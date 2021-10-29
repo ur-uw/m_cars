@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="{{ asset('assets/fav_icon/car_logo.svg') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <title>M Cars</title>
