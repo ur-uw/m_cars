@@ -17,56 +17,54 @@
     <!-- Header -->
     @if (Route::currentRouteName() != 'auth.login' && Route::currentRouteName() != 'auth.register')
         <header>
-            <nav class=" flex items-center p-5 sm:mt-10">
-                <div class="p-1">
-                    <a href="/"><img src="{{ asset('assets/svg/branding.svg') }}" alt="logo" /></a>
+            <nav class="flex items-center p-3 flex-wrap">
+                <a href="/"><img src="{{ asset('assets/svg/branding.svg') }}" alt="logo" /></a>
+                <div class="inline-flex p-3  rounded lg:hidden ml-auto outline-none">
+                    <i class="
+                    fas fa-bars text-2xl text-black" id="menu"></i>
                 </div>
-                <ul
-                    class="
-            hidden
-            sm:flex
-            flex-1
-            justify-end
-            items-center
-            gap-12
-            text-bookmark-blue
-            uppercase
-            font-xs
-          ">
-                    <li class="cursor-pointer">Features</li>
-                    <li class="cursor-pointer">Pricing</li>
-                    <li class="cursor-pointer">Contact</li>
-                    @if (!Auth::check())
-                        <li class="md:flex gap-x-2">
-                            <a href="{{ route('auth.login') }}"
-                                class="border border-secondary text-secondary py-2 px-6 rounded-md uppercase">
-                                Login
-                            </a>
-                            <a href="{{ route('auth.register') }}"
-                                class="bg-secondary text-white py-2 px-6 rounded-md uppercase">
-                                Register
-                            </a>
-                        </li>
-                    @else
-                        @if (Route::currentRouteName() == 'dashboard.show')
-                            <a href="{{ route('auth.logout') }}"
-                                class="bg-secondary text-white py-2 px-6 rounded-md uppercase">
-                                Log out
-                            </a>
+                <div class="hidden top-navbar w-full lg:inline-flex lg:flex-grow lg:w-auto" id="navigation">
+                    <ul
+                        class="bg-gray-50 lg:bg-white p-5 flex flex-col gap-6 lg:gap-12 lg:flex-row  ml-auto lg:items-center">
+                        <a href="#" class="hover:text-primary transition">Features</a>
+                        <a href="#" class="hover:text-primary transition">Pricing</a>
+                        <a href="#" class="hover:text-primary transition">Contact</a>
+                        @if (!Auth::check())
+                            <li class="md:flex gap-x-2">
+                                <a href="{{ route('auth.login') }}"
+                                    class="border border-secondary text-secondary py-2 px-6 rounded-md uppercase">
+                                    Login
+                                </a>
+                                <a href="{{ route('auth.register') }}"
+                                    class="bg-secondary text-white py-2 px-6 rounded-md uppercase">
+                                    Register
+                                </a>
+                            </li>
                         @else
-                            <a href="{{ route('dashboard.show') }}"
-                                class="text-sm capitalize text-secondary">{{ Auth::user()->name }}</a>
+                            @if (Route::currentRouteName() == 'dashboard.show')
+                                <a href="{{ route('auth.logout') }}"
+                                    class="bg-secondary text-sm md:text-md text-white text-center py-2 block px-6 rounded-md uppercase">
+                                    Log out
+                                </a>
+                            @else
+                                <a href="{{ route('dashboard.show') }}"
+                                    class="text-sm capitalize text-secondary">{{ Auth::user()->name }}</a>
+                            @endif
                         @endif
-                    @endif
-                </ul>
-                <div class="flex sm:hidden flex-1 justify-end">
-                    <i class="fas fa-bars text-2xl"></i>
+                    </ul>
                 </div>
             </nav>
+            <nav>
+
+            </nav>
+
+
+
         </header>
     @endif
 
     @yield('content')
+    <script src="{{ asset('js/app.js') }}"></script>
 </body>
 
 </html>

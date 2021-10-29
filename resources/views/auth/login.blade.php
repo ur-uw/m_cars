@@ -25,7 +25,7 @@
                     @csrf
                     {{-- Email --}}
                     <label for="email" class="block">Enter your email address</label>
-                    <input type="email" id="email" placeholder="name@example.com" name="email">
+                    <input type="email" id="email" placeholder="name@example.com" name="email" value="{{ old('email') }}">
                     {{-- Password --}}
                     <label for="password" class="block mt-3">Enter your password</label>
                     <input type="password" id="password" placeholder="Enter at least 8 characters" name="password">
@@ -37,10 +37,10 @@
                     @endif
                     <button type="submit" class="rounded-md bg-primary px-6 py-2 text-white inline-block ">Login</button>
                     {{-- ! Remember --}}
-                    <div class="px-6 mt-3 hidden lg:flex items-center gap-x-2">
+                    <div class="px-6 mt-3 flex lg:items-center gap-x-2">
                         <input type="checkbox" name="remember" id="remember"
                             class=" text-primary rounded focus:ring-primary border-gray-300">
-                        <p class=" text-xs text-app-grey">Use password for logging into my account</p>
+                        <p class="text-xs lg:text-sm text-app-grey">Use password for logging into my account</p>
 
                     </div>
                     {{-- Forget password --}}

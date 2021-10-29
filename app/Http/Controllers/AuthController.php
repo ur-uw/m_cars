@@ -26,7 +26,7 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => $data['password']
         ];
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials, $request->has('remember'))) {
             return redirect()->intended('dashboard')
                 ->withSuccess('Signed in');
         }

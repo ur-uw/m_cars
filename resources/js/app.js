@@ -1,1 +1,2 @@
-require('./bootstrap');
+require("./bootstrap");
+import "./nav_menu";
