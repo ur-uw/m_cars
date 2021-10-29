@@ -75,10 +75,10 @@ class AuthController extends Controller
     }
 
 
-    public function signOut()
+    public function logout()
     {
         Session::flush();
         Auth::logout();
-        return Redirect('login');
+        return redirect()->route('auth.login');
     }
 }
