@@ -1,0 +1,29 @@
+/* ./resources/css/app.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap');
+
+@layer base {
+  [type="text"],
+  [type="email"],
+  [type="url"],
+  [type="password"],
+  [type="number"],
+  [type="date"],
+  [type="datetime-local"],
+  [type="month"],
+  [type="search"],
+  [type="tel"],
+  [type="time"],
+  [type="week"],
+  [multiple],
+  textarea,
+  select {
+    @apply w-full border-gray-300 rounded-md shadow-sm focus:border-primary focus:ring-primary placeholder-app-grey;
+  }
+  [type="checkbox"],
+  [type="radio"] {
+    @apply border-gray-300 rounded text-primary focus:ring-primary;
+  }
+}
