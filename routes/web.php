@@ -19,9 +19,13 @@ Route::get('/', function () {
 });
 
 // Auth routes
-Route::get('/login', [AuthController::class, 'index'])->name('auth.login');
-Route::post('/login', [AuthController::class, 'login']);
-Route::get('/register', [AuthController::class, 'registration'])->name('auth.register');
-Route::post('/register', [AuthController::class, 'register']);
-Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
-Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard.show');
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'index'])->name('auth.login');
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::get('/register', [AuthController::class, 'registration'])->name('auth.register');
+    Route::post('/register', [AuthController::class, 'register']);
+});
+Route::middleware('auth')->group(function () {
+    Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
+    Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard.show');
+});
