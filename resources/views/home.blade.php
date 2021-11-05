@@ -8,7 +8,16 @@
     <section>
         <div class="flex flex-col-reverse lg:flex-row relative">
             {{-- Headings --}}
-            <div class="container lg:w-5/12 lg:ml-20">
+            <div class="container lg:w-5/12 lg:ml-20 relative">
+                <div
+                    class="absolute top-0 -left-4 w-72 h-72 bg-indigo-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob">
+                </div>
+                <div
+                    class="absolute top-0 -right-4 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000">
+                </div>
+                <div
+                    class="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000">
+                </div>
                 <h1 class="text-xl text-center font-semibold lg:hidden">Premium Car Service in Iraq</h1>
                 <div class="hidden lg:flex lg:flex-col lg:text-7xl lg:font-bold">
                     <span>Premium</span>
@@ -24,6 +33,12 @@
                     the world with our modern versatile tool for car's management, maintenance and information
                     here and now.
                 </p>
+                {{-- Call to action --}}
+                <div class="mt-3 w-full flex items-center">
+                    <a href="{{ route('auth.register') }}"
+                        class="btn btn-primary text-lg font-semibold z-10 transition">Start
+                        Now</a>
+                </div>
             </div>
             {{-- Hero Image --}}
             <div class="flex flex-col items-center justify-center mb-3 lg:mb-0 lg:full lg:w-7/12 relative">
@@ -74,8 +89,6 @@
                     <img src="{{ asset('assets/imgs/logos/lexus_logo.png') }}" class="h-100 w-100" alt="lexus_logo">
                 </div>
             </div>
-            <div class="hidden swiper-button-next lg:block"></div>
-            <div class="hidden swiper-button-prev lg:block"></div>
         </div>
     </section>
 @endsection
@@ -89,10 +102,6 @@
             spaceBetween: 20,
             freeMode: true,
             grabCursor: true,
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
             autoplay: {
                 delay: 3000,
                 disableOnInteraction: true,
@@ -112,9 +121,5 @@
                 }
             }
         });
-        const prevButton = document.querySelector('.swiper-button-prev');
-        const nextButton = document.querySelector('.swiper-button-next');
-        prevButton.style.color = "#5267DF";
-        nextButton.style.color = "#5267DF";
     </script>
 @endsection

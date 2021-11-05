@@ -19,25 +19,22 @@
         <header class="container mb-5">
             <nav class="flex items-center p-3 flex-wrap">
                 <a href="/"><img src="{{ asset('assets/svg/branding.svg') }}" alt="logo" /></a>
-                <div class="inline-flex p-3  rounded lg:hidden ml-auto outline-none">
+                <div class="inline-flex p-3 rounded lg:hidden ml-auto outline-none transition">
                     <i class="
                     fas fa-bars text-2xl text-black" id="menu"></i>
                 </div>
-                <div class="hidden top-navbar w-full lg:inline-flex lg:flex-grow lg:w-auto" id="navigation">
+                <div class="hidden top-navbar w-full lg:inline-flex lg:flex-grow lg:w-auto transition" id="navigation">
                     <ul
                         class="bg-gray-50 lg:bg-white p-5 flex flex-col gap-6 lg:gap-12 lg:flex-row  ml-auto lg:items-center">
                         <a href="#" class="hover:text-primary transition">Features</a>
                         <a href="#" class="hover:text-primary transition">Pricing</a>
                         <a href="#" class="hover:text-primary transition">Contact</a>
                         @if (!Auth::check())
-                            <li class="md:flex gap-x-2">
+                            <li>
                                 <a href="{{ route('auth.login') }}"
-                                    class="py-2 px-6 rounded-md uppercase hover:text-primary transition">
-                                    Login
-                                </a>
-                                <a href="{{ route('auth.register') }}"
-                                    class="bg-secondary shadow-md text-white py-2 px-6 rounded-md uppercase hover:bg-white hover:text-dark-blue transition">
-                                    Register
+                                    class="btn btn-secondary transition flex items-center gap-2">
+                                    <span>Login</span>
+                                    <i class="fas fa-arrow-right text-sm"></i>
                                 </a>
                             </li>
                         @else
