@@ -8,15 +8,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"
         integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+    @yield('styles')
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <title>M Cars</title>
 </head>
 
-<body>
-
+<body class="font-Poppins">
     <!-- Header -->
     @if (Route::currentRouteName() != 'auth.login' && Route::currentRouteName() != 'auth.register')
-        <header>
+        <header class="container mb-5">
             <nav class="flex items-center p-3 flex-wrap">
                 <a href="/"><img src="{{ asset('assets/svg/branding.svg') }}" alt="logo" /></a>
                 <div class="inline-flex p-3  rounded lg:hidden ml-auto outline-none">
@@ -32,11 +32,11 @@
                         @if (!Auth::check())
                             <li class="md:flex gap-x-2">
                                 <a href="{{ route('auth.login') }}"
-                                    class="border border-secondary text-secondary py-2 px-6 rounded-md uppercase">
+                                    class="py-2 px-6 rounded-md uppercase hover:text-primary transition">
                                     Login
                                 </a>
                                 <a href="{{ route('auth.register') }}"
-                                    class="bg-secondary text-white py-2 px-6 rounded-md uppercase">
+                                    class="bg-secondary shadow-md text-white py-2 px-6 rounded-md uppercase hover:bg-white hover:text-dark-blue transition">
                                     Register
                                 </a>
                             </li>
@@ -55,15 +55,12 @@
                 </div>
             </nav>
             <nav>
-
             </nav>
-
-
-
         </header>
     @endif
 
     @yield('content')
+    @yield('scripts')
     <script src="{{ asset('js/app.js') }}"></script>
 </body>
 

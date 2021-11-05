@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap);
+@import url(https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap);
 /* ./resources/css/app.css */
 
 /* ! tailwindcss v2.2.17 | MIT License | https://tailwindcss.com */
@@ -23037,12 +23037,8 @@ select {
   vertical-align: text-bottom;
 }
 
-.font-display {
-  font-family: Poppins,sans-serif;
-}
-
-.font-body {
-  font-family: Poppins,sans-serif;
+.font-Poppins {
+  font-family: Poppins, sans-serif;
 }
 
 .text-xs {
@@ -55157,12 +55153,8 @@ select {
     vertical-align: text-bottom;
   }
 
-  .sm\:font-display {
-    font-family: Poppins,sans-serif;
-  }
-
-  .sm\:font-body {
-    font-family: Poppins,sans-serif;
+  .sm\:font-Poppins {
+    font-family: Poppins, sans-serif;
   }
 
   .sm\:text-xs {
@@ -87265,12 +87257,8 @@ select {
     vertical-align: text-bottom;
   }
 
-  .md\:font-display {
-    font-family: Poppins,sans-serif;
-  }
-
-  .md\:font-body {
-    font-family: Poppins,sans-serif;
+  .md\:font-Poppins {
+    font-family: Poppins, sans-serif;
   }
 
   .md\:text-xs {
@@ -119373,12 +119361,8 @@ select {
     vertical-align: text-bottom;
   }
 
-  .lg\:font-display {
-    font-family: Poppins,sans-serif;
-  }
-
-  .lg\:font-body {
-    font-family: Poppins,sans-serif;
+  .lg\:font-Poppins {
+    font-family: Poppins, sans-serif;
   }
 
   .lg\:text-xs {
@@ -151481,12 +151465,8 @@ select {
     vertical-align: text-bottom;
   }
 
-  .xl\:font-display {
-    font-family: Poppins,sans-serif;
-  }
-
-  .xl\:font-body {
-    font-family: Poppins,sans-serif;
+  .xl\:font-Poppins {
+    font-family: Poppins, sans-serif;
   }
 
   .xl\:text-xs {
@@ -183589,12 +183569,8 @@ select {
     vertical-align: text-bottom;
   }
 
-  .\32xl\:font-display {
-    font-family: Poppins,sans-serif;
-  }
-
-  .\32xl\:font-body {
-    font-family: Poppins,sans-serif;
+  .\32xl\:font-Poppins {
+    font-family: Poppins, sans-serif;
   }
 
   .\32xl\:text-xs {
