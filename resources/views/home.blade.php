@@ -51,7 +51,7 @@
     <section class="container mt-16">
         <div class="swiper mySwiper">
             <div class="swiper-wrapper">
-                <div class="h-24 w-24 flex justify-center p-3 rouneded-lg bg-gray-50 swiper-slide  ">
+                {{-- <div class="h-24 w-24 flex justify-center p-3 rouneded-lg bg-gray-50 swiper-slide  ">
                     <img src="{{ asset('assets/imgs/logos/tesla_logo.png') }}" class="h-100 w-100" alt="tesla_logo">
                 </div>
                 <div class="h-24 w-24 flex justify-center p-3 rouneded-lg bg-gray-50 swiper-slide  ">
@@ -87,7 +87,12 @@
                 </div>
                 <div class="h-24 w-24 flex justify-center p-3 rouneded-lg bg-gray-50 swiper-slide  ">
                     <img src="{{ asset('assets/imgs/logos/lexus_logo.png') }}" class="h-100 w-100" alt="lexus_logo">
-                </div>
+                </div> --}}
+                @foreach (Storage::files('public/logos') as $car_brand)
+                    <div class="h-24 w-24 flex justify-center p-3 rouneded-lg bg-gray-50 swiper-slide  ">
+                        <img src="{{ Storage::url($car_brand) }}" class="h-100 w-100" alt="car_brand">
+                    </div>
+                @endforeach
             </div>
         </div>
     </section>
