@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\auth\LoginRequest;
 use App\Http\Requests\auth\RegisterRequest;
+use App\Models\Car;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -47,7 +48,7 @@ class AuthController extends Controller
         $check = $this->create($data);
         $credentials = ['email' => $check['email'], 'password' => $data['password']];
         if (Auth::attempt($credentials)) {
-            return redirect()->route('dashboard.show')->withSuccess('You have signed-in');
+            return redirect()->route('dashboard.show', ['cars' => Car::all()]);
         }
         return redirect()->route('auth.register')->withErrors([
             'register_error' => 'Some thing went wrong, please try again.'
@@ -68,7 +69,7 @@ class AuthController extends Controller
     public function dashboard()
     {
         if (Auth::check()) {
-            return view('dashboard');
+            return view('dashboard', ['cars' => Car::paginate(10)]);
         }
 
         return redirect()->route('auth.login')->withErrors(['auth_error' => 'You are not allowed to access']);

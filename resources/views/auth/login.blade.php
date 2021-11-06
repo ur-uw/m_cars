@@ -1,4 +1,4 @@
-@extends('layouts.base')
+@extends('layouts.app')
 @section('content')
     <div class="flex flex-col lg:flex-row-reverse h-screen w-full">
         {{-- Image section --}}
