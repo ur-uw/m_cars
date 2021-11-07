@@ -28,7 +28,7 @@ class AuthController extends Controller
             'password' => $data['password']
         ];
         if (Auth::attempt($credentials, $request->has('remember'))) {
-            return redirect()->intended('dashboard')
+            return redirect()->intended('explore')
                 ->withSuccess('Signed in');
         }
         return redirect()->route('auth.login')->withErrors(
@@ -48,7 +48,7 @@ class AuthController extends Controller
         $check = $this->create($data);
         $credentials = ['email' => $check['email'], 'password' => $data['password']];
         if (Auth::attempt($credentials)) {
-            return redirect()->route('dashboard.show', ['cars' => Car::all()]);
+            return redirect()->route('explore.show', ['cars' => Car::all()]);
         }
         return redirect()->route('auth.register')->withErrors([
             'register_error' => 'Some thing went wrong, please try again.'
@@ -66,10 +66,10 @@ class AuthController extends Controller
     }
 
 
-    public function dashboard()
+    public function explore()
     {
         if (Auth::check()) {
-            return view('dashboard', ['cars' => Car::paginate(10)]);
+            return view('explore', ['cars' => Car::paginate(10)]);
         }
 
         return redirect()->route('auth.login')->withErrors(['auth_error' => 'You are not allowed to access']);

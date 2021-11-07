@@ -27,5 +27,5 @@ Route::middleware('guest')->group(function () {
 });
 Route::middleware('auth')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
-    Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard.show');
+    Route::get('/explore', [AuthController::class, 'explore'])->name('explore.show');
 });
