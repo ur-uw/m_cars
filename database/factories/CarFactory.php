@@ -21,16 +21,8 @@ class CarFactory extends Factory
      */
     public function definition()
     {
-        $manufactures = [
-            'Mercedes', 'Nissan', 'Toyota', 'Porsche', 'Ford', 'Audi'
-        ];
-
-        $types = ['Suv', 'Sports', 'Sedan', 'Minivan'];
         return [
-            'manufacturer' => $this->faker->randomElement($manufactures),
             'model' => 'Model ' . random_int(1, 4),
-            'type' => $this->faker->randomElement($types),
-            'manufactured_at' => $this->faker->date(),
         ];
     }
 }

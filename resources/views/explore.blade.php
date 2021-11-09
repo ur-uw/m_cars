@@ -2,6 +2,6 @@
 @section('content')
     {{-- Car Categories --}}
     <section class="container">
-        <livewire:list-cars />
+        <livewire:cars-list />
     </section>
 @endsection

@@ -30,11 +30,12 @@
                         @if (Route::currentRouteName() != 'explore.show')
                             <a href="#" class="hover:text-primary transition">Features</a>
                             <a href="#" class="hover:text-primary transition">Pricing</a>
-                            <a href="#" class="hover:text-primary transition">Contact</a>
+                            <a href="#">Contact</a>
                         @else
                             <a href="#" class="hover:text-primary transition">Accessories</a>
                             <a href="#" class="hover:text-primary transition">Spare Parts</a>
-                            <a href="{{ route('explore.show') }}" class="hover:text-primary transition">Explore</a>
+                            <a href="{{ route('explore.show') }}"
+                                class="hover:text-primary transition {{ Route::is('explore.show') ? 'text-primary' : '' }}">Explore</a>
                         @endif
                         @if (!Auth::check())
                             <li>

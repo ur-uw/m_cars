@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Car;
+use App\Models\CarDetails;
+use App\Models\Manufacturer;
+use App\Models\Type;
 use Illuminate\Database\Seeder;
 
 class CarSeeder extends Seeder
@@ -14,6 +17,13 @@ class CarSeeder extends Seeder
      */
     public function run()
     {
-        Car::factory(30)->create();
+        $manufacturer = Manufacturer::all();
+        $types_count = Type::count();
+        $manufacturer->each(function (Manufacturer $manufacturer) use ($types_count) {
+            Car::factory()->create([
+                'manufacturer_id' => $manufacturer->id,
+                'type_id' => rand(1, $types_count)
+            ]);
+        });
     }
 }
