@@ -47,4 +47,12 @@ class Car extends Model
     {
         return $this->belongsTo(Type::class);
     }
+
+    public function scopeSearch($query, $term)
+    {
+        $term = "%$term%";
+        $query->where(function ($query) use ($term) {
+            $query->where('model', 'LIKE', $term);
+        });
+    }
 }

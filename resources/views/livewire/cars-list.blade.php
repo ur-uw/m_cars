@@ -22,27 +22,36 @@
                 <p class="text-sm">Explore out cars you might like!</p>
             </div>
             <div class="flex justify-center items-center w-full flex-col lg:w-1/2 lg:flex-row  gap-3">
-                <select class="text-sm">
-                    <option value="">Name</option>
+                <label for="manufacturer" value="">Manufacturer</label>
+                <select id="manufacturer" wire:model='filterManufacturer' class="text-sm">
+                    <option value="">All</option>
+                    @foreach ($manufacturers as $man)
+                        <option value="{{ $man->id }}">{{ $man->name }}</option>
+                    @endforeach
                 </select>
-                <select class="text-sm">
-                    <option value="">Manufacturer</option>
+                <label for="type">Type</label>
+                <select id="type" wire:model="filterType" class="text-sm">
+                    <option value="">All</option>
+                    @foreach ($types as $type)
+                        <option value="{{ $type->id }}">{{ $type->name }}</option>
+                    @endforeach
                 </select>
-                <select class="text-sm">
-                    <option value="">Type</option>
-                </select>
-                <select class="text-sm">
-                    <option value="">Rating</option>
+                <label for="rating">Rating</label>
+                <select id="rating" class="text-sm">
+                    <option value="">All</option>
+                    @for ($i = 1; $i <= 5; $i++)
+                        <option value="{{ $i }}">{{ $i }} Star</option>
+                    @endfor
                 </select>
             </div>
         </div>
     </section>
     {{-- Cars --}}
-    <div class="mt-6 grid grid-cols-1 gap-3 lg:grid-cols-4 lg:gap-5">
-        @if (count($cars) > 0)
+    @if (count($cars) > 0)
+        <div class="mt-6 grid grid-cols-1 gap-3 lg:grid-cols-4 lg:gap-5">
             @foreach ($cars as $car)
                 {{-- Car card --}}
-                <div class="flex flex-col rounded-xl bg-gray-100 h-72 lg:w-15  shadow px-5 py-6 overflow-hidden">
+                <div class="flex flex-col rounded-xl  h-72 lg:w-15  shadow px-5 py-6 overflow-hidden">
                     <h3 class="lg:text-lg font-semibold">{{ $car->manufacturer->name }} {{ $car->model }}</h3>
                     {{-- Car year --}}
                     <h3>
@@ -72,8 +81,11 @@
                     </div>
                 </div>
             @endforeach
-        @else
-            <h3 class="text-lg font-semibold lg:text-2xl text-primary">No Cars!</h3>
-        @endif
-    </div>
+        </div>
+        <div class="my-6">
+            {{ $cars->links() }}
+        </div>
+    @else
+        <h3 class="text-lg font-semibold lg:text-2xl text-primary mt-6">No Cars!</h3>
+    @endif
 </div>
