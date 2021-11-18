@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Car;
 use Illuminate\Http\Request;
+use Livewire;
 
 class CarController extends Controller
 {
@@ -24,7 +25,7 @@ class CarController extends Controller
      */
     public function create()
     {
-        //
+        return view('livewire.add-car');
     }
 
     /**

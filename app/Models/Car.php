@@ -15,6 +15,7 @@ class Car extends Model
         'manufacturer_id',
         'type_id',
         'car_details_id',
+        'user_id',
     ];
 
 
@@ -54,5 +55,15 @@ class Car extends Model
         $query->where(function ($query) use ($term) {
             $query->where('model', 'LIKE', $term);
         });
+    }
+
+    /**
+     * Get the user that owns the Car
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

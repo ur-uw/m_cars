@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Livewire\AddCar;
+use App\Http\Livewire\CarsList;
+use App\Http\Livewire\Garage;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('home');
-});
+})->name('home');
 
 // Auth routes
 Route::middleware('guest')->group(function () {
@@ -27,5 +30,8 @@ Route::middleware('guest')->group(function () {
 });
 Route::middleware('auth')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
-    Route::get('/explore', [AuthController::class, 'explore'])->name('explore.show');
+    Route::get('/explore', CarsList::class)->name('explore.show');
+    Route::get('/garage', Garage::class)->name('garage.show');
 });
+
+Route::get('/car/create', AddCar::class)->name('car.create');

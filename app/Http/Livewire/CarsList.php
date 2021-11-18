@@ -19,6 +19,14 @@ class CarsList extends Component
     {
         $this->resetPage();
     }
+    public function updatingFilterManufacturer()
+    {
+        $this->resetPage();
+    }
+    public function updatingFilterType()
+    {
+        $this->resetPage();
+    }
 
 
     public function render()
@@ -37,6 +45,6 @@ class CarsList extends Component
                 'manufacturers' => Manufacturer::all(),
                 'types' => Type::all(),
             ],
-        );
+        )->extends('layouts.app');
     }
 }

@@ -1,5 +1,7 @@
 const menuButton = document.querySelector("#menu");
 const navItems = document.querySelector("#navigation");
-menuButton.addEventListener("click", () => {
-    navItems.classList.toggle("hidden");
-});
+if (menuButton) {
+    menuButton.addEventListener("click", () => {
+        navItems.classList.toggle("hidden");
+    });
+}

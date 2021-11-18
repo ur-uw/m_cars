@@ -18,6 +18,7 @@ class CreateCarsTable extends Migration
             $table->string('model');
             $table->foreignId('manufacturer_id');
             $table->foreignId('type_id');
+            $table->foreignId('user_id')->nullable();
             $table->timestamps();
         });
     }
