@@ -16,6 +16,7 @@ class CreateCarsTable extends Migration
         Schema::create('cars', function (Blueprint $table) {
             $table->id();
             $table->string('model');
+            $table->string('thumb_nail');
             $table->foreignId('manufacturer_id');
             $table->foreignId('type_id');
             $table->foreignId('user_id')->nullable();

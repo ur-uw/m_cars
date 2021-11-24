@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Car;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Storage;
 
 class CarFactory extends Factory
 {
@@ -21,8 +22,10 @@ class CarFactory extends Factory
      */
     public function definition()
     {
+        $carsImages = Storage::allFiles('public/cars');
         return [
             'model' => 'Model ' . random_int(1, 4),
+            'thumb_nail' => $carsImages[array_rand($carsImages, 1)],
         ];
     }
 }
