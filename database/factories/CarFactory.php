@@ -25,7 +25,7 @@ class CarFactory extends Factory
         $carsImages = Storage::allFiles('public/cars');
         return [
             'model' => 'Model ' . random_int(1, 4),
-            'thumb_nail' => $carsImages[array_rand($carsImages, 1)],
+            'thumb_nail' => $this->faker->randomElement($carsImages),
         ];
     }
 }

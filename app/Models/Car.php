@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use DB;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Builder;
 
 class Car extends Model
 {
@@ -51,10 +53,21 @@ class Car extends Model
 
     public function scopeSearch($query, $term)
     {
-        $term = "%$term%";
-        $query->where(function ($query) use ($term) {
-            $query->where('model', 'LIKE', $term);
-        });
+        if ($term) {
+            $term = "%$term%";
+            $query->where(function ($query) use ($term) {
+                $query->where('model', 'LIKE', $term)->orWhereHas('manufacturer', function (Builder $query) use ($term) {
+                    $query->where('manufacturers.name', 'LIKE', $term)
+                        ->orWhereRaw(
+                            "CONCAT(manufacturers.`name`, ' ', `model`) LIKE ?",
+                            [$term]
+                        )->orWhereRaw(
+                            "CONCAT(`model`, ' ',manufacturers.`name`) LIKE ?",
+                            [$term]
+                        );
+                });
+            });
+        }
     }
 
     /**

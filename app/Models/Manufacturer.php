@@ -11,7 +11,7 @@ class Manufacturer extends Model
     use HasFactory;
     protected $fillable = [
         'name',
-        'country'
+        'country',
     ];
 
 

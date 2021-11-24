@@ -15,7 +15,7 @@ class Garage extends Component
     {
         return view('livewire.garage', [
             'cars' => Car::where('user_id', Auth::user()->id)
-                ->search($this->term)
+                ->search(trim($this->term))
                 ->paginate(8),
         ])->extends('layouts.app');
     }

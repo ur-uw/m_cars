@@ -34,7 +34,7 @@ class CarsList extends Component
         return view(
             'livewire.cars-list',
             [
-                'cars' =>  Car::with(['details', 'manufacturer', 'type'])
+                'cars' =>  Car::with(['details', 'type', 'manufacturer'])
                     ->when($this->filterManufacturer, function ($query, $manufacturer) {
                         return $query->where('manufacturer_id', $manufacturer);
                     })->when($this->filterType, function ($query, $type) {
