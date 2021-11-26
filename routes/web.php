@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Livewire\AddCar;
-use App\Http\Livewire\CarsList;
+use App\Http\Livewire\Explore;
 use App\Http\Livewire\Garage;
 use Illuminate\Support\Facades\Route;
 
@@ -30,7 +30,7 @@ Route::middleware('guest')->group(function () {
 });
 Route::middleware('auth')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
-    Route::get('/explore', CarsList::class)->name('explore.show');
+    Route::get('/explore', Explore::class)->name('explore.show');
     Route::get('/garage', Garage::class)->name('garage.show');
 });
 

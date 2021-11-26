@@ -28,8 +28,7 @@
                  </li>
              @else
                  @if (Route::currentRouteName() != 'home')
-                     <a href="{{ route('auth.logout') }}"
-                         class="bg-secondary text-sm md:text-md text-white text-center py-2 block px-6 rounded-md uppercase">
+                     <a href="{{ route('auth.logout') }}" class="btn btn-secondary transition rounded-md uppercase">
                          Log out
                      </a>
                  @else

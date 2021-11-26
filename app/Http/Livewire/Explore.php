@@ -8,7 +8,7 @@ use App\Models\Type;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class CarsList extends Component
+class Explore extends Component
 {
     use WithPagination;
     public $term;
@@ -32,7 +32,7 @@ class CarsList extends Component
     public function render()
     {
         return view(
-            'livewire.cars-list',
+            'livewire.explore',
             [
                 'cars' =>  Car::with(['details', 'type', 'manufacturer'])
                     ->when($this->filterManufacturer, function ($query, $manufacturer) {
