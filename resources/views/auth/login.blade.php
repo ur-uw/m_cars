@@ -40,8 +40,9 @@
                     <div class="px-6 mt-3 flex lg:items-center gap-x-2">
                         <input type="checkbox" name="remember" id="remember"
                             class=" text-primary rounded focus:ring-primary border-gray-300">
-                        <p class="text-xs lg:text-sm text-app-grey">Use password for logging into my account</p>
-
+                        <label for="remember" class="text-xs lg:text-sm text-app-grey">
+                            Use password for logging into my account
+                        </label>
                     </div>
                     {{-- Forget password --}}
                     <div class="mt-3 mx-auto text-primary">

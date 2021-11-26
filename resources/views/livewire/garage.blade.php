@@ -25,6 +25,8 @@
             {{ $cars->links() }}
         </div>
     @else
-        <h3 class="text-lg font-semibold lg:text-2xl text-primary mt-6">No Cars!</h3>
+        <h3 class="text-lg font-semibold text-center lg:text-2xl text-secondary">
+            No Cars!
+        </h3>
     @endif
 </div>
