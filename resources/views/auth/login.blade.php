@@ -1,4 +1,4 @@
-@extends('layouts.base')
+@extends('layouts.app')
 @section('content')
     <div class="flex flex-col lg:flex-row-reverse h-screen w-full">
         {{-- Image section --}}
@@ -11,7 +11,7 @@
         <div class="container flex flex-col gap-3 mt-3 flex-1">
             {{-- Branding --}}
             <div class="hidden lg:block mx-20 my-7">
-                <img src="{{ asset('assets/svg/branding.svg') }}" alt="">
+                <a href="/"><img src="{{ asset('assets/svg/branding.svg') }}" alt="logo" /></a>
             </div>
             <div class="flex flex-col p-5 mt-3 text-sm text-dark-blue gap-3 lg:mt-16 h-full">
                 {{-- Login text --}}
@@ -25,7 +25,7 @@
                     @csrf
                     {{-- Email --}}
                     <label for="email" class="block">Enter your email address</label>
-                    <input type="email" id="email" placeholder="name@example.com" name="email">
+                    <input type="text" id="email" placeholder="name@example.com" name="email" value="{{ old('email') }}">
                     {{-- Password --}}
                     <label for="password" class="block mt-3">Enter your password</label>
                     <input type="password" id="password" placeholder="Enter at least 8 characters" name="password">
@@ -37,11 +37,12 @@
                     @endif
                     <button type="submit" class="rounded-md bg-primary px-6 py-2 text-white inline-block ">Login</button>
                     {{-- ! Remember --}}
-                    <div class="px-6 mt-3 hidden lg:flex items-center gap-x-2">
+                    <div class="px-6 mt-3 flex lg:items-center gap-x-2">
                         <input type="checkbox" name="remember" id="remember"
                             class=" text-primary rounded focus:ring-primary border-gray-300">
-                        <p class=" text-xs text-app-grey">Use password for logging into my account</p>
-
+                        <label for="remember" class="text-xs lg:text-sm text-app-grey">
+                            Use password for logging into my account
+                        </label>
                     </div>
                     {{-- Forget password --}}
                     <div class="mt-3 mx-auto text-primary">

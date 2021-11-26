@@ -1,4 +1,4 @@
-@extends('layouts.base')
+@extends('layouts.app')
 @section('content')
     <div class="flex flex-col lg:flex-row-reverse h-screen w-full">
         {{-- Image section --}}
@@ -11,7 +11,7 @@
         <div class="container flex flex-col gap-3 mt-3 flex-1">
             {{-- Branding --}}
             <div class="hidden lg:block mx-20 my-7">
-                <img src="{{ asset('assets/svg/branding.svg') }}" alt="">
+                <a href="/"><img src="{{ asset('assets/svg/branding.svg') }}" alt="logo" /></a>
             </div>
             <div class="flex flex-col p-5 mt-3 text-sm text-dark-blue gap-3 lg:mt-16 h-full">
                 {{-- Register form --}}
@@ -26,7 +26,7 @@
                     @endif
                     {{-- Email --}}
                     <label for="email" class="block mt-3">Enter your email address</label>
-                    <input type="email" id="email" placeholder="name@example.com" name="email" value="{{ old('email') }}">
+                    <input type="text" id="email" placeholder="name@example.com" name="email" value="{{ old('email') }}">
                     @if ($errors->has('email'))
                         <p class=" text-red-500">{{ $errors->first('email') }}</p>
                     @endif

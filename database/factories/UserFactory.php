@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use Hash;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -41,6 +42,22 @@ class UserFactory extends Factory
         return $this->state(function (array $attributes) {
             return [
                 'email_verified_at' => null,
+            ];
+        });
+    }
+
+    /**
+     * Indicate that the model's email address should be unverified.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function default_user()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'name' => 'Mohammed Fadhil',
+                'email' => 'test@test.com',
+                'password' => Hash::make('testtest'),
             ];
         });
     }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\auth\LoginRequest;
 use App\Http\Requests\auth\RegisterRequest;
+use App\Models\Car;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,8 +27,8 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => $data['password']
         ];
-        if (Auth::attempt($credentials)) {
-            return redirect()->intended('dashboard')
+        if (Auth::attempt($credentials, $request->remember)) {
+            return redirect()->intended('explore')
                 ->withSuccess('Signed in');
         }
         return redirect()->route('auth.login')->withErrors(
@@ -47,7 +48,7 @@ class AuthController extends Controller
         $check = $this->create($data);
         $credentials = ['email' => $check['email'], 'password' => $data['password']];
         if (Auth::attempt($credentials)) {
-            return redirect()->route('dashboard.show')->withSuccess('You have signed-in');
+            return redirect()->route('explore.show');
         }
         return redirect()->route('auth.register')->withErrors([
             'register_error' => 'Some thing went wrong, please try again.'
@@ -65,20 +66,20 @@ class AuthController extends Controller
     }
 
 
-    public function dashboard()
+    public function explore()
     {
         if (Auth::check()) {
-            return view('dashboard');
+            return view('explore');
         }
 
         return redirect()->route('auth.login')->withErrors(['auth_error' => 'You are not allowed to access']);
     }
 
 
-    public function signOut()
+    public function logout()
     {
         Session::flush();
         Auth::logout();
-        return Redirect('login');
+        return redirect()->route('auth.login');
     }
 }
