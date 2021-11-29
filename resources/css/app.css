@@ -46,3 +46,6 @@
 .btn-secondary{
     @apply bg-secondary text-white hover:bg-green-50 hover:text-dark-blue;
 }
+textarea {
+  resize: none;
+}

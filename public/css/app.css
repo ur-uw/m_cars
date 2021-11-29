@@ -33146,6 +33146,10 @@ select {
   color: rgba(36, 42, 69, var(--tw-text-opacity));
 }
 
+textarea {
+  resize: none;
+}
+
 @media (min-width: 640px) {
   .sm\:container {
     width: 100%;

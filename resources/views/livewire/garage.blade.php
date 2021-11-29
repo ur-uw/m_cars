@@ -9,7 +9,7 @@
             </span>
         </div>
         {{-- Add car button --}}
-        <a href="#" class="btn btn-primary flex items-center justify-between transition">
+        <a href="{{ route('car.create') }}" class="btn btn-primary flex items-center justify-between transition">
             <span>Add Car</span>
             <i class="fas fa-plus ml-2"></i>
         </a>
