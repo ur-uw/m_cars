@@ -20,6 +20,9 @@ class Car extends Model
         'thumb_nail',
         'user_id',
     ];
+    protected $casts = [
+        'images' => 'array'
+    ];
 
 
     /**

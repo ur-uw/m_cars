@@ -17,6 +17,7 @@ class CreateCarsTable extends Migration
             $table->id();
             $table->string('model');
             $table->string('thumb_nail');
+            $table->json('images')->nullable();
             $table->foreignId('manufacturer_id');
             $table->foreignId('type_id');
             $table->foreignId('user_id')->nullable();

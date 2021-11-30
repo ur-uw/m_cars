@@ -8,11 +8,14 @@ use App\Models\Manufacturer;
 use App\Models\Type;
 use Auth;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class CarAdd extends Component
 {
+    use WithFileUploads;
+
     public $currentPage = 0;
-    public $fuel_type = 'benzin';
+    public $fuel_type;
     public $model;
     public $color;
     public $price;
@@ -33,6 +36,8 @@ class CarAdd extends Component
     public $drive_mode;
     public $is_four_wheel;
     public $is_auto_drive;
+    public $car_thumbnail;
+    public $car_images = [];
     public $pages = [
         0 => [
             'heading' => "General Car Info",
@@ -43,6 +48,31 @@ class CarAdd extends Component
         2 => [
             'heading' => 'Car Images',
         ],
+    ];
+
+    protected $rules = [
+        'model' => 'required|string|max:20',
+        'description' => 'string|max:100',
+        'color' => 'required|string|max:9',
+        'price' => 'required|numeric',
+        'plate_number' => 'required|string',
+        'manufactured_at' => 'required|date',
+        'type' => 'required|string',
+        'fuel_type' => 'required|string',
+        'manufacturer' => 'required|string',
+        'tank_capacity' => 'required|numeric',
+        'fuel_economy' => 'required|numeric',
+        'top_speed' => 'required|numeric',
+        'gearbox_speeds' => 'required|numeric',
+        'acceleration' => 'required|numeric',
+        'engine_capacity' => 'required|numeric',
+        'number_cylinders' => 'required|numeric',
+        'seating_capacity' => 'required|numeric',
+        'drive_mode' => 'required|string',
+        'car_thumbnail' =>
+        'required|image|mimes:jpeg,png,jpg|max:2048|dimensions:max_width=670,max_height=350',
+        'car_images.*' =>
+        'required|image|mimes:jpeg,png,jpg|max:10240',
     ];
 
     public function nextPage()
@@ -63,28 +93,18 @@ class CarAdd extends Component
             $this->currentPage = $page;
         }
     }
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName);
+    }
     public function submit()
     {
-        $this->validate([
-            'model' => 'required|string|max:20',
-            'description' => 'string|max:100',
-            'color' => 'required|string|max:9',
-            'price' => 'required|numeric',
-            'plate_number' => 'required|string',
-            'manufactured_at' => 'required|date',
-            'type' => 'required|string',
-            'fuel_type' => 'required|string',
-            'manufacturer' => 'required|string',
-            'tank_capacity' => 'required|numeric',
-            'fuel_economy' => 'required|numeric',
-            'top_speed' => 'required|numeric',
-            'gearbox_speeds' => 'required|numeric',
-            'acceleration' => 'required|numeric',
-            'engine_capacity' => 'required|numeric',
-            'number_cylinders' => 'required|numeric',
-            'seating_capacity' => 'required|numeric',
-            'drive_mode' => 'required|string',
-        ]);
+        $this->validate($this->rules);
+        $thumbnail =  $this->car_thumbnail->store('public/cars');
+        $carImages =  [];
+        foreach ($this->car_images as $car_image) {
+            array_push($carImages, $car_image->store('public/cars'));
+        }
         $car_details = CarDetails::make([
             'color' => $this->color,
             'is_four_wheel' => $this->is_four_wheel ?? false,
@@ -108,7 +128,8 @@ class CarAdd extends Component
         $car = Car::create([
             'model' => $this->model,
             'manufacturer_id' => $this->manufacturer,
-            'thumb_nail' => 'some_image',
+            'thumb_nail' => $thumbnail,
+            'images' => $carImages,
             'type_id' => $this->type,
             'user_id' => Auth::user()->id,
         ]);
