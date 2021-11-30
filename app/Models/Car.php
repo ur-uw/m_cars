@@ -17,6 +17,7 @@ class Car extends Model
         'manufacturer_id',
         'type_id',
         'car_details_id',
+        'thumb_nail',
         'user_id',
     ];
 
