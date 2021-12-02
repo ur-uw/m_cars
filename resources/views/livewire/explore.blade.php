@@ -18,7 +18,7 @@
 
         {{-- Heading and Filters --}}
         <div class="flex flex-col lg:flex-row items-start justify-between gap-2">
-            <div>
+            <div class="mb-3">
                 <h1 class="text-xl lg:text-2xl font-semibold">Car Catalogue</h1>
                 <p class="text-sm">Explore out cars you might like!</p>
             </div>
@@ -56,7 +56,7 @@
     </section>
     {{-- Cars --}}
     @if (count($cars) > 0)
-        <div class="mt-6 grid grid-cols-1 gap-3 lg:grid-cols-4 lg:gap-5">
+        <div class="mt-6 grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4 lg:gap-5">
             @foreach ($cars as $car)
                 {{-- Car card --}}
                 <livewire:car-card key="{{ $car->id }}" :car="$car" />
