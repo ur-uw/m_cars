@@ -53,7 +53,7 @@ class CarDetailsFactory extends Factory
             'top_speed' => $this->faker->numberBetween(40, 500),
             'battery_capacity' => $this->faker->numberBetween(12, 15),
             'acceleration' => $this->faker->numberBetween(1, 10),
-            'seating_capacity' => $this->faker->numberBetween(1, 60),
+            'seating_capacity' => $this->faker->numberBetween(1, 12),
             'driving_mode' => $this->faker->randomElement(['auto', 'manual']),
             'is_auto_drive' => $this->faker->boolean(),
             'plate_number' => $this->faker->creditCardNumber(),

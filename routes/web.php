@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Livewire\CarAdd;
+use App\Http\Livewire\CarCreate;
 use App\Http\Livewire\Explore;
 use App\Http\Livewire\Garage;
 use Illuminate\Support\Facades\Route;
@@ -34,4 +34,4 @@ Route::middleware('auth')->group(function () {
     Route::get('/garage', Garage::class)->name('garage.show');
 });
 
-Route::get('/car/create', CarAdd::class)->name('car.create');
+Route::get('/car/create', CarCreate::class)->name('car.create');

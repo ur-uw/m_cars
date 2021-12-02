@@ -10,11 +10,11 @@ use Auth;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
-class CarAdd extends Component
+class CarCreate extends Component
 {
     use WithFileUploads;
 
-    public $currentPage = 0;
+    public $currentPage = 2;
     public $fuel_type;
     public $model;
     public $color;
@@ -52,7 +52,7 @@ class CarAdd extends Component
 
     protected $rules = [
         'model' => 'required|string|max:20',
-        'description' => 'string|max:100',
+        'description' => 'string|nullable|max:100',
         'color' => 'required|string|max:9',
         'price' => 'required|numeric',
         'plate_number' => 'required|string',
@@ -139,7 +139,7 @@ class CarAdd extends Component
     }
     public function render()
     {
-        return view('livewire.car-add', [
+        return view('livewire.car-create', [
             'manufacturers' => Manufacturer::orderBy('name')
                 ->get(),
             'types' => Type::orderBy('name')
