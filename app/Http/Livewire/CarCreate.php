@@ -14,7 +14,7 @@ class CarCreate extends Component
 {
     use WithFileUploads;
 
-    public $currentPage = 2;
+    public $currentPage = 0;
     public $fuel_type;
     public $model;
     public $color;

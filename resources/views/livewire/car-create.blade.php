@@ -295,7 +295,7 @@
         @else
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
                 {{-- Thumbnail --}}
-                <div class="md:col-span-1 grid grid-rows-2 md:grid-rows-2 gap-3">
+                <div class="md:col-span-1 {{ $car_thumbnail != null ? 'grid grid-rows-2 gap-3' : '' }}">
                     @error('car_thumbnail') <p class="error">{{ $message }}</p>@enderror
                     <div
                         class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
@@ -306,7 +306,7 @@
                                     d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            <div class="flex flex-col md:flex-row text-sm text-gray-600">
+                            <div class="flex flex-col items-center md:flex-row text-sm text-gray-600">
                                 <label for="thumb_nail"
                                     class="relative cursor-pointer bg-white rounded-md text-md lg:text-lg lg:font-medium text-primary hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary">
                                     <span>Upload an image</span>
@@ -341,7 +341,7 @@
                                     d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            <div class="flex flex-col md:flex-row text-sm text-gray-600">
+                            <div class="flex items-center flex-col md:flex-row text-sm text-gray-600">
                                 <label for="car_images"
                                     class="relative cursor-pointer bg-white rounded-md text-md lg:text-lg lg:font-medium text-primary hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary">
                                     <span>Upload images</span>
