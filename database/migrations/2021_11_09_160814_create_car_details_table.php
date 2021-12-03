@@ -23,7 +23,7 @@ class CreateCarDetailsTable extends Migration
             $table->string('fuel_type')
                 ->default('Petrol');
             $table->double('fuel_economy')->nullable();
-            $table->integer('battery_capacity');
+            $table->integer('battery_capacity')->nullable();
             $table->integer('top_speed');
             $table->integer('acceleration');
             $table->integer('seating_capacity')

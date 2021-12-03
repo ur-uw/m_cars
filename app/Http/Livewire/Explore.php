@@ -42,8 +42,8 @@ class Explore extends Component
                     })
                     ->search(trim($this->term))
                     ->paginate(8),
-                'manufacturers' => Manufacturer::all(),
-                'types' => Type::all(),
+                'manufacturers' => Manufacturer::orderBy('name')->get(),
+                'types' => Type::orderBy('name')->get(),
             ],
         )->extends('layouts.app');
     }

@@ -1,5 +1,5 @@
 <div
-    class="flex flex-col rounded-xl h-72 md:h-auto lg:h-72  shadow px-5 py-6 overflow-hidden lg:w-15 transition hover:shadow-lg cursor-pointer relative">
+    class="flex flex-col rounded-xl h-full w-full  shadow px-5 py-6 overflow-hidden transition hover:shadow-lg cursor-pointer relative">
     @if (\Carbon\Carbon::parse($car->details->manufactured_at)->year >= now()->year)
         <div
             class="absolute bg-secondary border border-white border-dashed text-white text-xs p-1 rounded-xl h-15 w-15 top-2 right-3">
@@ -15,8 +15,8 @@
         </h3>
     </div>
     {{-- Car image --}}
-    <div class="flex-1">
-        <img class="w-full h-full object-contain" src="{{ Storage::url($car->thumb_nail) }}" alt="car_image">
+    <div class="flex-1 h-full w-full">
+        <img class="max-h-full max-w-full object-contain" src="{{ Storage::url($car->thumb_nail) }}" alt="car_image">
     </div>
     {{-- Car Specifications --}}
     <div class="flex items-end justify-between px-3 mt-3">
