@@ -4,7 +4,7 @@
         <div class="mx-auto lg:w-3/4 flex items-center shadow px-6 py-4 gap-3 rounded-full">
             <i class="fas fa-search text-2xl text-primary"></i>
             <span class="flex-1">
-                <input wire:model.debounce='term' class=" border-0 w-full" type="text"
+                <input wire:model.debounce.350ms='term' class=" border-0 w-full" type="text"
                     placeholder="Ex: Mercedes Benz,...">
             </span>
             <span>

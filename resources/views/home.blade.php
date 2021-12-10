@@ -51,43 +51,6 @@
     <section class="container mt-16">
         <div class="swiper mySwiper">
             <div class="swiper-wrapper">
-                {{-- <div class="h-24 w-24 flex justify-center p-3 rouneded-lg bg-gray-50 swiper-slide  ">
-                    <img src="{{ asset('assets/imgs/logos/tesla_logo.png') }}" class="h-100 w-100" alt="tesla_logo">
-                </div>
-                <div class="h-24 w-24 flex justify-center p-3 rouneded-lg bg-gray-50 swiper-slide  ">
-                    <img src="{{ asset('assets/imgs/logos/toyota_logo.png') }}" class="h-100 w-100" alt="toyota_logo">
-                </div>
-                <div class="h-24 w-24 flex justify-center p-3 rouneded-lg bg-gray-50 swiper-slide  ">
-                    <img src="{{ asset('assets/imgs/logos/ford_logo.png') }}" class="h-100 w-100" alt="ford_logo">
-                </div>
-                <div class="h-24 w-24 flex justify-center p-3 rouneded-lg bg-gray-50 swiper-slide  ">
-                    <img src="{{ asset('assets/imgs/logos/ferrari_logo.png') }}" class="h-100 w-100"
-                        alt="ferrari_logo">
-                </div>
-                <div class="h-24 w-24 flex justify-center p-3 rouneded-lg bg-gray-50 swiper-slide  ">
-                    <img src="{{ asset('assets/imgs/logos/jeep_logo.png') }}" class="h-100 w-100" alt="jeep_logo">
-                </div>
-                <div class="h-24 w-24 flex justify-center p-3 rouneded-lg bg-gray-50 swiper-slide  ">
-                    <img src="{{ asset('assets/imgs/logos/audi_logo.png') }}" class="h-100 w-100" alt="audi_logo">
-                </div>
-                <div class="h-24 w-24 flex justify-center p-3 rouneded-lg bg-gray-50 swiper-slide  ">
-                    <img src="{{ asset('assets/imgs/logos/lamborghini_logo.png') }}" class="h-100 w-100"
-                        alt="lamborghini_logo">
-                </div>
-                <div class="h-24 w-24 flex justify-center p-3 rouneded-lg bg-gray-50 swiper-slide  ">
-                    <img src="{{ asset('assets/imgs/logos/bmw_logo.png') }}" class="h-100 w-100" alt="bmw_logo">
-                </div>
-                <div class="h-24 w-24 flex justify-center p-3 rouneded-lg bg-gray-50 swiper-slide  ">
-                    <img src="{{ asset('assets/imgs/logos/porsche_logo.png') }}" class="h-100 w-100"
-                        alt="porsche_logo">
-                </div>
-                <div class="h-24 w-24 flex justify-center p-3 rouneded-lg bg-gray-50 swiper-slide  ">
-                    <img src="{{ asset('assets/imgs/logos/mercedes_logo.png') }}" class="h-100 w-100"
-                        alt="mercedes_logo">
-                </div>
-                <div class="h-24 w-24 flex justify-center p-3 rouneded-lg bg-gray-50 swiper-slide  ">
-                    <img src="{{ asset('assets/imgs/logos/lexus_logo.png') }}" class="h-100 w-100" alt="lexus_logo">
-                </div> --}}
                 @foreach (Storage::files('public/logos') as $car_brand)
                     <div class="h-24 w-24 flex justify-center p-3 rouneded-lg bg-gray-50 swiper-slide  ">
                         <img src="{{ Storage::url($car_brand) }}" class="h-100 w-100" alt="car_brand">

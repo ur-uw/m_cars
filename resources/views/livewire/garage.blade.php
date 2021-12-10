@@ -4,7 +4,7 @@
         <div class="flex items-center py-4 gap-3 md:w-1/2  ">
             <span class="flex-1">
                 <label for="search">Search</label>
-                <input id="search" wire:model='term' class="w-full" type="text"
+                <input id="search" wire:model.debounce.350ms='term' class="w-full" type="text"
                     placeholder="Ex: Mercedes Benz,...">
             </span>
         </div>

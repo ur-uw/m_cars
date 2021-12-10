@@ -21,7 +21,9 @@
             @include('components.theNavbar')
         </header>
     @endif
-    @yield('content')
+    <main>
+        @yield('content')
+    </main>
     @livewireScripts
     <script src="{{ asset('js/app.js') }}"></script>
     @yield('scripts')

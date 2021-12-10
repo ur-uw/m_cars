@@ -15,7 +15,7 @@
             <div class="flex flex-col md:flex-row items-center gap-3">
                 <div class="lg:flex-1">
                     <label for="model" class="text-md lg:text-lg lg:font-medium">Model Name</label>
-                    <input id="model" wire:model.debounce='model' name="model" type="text" placeholder="Ex: X6">
+                    <input id="model" wire:model.debounce.350ms='model' name="model" type="text" placeholder="Ex: X6">
                     <p class="text-app-grey text-xs mt-1">Do not exceed 20 characters when entering model name!
                     </p>
                     @error('model')
@@ -26,7 +26,8 @@
                 </div>
                 <div>
                     <label for="color" class="text-md lg:text-lg lg:font-medium">Car Color</label>
-                    <input id="color" type="text" name="color" wire:model.debounce='color' placeholder="Ex: #ffffff">
+                    <input id="color" type="text" name="color" wire:model.debounce.350ms='color'
+                        placeholder="Ex: #ffffff">
                     <p class="text-app-grey text-xs mt-1">Enter color name in hex format!</p>
                     @error('color')
                         <p class="error">
@@ -67,8 +68,8 @@
                     </div>
                     <div class="lg:w-1/2">
                         <label for="plate_number" class="text-md lg:text-lg lg:font-medium">Plate Number</label>
-                        <input type="text" name="plate_number" id="plate_number" wire:model.debounce='plate_number'
-                            placeholder="Ex: 33-2S1-BNX" />
+                        <input type="text" name="plate_number" id="plate_number"
+                            wire:model.debounce.350ms='plate_number' placeholder="Ex: 33-2S1-BNX" />
                         @error('plate_number')
                             <p class="error">
                                 {{ $message }}
@@ -93,7 +94,7 @@
                     <label for="price" class="text-md lg:text-lg lg:font-medium">Price <sub
                             class="text-xs text-primary">$</sub>
                     </label>
-                    <input type="number" name="price" id="price" wire:model.debounce="price">
+                    <input type="number" name="price" id="price" wire:model.debounce.350ms="price">
                     @error('price')
                         <p class="error">
                             {{ $message }}
@@ -106,7 +107,7 @@
             <div>
                 <label for="description" class="text-md lg:text-lg lg:font-medium">Description</label>
                 <textarea name="description" id="description" cols="20" rows="5"
-                    wire:model.debounce='description'></textarea>
+                    wire:model.debounce.350ms='description'></textarea>
                 <p class=" text-app-grey text-xs mt-1">Do not exceed 100 characters when entering car description!
                 </p>
                 @error('description')
@@ -142,7 +143,7 @@
                             <label for="battery_capacity" class="text-md lg:text-lg lg:font-medium">Battery
                                 Capacity</label>
                             <input type="number" id="battery_capacity" name="battery_capacity"
-                                wire:model.debounce='battery_capacity'>
+                                wire:model.debounce.350ms='battery_capacity'>
                             @error('battery_capacity')
                                 <p class="error">
                                     {{ $message }}
@@ -153,7 +154,7 @@
                                 <sub class="text-xs text-primary">L</sub>
                             </label>
                             <input type="number" id="tank_capacity" name="tank_capacity"
-                                wire:model.debounce='tank_capacity'>
+                                wire:model.debounce.350ms='tank_capacity'>
                             @error('tank_capacity')
                                 <p class="error">
                                     {{ $message }}
@@ -172,7 +173,8 @@
                                 @endif
                             </sub>
                         </label>
-                        <input type="number" id="fuel_economy" name="fuel_economy" wire:model.debounce='fuel_economy'
+                        <input type="number" id="fuel_economy" name="fuel_economy"
+                            wire:model.debounce.350ms='fuel_economy'
                             placeholder="{{ $fuel_type == 'electricity' ? 'Ex: 1 = Ampere per Kilometer' : '1 = Litter per Kilometer' }}">
                         @error('fuel_economy')
                             <p class="error">
@@ -192,7 +194,7 @@
                         Top Speed
                         <sub class="text-xs text-primary">Km/H</sub>
                     </label>
-                    <input type="number" id="top_speed" name="top_speed" wire:model.debounce='top_speed'>
+                    <input type="number" id="top_speed" name="top_speed" wire:model.debounce.350ms='top_speed'>
                     @error('top_speed')
                         <p class="error">
                             {{ $message }}
@@ -203,7 +205,7 @@
                     <label for="acceleration" class="text-md lg:text-lg lg:font-medium">
                         Acceleration
                     </label>
-                    <input type="number" id="acceleration" name="acceleration" wire:model.debounce='acceleration'>
+                    <input type="number" id="acceleration" name="acceleration" wire:model.debounce.350ms='acceleration'>
                     @error('acceleration')
                         <p class="error">
                             {{ $message }}
@@ -214,7 +216,8 @@
                     <label for="gearbox_speeds" class="text-md lg:text-lg lg:font-medium">
                         Gearbox Speeds
                     </label>
-                    <input type="number" id="gearbox_speeds" name="gearbox_speeds" wire:model.debounce='gearbox_speeds'>
+                    <input type="number" id="gearbox_speeds" name="gearbox_speeds"
+                        wire:model.debounce.350ms='gearbox_speeds'>
                     @error('gearbox_speeds')
                         <p class="error">
                             {{ $message }}
@@ -230,7 +233,7 @@
                         <sub class="text-xs text-primary">CC</sub>
                     </label>
                     <input type="number" id="engine_capacity" name="engine_capacity"
-                        wire:model.debounce='engine_capacity'>
+                        wire:model.debounce.350ms='engine_capacity'>
                     @error('engine_capacity')
                         <p class="error">
                             {{ $message }}
@@ -242,7 +245,7 @@
                         Number of Cylinders
                     </label>
                     <input type="number" id="number_cylinders" name="number_cylinders"
-                        wire:model.debounce='number_cylinders'>
+                        wire:model.debounce.350ms='number_cylinders'>
                     @error('number_cylinders')
                         <p class="error">
                             {{ $message }}
@@ -257,7 +260,7 @@
                 <div class="flex-1">
                     <label for="seating_capacity" class="text-md lg:text-lg lg:font-medium">Seating Capacity</label>
                     <input type="number" id="seating_capacity" name="seating_capacity"
-                        wire:model.debounce='seating_capacity'>
+                        wire:model.debounce.350ms='seating_capacity'>
                     @error('seating_capacity')
                         <p class="error">
                             {{ $message }}
@@ -268,7 +271,7 @@
                     <div class="flex items-center justify-center gap-3">
                         <div class="flex items-center lg:flex-row gap-2">
                             <label for="auto" class="text-sm">Auto</label>
-                            <input type="radio" name="drive_mode" value="auto" wire:model.debounce='drive_mode'>
+                            <input type="radio" name="drive_mode" value="auto" wire:model.debounce.350ms='drive_mode'>
                             <label for="manual" class="text-sm">Manual</label>
                             <input type="radio" id="manual" name="drive_mode" value="manual"
                                 wire:model.lazy='drive_mode'>
@@ -309,11 +312,11 @@
                             <div class="flex flex-col items-center md:flex-row text-sm text-gray-600">
                                 <label for="thumb_nail"
                                     class="relative cursor-pointer bg-white rounded-md text-md lg:text-lg lg:font-medium text-primary hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary">
-                                    <span>Upload an image</span>
+                                    <span class="text-sm">Upload image preview</span>
                                     <input id="thumb_nail" name="thumb_nail" type="file" class="sr-only"
                                         wire:model='car_thumbnail'>
                                 </label>
-                                <p class="pl-1">or drag and drop</p>
+                                <p class="pl-1 text-xs">or drag and drop</p>
                             </div>
                             <p class="text-xs text-gray-500">
                                 PNG, JPG up to 2MB
@@ -344,11 +347,11 @@
                             <div class="flex items-center flex-col md:flex-row text-sm text-gray-600">
                                 <label for="car_images"
                                     class="relative cursor-pointer bg-white rounded-md text-md lg:text-lg lg:font-medium text-primary hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary">
-                                    <span>Upload images</span>
+                                    <span class="text-sm">Upload images</span>
                                     <input id="car_images" name="car_images" type="file" class="sr-only"
                                         wire:model='car_images' multiple>
                                 </label>
-                                <p class="pl-1">or drag and drop</p>
+                                <p class="pl-1 text-xs">or drag and drop</p>
                             </div>
                             <p class="text-xs text-gray-500">
                                 PNG, JPG up to 10MB
