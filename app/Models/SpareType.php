@@ -9,7 +9,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class SpareType extends Model
 {
     use HasFactory;
-
+    protected $fillable = [
+        'name',
+        'image'
+    ];
     /**
      * Get all of the spareParts for the SpareType
      *

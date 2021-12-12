@@ -16,7 +16,7 @@ class SparePartFactory extends Factory
         return [
             'name' => $this->faker->company,
             'price' => rand(4, 100),
-            'image' => $this->faker->image(),
+            'image' => $this->faker->imageUrl(),
         ];
     }
 }

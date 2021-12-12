@@ -12,7 +12,9 @@
                  <a href="#">Contact</a>
              @else
                  <a href="#" class="hover:text-primary transition">Accessories</a>
-                 <a href="#" class="hover:text-primary transition">Spare Parts</a>
+                 <a href="{{ route('spare_types.show') }}"
+                     class="hover:text-primary transition {{ Route::is('spare_types.show') ? 'text-primary' : '' }}">Spare
+                     Parts</a>
                  <a href="{{ route('explore.show') }}"
                      class="hover:text-primary transition {{ Route::is('explore.show') ? 'text-primary' : '' }}">Explore</a>
                  <a href="{{ route('garage.show') }}"

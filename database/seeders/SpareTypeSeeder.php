@@ -3,7 +3,12 @@
 namespace Database\Seeders;
 
 use App\Models\SpareType;
+use App\Utility\DirectoryUtils;
+use Facade\Ignition\Support\FakeComposer;
 use Illuminate\Database\Seeder;
+use Storage;
+use Faker\Factory as Faker;
+
 
 class SpareTypeSeeder extends Seeder
 {
@@ -14,6 +19,17 @@ class SpareTypeSeeder extends Seeder
      */
     public function run()
     {
-        SpareType::factory(11)->create();
+        $faker = Faker::create();
+
+        // SpareType::factory(11)->create();
+        $spare_types = Storage::directories('public/spare_parts');
+        foreach ($spare_types as $spare_type) {
+            SpareType::create([
+                'name' => DirectoryUtils::snakeToNormal(
+                    DirectoryUtils::dirNameFromStorage($spare_type)
+                ),
+                'image' =>  $faker->imageUrl(),
+            ]);
+        }
     }
 }

@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Utility\DirectoryUtils;
 use App\Http\Livewire\CarCreate;
 use App\Http\Livewire\Explore;
 use App\Http\Livewire\Garage;
+use App\Http\Livewire\SpareTypesList;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,6 +34,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
     Route::get('/explore', Explore::class)->name('explore.show');
     Route::get('/garage', Garage::class)->name('garage.show');
+    Route::get('/car/create', CarCreate::class)->name('car.create');
+    Route::get('/spare-types', SpareTypesList::class)->name('spare_types.show');
+    Route::get('/testing', function () {
+        $arr = array();
+        $folders = Storage::directories('public/spare_parts');
+        foreach ($folders as $folder) {
+            array_push($arr, DirectoryUtils::dirNameFromStorage($folder));
+        }
+        return DirectoryUtils::snakeToNormal($arr[0]);
+    });
 });
-
-Route::get('/car/create', CarCreate::class)->name('car.create');

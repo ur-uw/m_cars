@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Storage;
 
 class SpareTypeFactory extends Factory
 {
@@ -15,7 +16,7 @@ class SpareTypeFactory extends Factory
     {
         return [
             'name' => $this->faker->name,
-            'image' => $this->faker->image(),
+            'image' => $this->faker->imageUrl(),
         ];
     }
 }
