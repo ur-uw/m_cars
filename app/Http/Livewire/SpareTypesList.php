@@ -17,9 +17,7 @@ class SpareTypesList extends Component
     }
     public function render()
     {
-        return view(
-            'livewire.spare-types-list',
-        )
+        return view('livewire.spare-types-list')
             ->extends('layouts.app');
     }
 }
