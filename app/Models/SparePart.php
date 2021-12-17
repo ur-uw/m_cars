@@ -37,4 +37,12 @@ class SparePart extends Model
     {
         return $this->belongsTo(Manufacturer::class);
     }
+
+    public function scopeSearch($query, string|null $term)
+    {
+        if ($term) {
+            $term = "%$term%";
+            $query->where('name', 'LIKE', $term);
+        }
+    }
 }
