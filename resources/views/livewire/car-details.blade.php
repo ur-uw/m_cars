@@ -29,14 +29,14 @@
             class="max-w-2xl mx-auto pt-10 pb-16 px-4 sm:px-6 lg:max-w-7xl lg:pt-16 lg:pb-24 lg:px-8 lg:grid lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8">
             <div class="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
                 <h1 class="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
-                    Car Name
+                    {{ $car->manufacturer->name }} {{ $car->model }}
                 </h1>
             </div>
 
             <!-- Options -->
             <div class="mt-4 lg:mt-0 lg:row-span-3">
                 <h2 class="sr-only">Product information</h2>
-                <p class="text-3xl text-gray-900">$192</p>
+                <p class="text-3xl text-gray-900">${{ number_format($car->details->price, 3) }}</p>
 
                 <!-- Reviews -->
                 <div class="mt-6">
@@ -145,12 +145,11 @@
                             </div>
                         </fieldset>
                     </div>
-
-
-
-                    <button type="submit"
-                        class="mt-10 w-full bg-primary border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Add
-                        to garage</button>
+                    @if (!$car->user)
+                        <button type="submit"
+                            class="mt-10 w-full bg-primary border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Add
+                            to garage</button>
+                    @endif
                 </form>
             </div>
 
@@ -160,7 +159,7 @@
                     <h3 class="sr-only">Description</h3>
 
                     <div class="space-y-6">
-                        <p class="text-base text-gray-900">Description</p>
+                        <p class="text-base text-gray-900">{{ $car->details->description }}</p>
                     </div>
                 </div>
 
@@ -169,16 +168,30 @@
 
                     <div class="mt-4">
                         <ul role="list" class="pl-4 list-disc text-sm space-y-2">
-                            <li class="text-gray-400"><span class="text-gray-600">Hand cut and sewn locally</span>
+                            <li class="text-gray-400"><span class="text-gray-600">
+
+                                    @if ($car->details->fuel_type == 'electricity')
+                                        Battery Capacity:
+                                        {{ $car->details->battery_capacity }}
+                                        A
+                                    @else
+                                        Tank Capacity:
+                                        {{ $car->details->tank_capacity }}
+                                        L
+                                    @endif
+                                </span>
                             </li>
 
-                            <li class="text-gray-400"><span class="text-gray-600">Dyed with our proprietary
-                                    colors</span></li>
+                            <li class="text-gray-400"><span class="text-gray-600">
+                                    Top Speed: {{ $car->details->top_speed }} KM/H</span></li>
 
-                            <li class="text-gray-400"><span class="text-gray-600">Pre-washed &amp; pre-shrunk</span>
+                            <li class="text-gray-400"><span class="text-gray-600">Acceleration:
+                                    {{ $car->details->acceleration }} seconds</span>
                             </li>
 
-                            <li class="text-gray-400"><span class="text-gray-600">Ultra-soft 100% cotton</span></li>
+                            <li class="text-gray-400"><span class="text-gray-600">Engine Capacity:
+                                    {{ $car->details->engine_capacity }}
+                                </span></li>
                         </ul>
                     </div>
                 </div>
@@ -186,13 +199,52 @@
                 <div class="mt-10">
                     <h2 class="text-sm font-medium text-gray-900">Details</h2>
 
-                    <div class="mt-4 space-y-6">
-                        <p class="text-sm text-gray-600">
-                            Car details text
-                        </p>
-                    </div>
+                    <dl class="mt-16 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-4 sm:gap-y-16 lg:gap-x-8">
+
+                        <div class="border-t border-gray-200 pt-4">
+                            <dt class="font-medium text-gray-900">Fuel Type</dt>
+                            <dd class="mt-2 text-sm text-gray-500">{{ $car->details->fuel_type }}</dd>
+                        </div>
+
+                        <div class="border-t border-gray-200 pt-4">
+                            <dt class="font-medium text-gray-900">Fuel Economy</dt>
+                            <dd class="mt-2 text-sm text-gray-500">{{ $car->details->fuel_economy }}</dd>
+                        </div>
+
+
+                        <div class="border-t border-gray-200 pt-4">
+                            <dt class="font-medium text-gray-900">Driving Mode</dt>
+                            <dd class="mt-2 text-sm text-gray-500 capitalize">{{ $car->details->driving_mode }}</dd>
+                        </div>
+
+                        <div class="border-t border-gray-200 pt-4">
+                            <dt class="font-medium text-gray-900">Number of Cylinders</dt>
+                            <dd class="mt-2 text-sm text-gray-500">
+                                {{ $car->details->number_of_cylinders }}
+                            </dd>
+                        </div>
+
+                        <div class="border-t border-gray-200 pt-4">
+                            <dt class="font-medium text-gray-900">Gearbox Speeds</dt>
+                            <dd class="mt-2 text-sm text-gray-500">{{ $car->details->gearbox_speeds }}</dd>
+                        </div>
+
+                        <div class="border-t border-gray-200 pt-4">
+                            <dt class="font-medium text-gray-900">Production Year</dt>
+                            <dd class="mt-2 text-sm text-gray-500">{{ $car->details->manufactured_at }}</dd>
+                        </div>
+                        <div class="border-t border-gray-200 pt-4">
+                            <dt class="font-medium text-gray-900">Seating Capacity</dt>
+                            <dd class="mt-2 text-sm text-gray-500">{{ $car->details->seating_capacity }}</dd>
+                        </div>
+                        <div class="border-t border-gray-200 pt-4">
+                            <dt class="font-medium text-gray-900">Seating Capacity</dt>
+                            <dd class="mt-2 text-sm text-gray-500">{{ $car->details->plate_number }}</dd>
+                        </div>
+                    </dl>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>

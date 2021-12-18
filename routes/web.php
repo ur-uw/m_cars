@@ -41,7 +41,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/spare-types/{spare_type}', SparePartsList::class)->name('spare_part.show');
 
-    Route::get('/car-details', CarDetails::class)->name('car_details.show');
+    Route::get('/car-details/{car}', CarDetails::class)->name('car_details.show');
 
     Route::get('/testing', function () {
         $sparePartsImages = Storage::allFiles("public/spare_parts/" . Str::snake('abs_sensor'));

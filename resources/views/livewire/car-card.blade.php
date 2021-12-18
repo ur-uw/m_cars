@@ -6,7 +6,7 @@
             New
         </div>
     @endif
-    <a href="{{ route('car_details.show') }}" class="hover:text-primary transition">
+    <a href="{{ route('car_details.show', ['car' => $car]) }}" class="hover:text-primary transition">
         {{-- Car name and year --}}
         <div>
             <h3 class="lg:text-lg font-semibold">{{ $car->manufacturer->name }} {{ $car->model }}</h3>

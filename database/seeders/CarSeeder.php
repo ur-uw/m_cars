@@ -19,12 +19,11 @@ class CarSeeder extends Seeder
     public function run()
     {
         $types_count = Type::count();
-        User::all()->each(function (User $user) use ($types_count) {
+        Manufacturer::all()->each(function (Manufacturer $manufacturer) use ($types_count) {
             $cars =  Car::factory(rand(1, 3))->make([
-                'manufacturer_id' => Manufacturer::inRandomOrder()->first()->id,
                 'type_id' => rand(1, $types_count),
             ]);
-            $user->cars()->saveMany($cars);
+            $manufacturer->cars()->saveMany($cars);
         });
     }
 }
