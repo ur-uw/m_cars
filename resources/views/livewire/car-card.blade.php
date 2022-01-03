@@ -6,18 +6,21 @@
             New
         </div>
     @endif
-    {{-- Car name and year --}}
-    <div>
-        <h3 class="lg:text-lg font-semibold">{{ $car->manufacturer->name }} {{ $car->model }}</h3>
-        {{-- Car year --}}
-        <h3>
-            {{ \Carbon\Carbon::parse($car->details->manufactured_at)->year }}
-        </h3>
-    </div>
-    {{-- Car image --}}
-    <div class="flex-1 h-full w-full">
-        <img class="max-h-full max-w-full object-contain" src="{{ Storage::url($car->thumb_nail) }}" alt="car_image">
-    </div>
+    <a href="{{ route('car_details.show', ['car' => $car]) }}" class="hover:text-primary transition">
+        {{-- Car name and year --}}
+        <div>
+            <h3 class="lg:text-lg font-semibold">{{ $car->manufacturer->name }} {{ $car->model }}</h3>
+            {{-- Car year --}}
+            <h3>
+                {{ \Carbon\Carbon::parse($car->details->manufactured_at)->year }}
+            </h3>
+        </div>
+        {{-- Car image --}}
+        <div class="flex-1 h-full w-full">
+            <img class="max-h-full max-w-full object-contain" src="{{ Storage::url($car->thumb_nail) }}"
+                alt="car_image">
+        </div>
+    </a>
     {{-- Car Specifications --}}
     <div class="flex items-end justify-between px-3 mt-3">
         <span class="flex flex-col items-center">

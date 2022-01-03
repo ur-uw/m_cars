@@ -18,6 +18,7 @@ class Car extends Model
         'type_id',
         'car_details_id',
         'thumb_nail',
+        'images',
         'user_id',
     ];
     protected $casts = [

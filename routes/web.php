@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Utility\DirectoryUtils;
 use App\Http\Livewire\CarCreate;
+use App\Http\Livewire\CarDetails;
 use App\Http\Livewire\Explore;
 use App\Http\Livewire\Garage;
 use App\Http\Livewire\SparePartsList;
@@ -39,6 +40,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/spare-types', SpareTypesList::class)->name('spare_types.show');
 
     Route::get('/spare-types/{spare_type}', SparePartsList::class)->name('spare_part.show');
+
+    Route::get('/car-details/{car}', CarDetails::class)->name('car_details.show');
 
     Route::get('/testing', function () {
         $sparePartsImages = Storage::allFiles("public/spare_parts/" . Str::snake('abs_sensor'));

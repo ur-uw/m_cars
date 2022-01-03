@@ -59,6 +59,9 @@ module.exports = {
                     },
                 },
             },
+            gridTemplateRows: {
+                "[auto,auto,1fr]": "auto auto 1fr",
+            },
         },
         fontFamily: {
             Poppins: ["Poppins, sans-serif"],
@@ -76,5 +79,8 @@ module.exports = {
     variants: {
         extend: {},
     },
-    plugins: [require("@tailwindcss/forms")],
+    plugins: [
+        require("@tailwindcss/forms"),
+        require("@tailwindcss/aspect-ratio"),
+    ],
 };

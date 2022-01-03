@@ -59,7 +59,7 @@ class CarDetailsFactory extends Factory
             'plate_number' => $this->faker->creditCardNumber(),
             'manufactured_at' => $this->faker->date(),
             'fuel_economy' => $this->faker->numberBetween(1, 7),
-            'price' => $this->faker->numberBetween(2500, 30000000),
+            'price' => $this->faker->numberBetween(2500, 1000000),
             'number_of_cylinders' => $this->faker->numberBetween(3, 16),
             'engine_capacity' => $this->faker->numberBetween(3, 7),
             'gearbox_speeds' => $this->faker->numberBetween(1, 9),
