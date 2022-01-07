@@ -2,14 +2,14 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Accessory;
+use App\Models\AccessoryType;
 use App\Models\Manufacturer;
-use App\Models\SparePart;
-use App\Models\SpareType;
 use Livewire\Component;
 
-class SparePartsList extends Component
+class AccessoriesList extends Component
 {
-    public SpareType $spare_type;
+    public AccessoryType $accessory_type;
     public $term;
     public $filterManufacturer;
     public $manufacturers;
@@ -23,13 +23,12 @@ class SparePartsList extends Component
         }
     }
 
-
     public function render()
     {
         return view(
-            'livewire.spare-parts-list',
+            'livewire.accessories-list',
             [
-                'spare_parts' => SparePart::where('spare_type_id', $this->spare_type->id)
+                'accessories' => Accessory::where('accessory_type_id', $this->accessory_type->id)
                     ->when($this->filterManufacturer, function ($query, $man) {
                         return $query->where('manufacturer_id', $man);
                     })

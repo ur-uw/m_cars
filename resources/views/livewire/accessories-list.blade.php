@@ -5,7 +5,7 @@
             <i class="fas fa-search text-2xl text-primary"></i>
             <span class="flex-1">
                 <input wire:model.debounce.350ms='term' class=" border-0 w-full" type="text"
-                    placeholder="Ex: Brake disks,...">
+                    placeholder="Ex: Seat covers,...">
             </span>
             <span>
                 <button class="hidden lg:block btn btn-primary transition">
@@ -18,8 +18,8 @@
     <section class="my-10">
         <div class="flex flex-col lg:flex-row items-start justify-between gap-2">
             <div class="mb-3">
-                <h1 class="text-xl lg:text-2xl font-semibold">Spare Part Catalogue</h1>
-                <p class="text-sm">Explore out spare parts for your car</p>
+                <h1 class="text-xl lg:text-2xl font-semibold">Accessories Catalogue</h1>
+                <p class="text-sm">Explore out accessories for your car</p>
             </div>
             <div class="flex justify-center items-center w-full flex-col lg:w-1/2 md:flex-row  gap-3">
                 <div class="flex items-center w-full lg:items-start lg:flex-col lg:justify-center gap-3 lg:gap-0">
@@ -38,20 +38,20 @@
         </div>
     </section>
 
-    {{-- Spare Parts Section --}}
+    {{-- Accessories Section --}}
     <section>
         <h1 class="text-center text-lg lg:font-semibold lg:text-4xl capitalize mb-2">
-            {{ $spare_type->name }}
+            {{ $accessory_type->name }}
         </h1>
-        @if (count($spare_parts) > 0)
+        @if (count($accessories) > 0)
             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-4">
-                @foreach ($spare_parts as $spare_part)
-                    <livewire:product-card :product="$spare_part" key="{{ $spare_part->id }}" />
+                @foreach ($accessories as $accessory)
+                    <livewire:product-card :product="$accessory" key="{{ $accessory->id }}" />
                 @endforeach
             </div>
         @else
             <h2 class="text-center text-secondary text-2xl mt-10">
-                No Spare Parts!
+                No Accessories!
             </h2>
         @endif
     </section>

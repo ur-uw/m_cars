@@ -11,8 +11,9 @@
                  <a href="#" class="hover:text-primary transition">Pricing</a>
                  <a href="#">Contact</a>
              @else
-                 <a href="#" class="hover:text-primary transition">Accessories</a>
-                 <a href="{{ route('spare_types.show') }}"
+                 <a href="{{ route('accessories.show') }}"
+                     class="hover:text-primary transition {{ Route::is('accessories.show') || Route::is('accessory.show') ? 'text-primary' : '' }}">Accessories</a>
+                 <a href="{{ route('spare_types.show') }} "
                      class="hover:text-primary transition {{ Route::is('spare_types.show') || Route::is('spare_part.show') ? 'text-primary' : '' }}">
                      Spare Parts</a>
                  <a href="{{ route('explore.show') }}"

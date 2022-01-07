@@ -24,4 +24,24 @@ class Manufacturer extends Model
     {
         return $this->hasMany(Car::class);
     }
+
+    /**
+     * Get all of the spare parts for the Manufacturer
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function spareParts(): HasMany
+    {
+        return $this->hasMany(SparePart::class);
+    }
+
+    /**
+     * Get all of the accessories the Manufacturer
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function accessories(): HasMany
+    {
+        return $this->hasMany(Accessory::class);
+    }
 }
