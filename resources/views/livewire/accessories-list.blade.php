@@ -1,3 +1,6 @@
+@section('page-title')
+    {{ Str::upper($accessory_type->name) }}
+@endsection
 <div class="container">
     {{-- Search section --}}
     <section class="mb-6">

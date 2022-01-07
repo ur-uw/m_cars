@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@section('page-title')
+    Login
+@endsection
 @section('content')
     <div class="flex flex-col lg:flex-row-reverse h-screen w-full">
         {{-- Image section --}}

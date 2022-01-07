@@ -3,6 +3,9 @@
     <!-- Link Swiper's CSS -->
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 @endsection
+@section('page-title')
+    Home
+@endsection
 @section('content')
     <div class="flex flex-col gap-24 md:gap-28 lg:gap-16">
         {{-- Hero Section --}}

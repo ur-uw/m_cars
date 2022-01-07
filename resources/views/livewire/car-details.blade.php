@@ -1,3 +1,6 @@
+@section('page-title')
+    Car Details
+@endsection
 <div class="container">
     <!-- Image gallery -->
     @if ($car->images !== null && count($car->images) > 0)

@@ -11,7 +11,9 @@
     @yield('styles')
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     @livewireStyles
-    <title>M Cars</title>
+    <title>
+        @yield('page-title','Home') - {{ config('app.name') }}
+    </title>
 </head>
 
 <body class="font-Poppins">

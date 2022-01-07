@@ -1,3 +1,6 @@
+@section('page-title')
+    Explore
+@endsection
 <div class="container">
     {{-- Search --}}
     <section class="container">

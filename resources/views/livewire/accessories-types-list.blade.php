@@ -1,3 +1,6 @@
+@section('page-title')
+    Accessory Types
+@endsection
 <div class="container">
     <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3">
         @foreach ($accessoryTypes as $accessory_type)

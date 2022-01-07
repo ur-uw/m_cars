@@ -1,3 +1,6 @@
+@section('page-title')
+    Create Car
+@endsection
 <div>
     <div class="flex items-center justify-center gap-3 mb-3">
         {{-- Step indicators --}}
