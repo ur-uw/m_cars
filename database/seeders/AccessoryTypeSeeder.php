@@ -19,8 +19,6 @@ class AccessoryTypeSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
-
-        // SpareType::factory(11)->create();
         $accessories = Storage::directories('public/accessories');
         foreach ($accessories as $accessory) {
             $dirFiles = Storage::files($accessory);

@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             SpareTypeSeeder::class,
             SparePartSeeder::class,
             AccessoryTypeSeeder::class,
+            AccessorySeeder::class,
         ]);
     }
 }

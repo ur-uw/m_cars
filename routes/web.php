@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Livewire\AccessoriesList;
 use App\Http\Livewire\AccessoriesTypesList;
-use App\Utility\DirectoryUtils;
 use App\Http\Livewire\CarCreate;
 use App\Http\Livewire\CarDetails;
 use App\Http\Livewire\Explore;
@@ -46,18 +46,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/spare-parts/{spare_type}', SparePartsList::class)->name('spare_part.show');
 
     Route::get('/accessories', AccessoriesTypesList::class)->name('accessories.show');
+    Route::get('/accessories/{accessory_type}', AccessoriesList::class)->name('accessory.show');
+
 
     Route::get('/testing', function () {
-        $sparePartsImages = Storage::allFiles("public/spare_parts/" . Str::snake('abs_sensor'));
-        $arr = array();
-        foreach ($sparePartsImages as $sparePartImage) {
-            $con = preg_match('~\.(jpeg|jpg|png)$~', $sparePartImage);
-            array_push($arr, $con);
-            if ($con) {
-                echo "fuck \n";
-            }
-        }
-
-        return $arr;
     });
 });

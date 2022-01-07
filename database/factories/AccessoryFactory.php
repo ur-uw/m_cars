@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class AccessoryTypeFactory extends Factory
+class AccessoryFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -13,8 +13,9 @@ class AccessoryTypeFactory extends Factory
      */
     public function definition()
     {
-        return  [
-            'name' => $this->faker->name,
+        return [
+            'name' => $this->faker->company,
+            'price' => rand(4, 100),
             'image' => $this->faker->imageUrl(),
         ];
     }
