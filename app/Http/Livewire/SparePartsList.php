@@ -12,6 +12,19 @@ class SparePartsList extends Component
     public SpareType $spare_type;
     public $term;
     public $filterManufacturer;
+    public $manufacturers;
+    public $manufacturers_ids = [];
+
+    public function loadManufacturers()
+    {
+        if (!$this->manufacturers) {
+            $this->manufacturers = Manufacturer::latest()
+                ->orderBy('name')
+                ->get();
+        }
+    }
+
+
     public function render()
     {
         return view(
@@ -22,9 +35,6 @@ class SparePartsList extends Component
                         return $query->where('manufacturer_id', $man);
                     })
                     ->search($this->term)
-                    ->get(),
-                'manufacturers' => Manufacturer::latest()
-                    ->orderBy('name')
                     ->get(),
             ]
         )->extends('layouts.app');
