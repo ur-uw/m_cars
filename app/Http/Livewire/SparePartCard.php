@@ -2,12 +2,12 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\SparePart;
 use Livewire\Component;
 
 class SparePartCard extends Component
 {
-    public $spare_part_name;
-    public $spare_part_image;
+    public SparePart $spare;
     public function render()
     {
         return view('livewire.spare-part-card');

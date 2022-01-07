@@ -24,12 +24,14 @@
             <div class="flex justify-center items-center w-full flex-col lg:w-1/2 md:flex-row  gap-3">
                 <div class="flex items-center w-full lg:items-start lg:flex-col lg:justify-center gap-3 lg:gap-0">
                     <label for="manufacturer" class="flex-1">Manufacturer</label>
-                    <select id="manufacturer" class="flex-1" wire:model='filterManufacturer'
-                        class="text-sm">
+                    <select wire:click='loadManufacturers' id="manufacturer" class="flex-1"
+                        wire:model='filterManufacturer' class="text-sm">
                         <option value="">All</option>
-                        @foreach ($manufacturers as $man)
-                            <option value="{{ $man->id }}">{{ $man->name }}</option>
-                        @endforeach
+                        @if ($manufacturers)
+                            @foreach ($manufacturers as $man)
+                                <option value="{{ $man->id }}">{{ $man->name }}</option>
+                            @endforeach
+                        @endif
                     </select>
                 </div>
             </div>
@@ -45,8 +47,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-4">
                 @foreach ($spare_parts as $spare_part)
                     <a href="#">
-                        <livewire:spare-part-card :spare_part_name="$spare_part->name"
-                            :spare_part_image="$spare_part->image" key="{{ $spare_part->id }}" />
+                        <livewire:spare-part-card :spare="$spare_part" key="{{ $spare_part->id }}" />
                     </a>
                 @endforeach
             </div>
