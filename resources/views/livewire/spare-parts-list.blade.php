@@ -1,3 +1,6 @@
+@section('page-title')
+    {{ Str::upper($spare_type->name) }}
+@endsection
 <div class="container">
     {{-- Search section --}}
     <section class="mb-6">

@@ -1,3 +1,7 @@
+@section('page-title')
+    Garage
+@endsection
+
 <div class="container">
     <section class="flex flex-col justify-center md:flex-row md:items-center md:justify-between">
         {{-- Search --}}

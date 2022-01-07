@@ -17,7 +17,7 @@
                      class="hover:text-primary transition {{ Route::is('spare_types.show') || Route::is('spare_part.show') ? 'text-primary' : '' }}">
                      Spare Parts</a>
                  <a href="{{ route('explore.show') }}"
-                     class="hover:text-primary transition {{ Route::is('explore.show') ? 'text-primary' : '' }}">Explore</a>
+                     class="hover:text-primary transition {{ Route::is('explore.show') || Route::is('car_details.show') ? 'text-primary' : '' }}">Explore</a>
                  <a href="{{ route('garage.show') }}"
                      class="hover:text-primary transition {{ Route::is('garage.show') ? 'text-primary' : '' }}">Garage</a>
 
