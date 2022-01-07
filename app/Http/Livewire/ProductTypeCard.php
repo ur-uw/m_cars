@@ -6,8 +6,8 @@ use Livewire\Component;
 
 class ProductTypeCard extends Component
 {
-    public $spare_type_name;
-    public $spare_type_image;
+    public $product_type_name;
+    public $product_type_image;
     public function render()
     {
         return view('livewire.product-type-card');

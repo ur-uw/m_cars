@@ -47,7 +47,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-4">
                 @foreach ($spare_parts as $spare_part)
                     <a href="#">
-                        <livewire:spare-part-card :spare="$spare_part" key="{{ $spare_part->id }}" />
+                        <livewire:product-card :product="$spare_part" key="{{ $spare_part->id }}" />
                     </a>
                 @endforeach
             </div>
