@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Livewire\AccessoriesList;
 use App\Http\Livewire\AccessoriesTypesList;
+use App\Http\Livewire\AdminDashboard;
 use App\Http\Livewire\CarCreate;
 use App\Http\Livewire\CarDetails;
 use App\Http\Livewire\Explore;
@@ -48,6 +49,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/accessories', AccessoriesTypesList::class)->name('accessories.show');
     Route::get('/accessories/{accessory_type}', AccessoriesList::class)->name('accessory.show');
 
+
+    // Admin Routes
+    Route::get('/admin-dashboard', AdminDashboard::class)
+        ->middleware('admin')
+        ->name('admin-dashboard');
 
     Route::get('/testing', function () {
     });

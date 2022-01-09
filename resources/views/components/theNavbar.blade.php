@@ -21,27 +21,31 @@
                  <a href="{{ route('garage.show') }}"
                      class="hover:text-primary transition {{ Route::is('garage.show') ? 'text-primary' : '' }}">Garage</a>
 
+
              @endif
-             @if (!Auth::check())
+             @guest
                  <li>
                      <a href="{{ route('auth.login') }}" class="btn btn-secondary transition flex items-center gap-2">
                          <span>Login</span>
                          <i class="fas fa-arrow-right text-sm"></i>
                      </a>
                  </li>
-             @else
+             @endguest
+             @auth
                  @if (Route::currentRouteName() != 'home')
-                     <a href="{{ route('auth.logout') }}" class="btn btn-secondary transition rounded-md uppercase">
-                         Log out
+                     <a href="{{ route('admin-dashboard') }}" class="btn btn-primary transition rounded-md">
+                         Admin Dashboard
+                     </a>
+                     <a href="{{ route('auth.logout') }}" class="btn btn-secondary transition rounded-md">
+                         <i class="fas fa-sign-out-alt"></i>
                      </a>
                  @else
-                     <a href="{{ route('explore.show') }}"
-                         class="btn btn-secondary transition flex items-center gap-2">
+                     <a href="{{ route('explore.show') }}" class="btn btn-secondary transition flex items-center gap-2">
                          <span>Explore</span>
                          <i class="fas fa-arrow-right text-sm"></i>
                      </a>
                  @endif
-             @endif
+             @endauth
          </ul>
      </div>
  </nav>
