@@ -16,7 +16,7 @@
     </title>
 </head>
 
-<body class="font-Poppins">
+<body class="font-Poppins min-h-screen">
     <!-- Header -->
     @if (Route::currentRouteName() != 'auth.login' && Route::currentRouteName() != 'auth.register')
         <header class="container mb-5">

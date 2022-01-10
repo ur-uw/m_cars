@@ -3,12 +3,16 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Livewire\AccessoriesList;
 use App\Http\Livewire\AccessoriesTypesList;
+use App\Http\Livewire\AdminDashboard;
 use App\Http\Livewire\CarCreate;
 use App\Http\Livewire\CarDetails;
+use App\Http\Livewire\CreateAccessory;
+use App\Http\Livewire\CreateSparePart;
 use App\Http\Livewire\Explore;
 use App\Http\Livewire\Garage;
 use App\Http\Livewire\SparePartsList;
 use App\Http\Livewire\SpareTypesList;
+use App\Models\Accessory;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -49,6 +53,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/accessories/{accessory_type}', AccessoriesList::class)->name('accessory.show');
 
 
+    // Admin Routes
+    Route::middleware('admin')->group(function () {
+        Route::get('/admin-dashboard', AdminDashboard::class)
+            ->name('admin-dashboard');
+
+        Route::get('/spare-part/create', CreateSparePart::class)
+            ->name('spare-part.create');
+
+        Route::get('/accessory/create', CreateAccessory::class)
+            ->name('accessory.create');
+    });
     Route::get('/testing', function () {
     });
 });

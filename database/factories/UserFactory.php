@@ -58,6 +58,7 @@ class UserFactory extends Factory
                 'name' => 'Mohammed Fadhil',
                 'email' => 'test@test.com',
                 'password' => Hash::make('testtest'),
+                'is_admin' => true,
             ];
         });
     }

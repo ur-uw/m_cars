@@ -107,20 +107,39 @@
 
             </div>
             {{-- Description --}}
-            <div>
-                <label for="description" class="text-md lg:text-lg lg:font-medium">Description</label>
-                <textarea name="description" id="description" cols="20" rows="5"
-                    wire:model.debounce.350ms='description'></textarea>
-                <p class=" text-app-grey text-xs mt-1">Do not exceed 100 characters when entering car description!
-                </p>
-                @error('description')
-                    <p class="error">
-                        {{ $message }}
+            <div class="flex items-start gap-3">
+
+                <div class="flex-1">
+                    <label for="description" class="text-md lg:text-lg lg:font-medium">Description</label>
+                    <textarea name="description" id="description" cols="20" rows="5"
+                        wire:model.debounce.350ms='description'></textarea>
+                    <p class=" text-app-grey text-xs mt-1">Do not exceed 100 characters when entering car description!
                     </p>
-                @enderror
+                    @error('description')
+                        <p class="error">
+                            {{ $message }}
+                        </p>
+                    @enderror
+                </div>
+                <div class="flex flex-col items-center">
+                    <label for="action" class="text-md lg:text-lg lg:font-medium">Action</label>
+                    <select wire:model='action' name="action" id="action">
+                        <option value="">Just Show in Garage</option>
+                        <option value="FOR_SALE">For Sale</option>
+                        <option value="FOR_RENT">For Rent</option>
+                    </select>
+                    @admin
+                    <div class="flex-1 flex items-center gap-2 mt-4 border border-primary shadow cursor-pointer p-5 rounded hover:shadow-xl transition"
+                        wire:click='$toggle("formMyGarage")'>
+                        <input type="checkbox" wire:model='formMyGarage' name="for_my_garage" id="for_my_garage">
+                        <label for="action" class="text-md">Add to my garage</label>
+                    </div>
+                    @endadmin
+                </div>
+
             </div>
             {{-- Second step --}}
-        @elseif ($currentPage==1)
+        @elseif ($currentPage == 1)
             {{-- Fuel Details --}}
             <h2 class="text-md lg:text-2xl lg:font-semibold">Fuel Details</h2>
             <div>

@@ -2113,7 +2113,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var swiper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! swiper */ "./node_modules/swiper/swiper.esm.js");
 
-var swiper = new swiper__WEBPACK_IMPORTED_MODULE_0__["default"](".mySwiper", {
+new swiper__WEBPACK_IMPORTED_MODULE_0__["default"](".mySwiper", {
   slidesPerView: 2,
   spaceBetween: 20,
   freeMode: true,
