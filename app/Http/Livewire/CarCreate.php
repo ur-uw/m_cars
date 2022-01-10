@@ -37,6 +37,9 @@ class CarCreate extends Component
     public $is_four_wheel;
     public $is_auto_drive;
     public $car_thumbnail;
+    public $action;
+    public $formMyGarage = true;
+
     public $car_images = [];
     public $pages = [
         0 => [
@@ -97,6 +100,16 @@ class CarCreate extends Component
     {
         $this->validateOnly($propertyName);
     }
+
+    private function getUserId(): int|null
+    {
+        $isAdmin = Auth::user()->is_admin;
+        if ($isAdmin) {
+            return $this->formMyGarage ? Auth::user()->id : null;
+        }
+        return Auth::user()->id;
+    }
+
     public function submit()
     {
         $this->validate($this->rules);
@@ -129,9 +142,10 @@ class CarCreate extends Component
             'model' => $this->model,
             'manufacturer_id' => $this->manufacturer,
             'thumb_nail' => $thumbnail,
+            'action' => $this->action,
             'images' => $carImages,
             'type_id' => $this->type,
-            'user_id' => Auth::user()->id,
+            'user_id' => $this->getUserId(),
         ]);
         $car->details()->save($car_details);
         $this->reset();

@@ -25,7 +25,7 @@ class CreateAccessory extends Component
         'name' => 'required|string|max:20',
         'price' => 'required|numeric',
         'image' => 'required|image|mimes:jpeg,png,jpg|max:2048|dimensions:max_width=670,max_height=350',
-        'accessoryType' => 'required|exists:App\Models\SpareType,id',
+        'accessoryType' => 'required|exists:App\Models\AccessoryType,id',
         'manufacturer' => 'required|exists:App\Models\Manufacturer,id',
 
     ];

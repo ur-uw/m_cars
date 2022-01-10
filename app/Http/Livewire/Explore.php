@@ -35,6 +35,7 @@ class Explore extends Component
             'livewire.explore',
             [
                 'cars' =>  Car::with(['details', 'type', 'manufacturer'])
+                    ->where('action', '!=', null)
                     ->when($this->filterManufacturer, function ($query, $manufacturer) {
                         return $query->where('manufacturer_id', $manufacturer);
                     })->when($this->filterType, function ($query, $type) {
