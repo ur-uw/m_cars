@@ -33,9 +33,11 @@
              @endguest
              @auth
                  @if (Route::currentRouteName() != 'home')
+                     @admin
                      <a href="{{ route('admin-dashboard') }}" class="btn btn-primary transition rounded-md">
                          Admin Dashboard
                      </a>
+                     @endadmin
                      <a href="{{ route('auth.logout') }}" class="btn btn-secondary transition rounded-md">
                          <i class="fas fa-sign-out-alt"></i>
                      </a>
