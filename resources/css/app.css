@@ -50,7 +50,7 @@ textarea {
   resize: none;
 }
 .error{
-    @apply text-red-500 text-xs;
+    @apply text-red-500 text-xs mt-1;
 }
 .thumbnail{
     max-height:350px ;

@@ -11,7 +11,7 @@
             <h3 class="text-white text-xl font-semibold">Add a Car</h3>
         </a>
         {{-- Add a spare part --}}
-        <a href="#"
+        <a href="{{ route('spare-part.create') }}"
             class="flex flex-col  items-center p-10 bg-primary shadow h-48 lg:h-52 rounded hover:shadow-xl transition space-y-6">
             <i class="fas fa-tools text-white text-7xl"></i>
             <h3 class="text-white text-xl font-semibold">Add a Spare Part</h3>

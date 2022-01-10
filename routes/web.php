@@ -6,6 +6,7 @@ use App\Http\Livewire\AccessoriesTypesList;
 use App\Http\Livewire\AdminDashboard;
 use App\Http\Livewire\CarCreate;
 use App\Http\Livewire\CarDetails;
+use App\Http\Livewire\CreateSparePart;
 use App\Http\Livewire\Explore;
 use App\Http\Livewire\Garage;
 use App\Http\Livewire\SparePartsList;
@@ -51,10 +52,12 @@ Route::middleware('auth')->group(function () {
 
 
     // Admin Routes
-    Route::get('/admin-dashboard', AdminDashboard::class)
-        ->middleware('admin')
-        ->name('admin-dashboard');
-
+    Route::middleware('admin')->group(function () {
+        Route::get('/admin-dashboard', AdminDashboard::class)
+            ->name('admin-dashboard');
+        Route::get('/spare-part/create', CreateSparePart::class)
+            ->name('spare-part.create');
+    });
     Route::get('/testing', function () {
     });
 });
