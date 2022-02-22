@@ -2163,7 +2163,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
-
+ // to declare global things and used in all laravel balde we must use window.{name}
 
 window.scrollToId = function (id) {
   if (id != null) {

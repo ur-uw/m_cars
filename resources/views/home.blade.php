@@ -57,5 +57,7 @@
         </section>
         {{-- Features --}}
         @include('components.theFeatures')
+        {{-- Contact Us --}}
+        @include('components.theContactUs')
     </div>
 @endsection
