@@ -8,7 +8,7 @@
          <ul class="bg-gray-50 lg:bg-white p-5 flex flex-col gap-6 lg:gap-12 lg:flex-row  ml-auto lg:items-center">
              @if (Route::currentRouteName() == 'home')
                  <a href="#" class="hover:text-primary transition">Features</a>
-                 <a href="#">Contact</a>
+                 <a href="#" class="hover:text-primary transition">Contact</a>
              @else
                  <a href="{{ route('accessories.show') }}"
                      class="hover:text-primary transition {{ Route::is('accessories.show') || Route::is('accessory.show') ? 'text-primary' : '' }}">Accessories</a>

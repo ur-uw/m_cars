@@ -59,7 +59,7 @@
         <section class="bg-white relative">
             <div class="container px-6 py-10 mx-auto">
                 <h1 class="text-3xl font-semibold text-gray-800 capitalize lg:text-4xl">explore our <br>
-                    awesome <span class="underline decoration-blue-500">Features</span>
+                    awesome <span class="underline decoration-primary">Features</span>
                 </h1>
 
                 <p class="mt-4 text-gray-500 xl:mt-6">
@@ -145,8 +145,8 @@
                     </div>
 
                     {{-- Navigation Services --}}
-                    <div class="p-8 space-y-3 border-2 border-primary dark:border-blue-300 rounded-xl">
-                        <span class="inline-block text-primary dark:text-blue-400">
+                    <div class="p-8 space-y-3 border-2 border-primary rounded-xl">
+                        <span class="inline-block text-primary ">
                             <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="50" height="50"
                                 viewBox="0 0 172 172" style=" fill:#000000;">
                                 <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt"
