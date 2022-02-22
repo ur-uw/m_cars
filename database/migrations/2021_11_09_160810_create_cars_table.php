@@ -19,9 +19,22 @@ class CreateCarsTable extends Migration
             $table->string('thumb_nail');
             $table->json('images')->nullable();
             $table->enum('action', ['FOR_SALE', 'FOR_RENT', null])->nullable();
-            $table->foreignId('manufacturer_id');
-            $table->foreignId('type_id');
-            $table->foreignId('user_id')->nullable();
+
+            $table->foreignId('manufacturer_id')
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+            $table->foreignId('type_id')
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+            $table->foreignId('user_id')
+                ->nullable()
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

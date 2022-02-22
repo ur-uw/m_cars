@@ -18,8 +18,14 @@ class CreateAccessoriesTable extends Migration
             $table->string('name');
             $table->integer('price');
             $table->string('image');
-            $table->foreignId('accessory_type_id');
-            $table->foreignId('manufacturer_id');
+            $table->foreignId('accessory_type_id')
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->foreignId('manufacturer_id')
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }
