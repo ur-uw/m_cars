@@ -92,7 +92,7 @@
                             Browse, sell, rent and buy cars from huge number of cars offered by our community.
                         </p>
 
-                        <a href="#"
+                        <a href="{{ route('explore.show') }}"
                             class="inline-flex p-2 text-primary capitalize transition-colors duration-200 transform bg-blue-100 rounded-full hover:underline hover:text-blue-600">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
@@ -134,7 +134,7 @@
                             Get the best spare and accessory parts suited for your car.
                         </p>
 
-                        <a href="#"
+                        <a href="{{ route('spare_types.show') }}"
                             class="inline-flex p-2 text-primary capitalize transition-colors duration-200 transform bg-blue-100 rounded-full hover:underline hover:text-blue-600">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">

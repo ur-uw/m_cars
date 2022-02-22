@@ -8,7 +8,6 @@
          <ul class="bg-gray-50 lg:bg-white p-5 flex flex-col gap-6 lg:gap-12 lg:flex-row  ml-auto lg:items-center">
              @if (Route::currentRouteName() == 'home')
                  <a href="#" class="hover:text-primary transition">Features</a>
-                 <a href="#" class="hover:text-primary transition">Pricing</a>
                  <a href="#">Contact</a>
              @else
                  <a href="{{ route('accessories.show') }}"
@@ -21,8 +20,6 @@
                  <a href="{{ route('garage.show') }}"
                      class="hover:text-primary transition {{ Route::is('garage.show') ? 'text-primary' : '' }}">Garage</a>
                  <a href="#" class="hover:text-primary transition">Map</a>
-
-
              @endif
              @guest
                  <li>
