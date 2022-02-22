@@ -10,7 +10,9 @@
                  <button onclick="scrollToId('features-section')" class="hover:text-primary transition">
                      Features
                  </button>
-                 <button class="hover:text-primary transition">Contact</button>
+                 <button class="hover:text-primary transition" onclick="scrollToId('contact-us-section')">
+                     Contact
+                 </button>
              @else
                  <a href="{{ route('accessories.show') }}"
                      class="hover:text-primary transition {{ Route::is('accessories.show') || Route::is('accessory.show') ? 'text-primary' : '' }}">Accessories</a>
