@@ -107,7 +107,7 @@
 
             </div>
             {{-- Description --}}
-            <div class="flex items-start gap-3">
+            <div class="flex flex-col items-center lg:flex-row lg:items-start gap-3">
 
                 <div class="flex-1">
                     <label for="description" class="text-md lg:text-lg lg:font-medium">Description</label>

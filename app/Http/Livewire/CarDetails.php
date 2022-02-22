@@ -9,6 +9,8 @@ class CarDetails extends Component
 {
     public Car $car;
     public $selected_car_image;
+    // flag to indecate if the data of cars is from seeder of from cars api
+    public $useRealData = true;
     public function mount(Car $car)
     {
         if ($car->images != null) {

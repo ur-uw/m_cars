@@ -41,7 +41,7 @@ class ManufacturerFactory extends Factory
             'Volkswagen',
             'Kia',
             'Volvo',
-            'Mercedes-Benz',
+            'Mercedes',
             'Cadillac',
             'Acura',
         ];

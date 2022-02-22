@@ -6,22 +6,24 @@
     @if ($car->images !== null && count($car->images) > 0)
         <div class="flex flex-col items-center container lg:flex-row">
             <div class="container">
-                <img class="object-contain lg:h-96 min-w-full" src="{{ Storage::url($selected_car_image) }}"
+                <img class="object-contain lg:h-96 min-w-full"
+                    src="{{ $useRealData ? $selected_car_image : Storage::url($selected_car_image) }}"
                     alt="car_thumb_nail">
             </div>
             <div class="grid grid-cols-2 gap-3 mt-4 lg:m-0 lg:grid-cols-1">
                 @foreach ($car->images as $img)
                     <div class="w-32 p-3 shadow overflow-hidden bg-gray-50 {{ $selected_car_image == $img ? 'border border-primary' : '' }} cursor-pointer hover:shadow-lg transition rounded"
                         wire:click='$set("selected_car_image","{{ $img }}")'>
-                        <img class="min-h-full min-w-full object-cover" src="{{ Storage::url($img) }}" alt="car_image">
+                        <img class="min-h-full min-w-full object-cover"
+                            src="{{ $useRealData ? $img : Storage::url($img) }}" alt="car_image">
                     </div>
                 @endforeach
             </div>
         </div>
     @else
         <div class="container">
-            <img class="h-96 min-w-full object-contain" src="{{ Storage::url($car->thumb_nail) }}"
-                alt="car_thumb_nail">
+            <img class="h-96 min-w-full object-contain"
+                src="{{ $useRealData ? $car->thumb_nail : Storage::url($car->thumb_nail) }}" alt="car_thumb_nail">
         </div>
     @endif
 
@@ -29,7 +31,7 @@
     <div
         class="max-w-2xl mx-auto pt-10 pb-16 px-4 sm:px-6 lg:max-w-7xl lg:pt-16 lg:pb-24 lg:px-8 lg:grid lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8">
         <div class="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
-            <h1 class="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
+            <h1 class="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl capitalize">
                 {{ $car->manufacturer->name }} {{ $car->model }}
             </h1>
         </div>
@@ -37,7 +39,7 @@
         <!-- Options -->
         <div class="mt-4 lg:mt-0 lg:row-span-3">
             <h2 class="sr-only">Product information</h2>
-            <p class="text-3xl text-gray-900">${{ number_format($car->details->price, 3) }}</p>
+            <p class="text-3xl text-gray-900">${{ number_format($car->details->price, 0) }}</p>
 
             <!-- Reviews -->
             <div class="mt-6">
@@ -219,14 +221,16 @@
 
                     <div class="border-t border-gray-200 pt-4">
                         <dt class="font-medium text-gray-900">Production Year</dt>
-                        <dd class="mt-2 text-sm text-gray-500">{{ $car->details->manufactured_at }}</dd>
+                        <dd class="mt-2 text-sm text-gray-500">
+                            {{ \Carbon\Carbon::parse($car->details->manufactured_at)->year }}
+                        </dd>
                     </div>
                     <div class="border-t border-gray-200 pt-4">
                         <dt class="font-medium text-gray-900">Seating Capacity</dt>
                         <dd class="mt-2 text-sm text-gray-500">{{ $car->details->seating_capacity }}</dd>
                     </div>
                     <div class="border-t border-gray-200 pt-4">
-                        <dt class="font-medium text-gray-900">Seating Capacity</dt>
+                        <dt class="font-medium text-gray-900">Plate Number</dt>
                         <dd class="mt-2 text-sm text-gray-500">{{ $car->details->plate_number }}</dd>
                     </div>
                 </dl>
