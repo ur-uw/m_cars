@@ -2165,6 +2165,17 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
 
+window.scrollToId = function (id) {
+  if (id != null) {
+    var elm = document.getElementById(id);
+    elm.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+      inline: "nearest"
+    });
+  }
+};
+
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":
