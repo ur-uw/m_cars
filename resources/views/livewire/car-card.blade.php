@@ -9,7 +9,7 @@
     <a href="{{ route('car_details.show', ['car' => $car]) }}" class="hover:text-primary transition">
         {{-- Car name and year --}}
         <div>
-            <h3 class="lg:text-lg font-semibold">{{ $car->manufacturer->name }} {{ $car->model }}</h3>
+            <h3 class="lg:text-lg font-semibold capitalize">{{ $car->manufacturer->name }} {{ $car->model }}</h3>
             {{-- Car year --}}
             <h3>
                 {{ \Carbon\Carbon::parse($car->details->manufactured_at)->year }}
@@ -17,8 +17,8 @@
         </div>
         {{-- Car image --}}
         <div class="flex-1 h-full w-full">
-            <img class="max-h-full max-w-full object-contain" src="{{ Storage::url($car->thumb_nail) }}"
-                alt="car_image">
+            <img class="max-h-full max-w-full object-contain"
+                src="{{ $useRealData ? $car->thumb_nail : Storage::url($car->thumb_nail) }}" alt="car_image">
         </div>
     </a>
     {{-- Car Specifications --}}
@@ -32,8 +32,14 @@
             <h4 class="text-sm">{{ $car->details->seating_capacity }}</h4>
         </span>
         <span class="flex flex-col items-center">
-            <img class="h-5 w-5" src="https://img.icons8.com/ios-filled/50/000000/gas-station.png" />
-            <h4 class="text-sm">{{ $car->details->tank_capacity }} MPG</h4>
+            @if ($car->details->fuel_type == 'Electricity')
+                <img class="h-5 w-5"
+                    src="https://img.icons8.com/external-kiranshastry-solid-kiranshastry/344/external-flash-photography-kiranshastry-solid-kiranshastry.png" />
+                <h4 class="text-sm">{{ $car->details->tank_capacity }} A</h4>
+            @else
+                <img class="h-5 w-5" src="https://img.icons8.com/ios-filled/50/000000/gas-station.png" />
+                <h4 class="text-sm">{{ $car->details->tank_capacity }} MPG</h4>
+            @endif
         </span>
     </div>
 </div>

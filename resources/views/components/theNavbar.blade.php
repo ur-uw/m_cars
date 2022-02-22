@@ -20,6 +20,7 @@
                      class="hover:text-primary transition {{ Route::is('explore.show') || Route::is('car_details.show') ? 'text-primary' : '' }}">Explore</a>
                  <a href="{{ route('garage.show') }}"
                      class="hover:text-primary transition {{ Route::is('garage.show') ? 'text-primary' : '' }}">Garage</a>
+                 <a href="#" class="hover:text-primary transition">Map</a>
 
 
              @endif
