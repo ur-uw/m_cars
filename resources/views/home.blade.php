@@ -13,15 +13,7 @@
             <div class="flex flex-col-reverse lg:flex-row relative">
                 {{-- Headings --}}
                 <div class="container lg:w-5/12 lg:ml-20 relative">
-                    <div
-                        class="absolute -top-10 lg:top-0 -left-4 w-72 h-72 bg-indigo-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob">
-                    </div>
-                    <div
-                        class="absolute -top-10 lg:top-0 -right-4 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000">
-                    </div>
-                    <div
-                        class="absolute bottom-8 lg:-bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000">
-                    </div>
+                    @include('components.theBubbles')
                     <h1 class="text-xl text-center font-semibold lg:hidden">Premium Car Service in Iraq</h1>
                     <div class="hidden lg:flex lg:flex-col lg:text-7xl lg:font-bold">
                         <span>Premium</span>
@@ -63,5 +55,9 @@
                 </div>
             </div>
         </section>
+        {{-- Features --}}
+        @include('components.theFeatures')
+        {{-- Contact Us --}}
+        @include('components.theContactUs')
     </div>
 @endsection

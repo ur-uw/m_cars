@@ -12,7 +12,7 @@
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     @livewireStyles
     <title>
-        @yield('page-title','Home') - {{ config('app.name') }}
+        @yield('page-title','Home') - M Cars
     </title>
 </head>
 

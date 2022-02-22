@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\Car;
+use Auth;
 use Livewire\Component;
 
 class CarDetails extends Component
@@ -19,6 +20,16 @@ class CarDetails extends Component
         $this->car = $car;
     }
 
+    // Add the car for user garage
+    public function addToGarage()
+    {
+        if (Auth::check()) {
+
+            dd($this->car);
+        } else {
+            redirect()->route('auth.login');
+        }
+    }
 
     public function render()
     {

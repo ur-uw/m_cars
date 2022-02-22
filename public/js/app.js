@@ -28,12 +28,24 @@ var buildFullPath = __webpack_require__(/*! ../core/buildFullPath */ "./node_mod
 var parseHeaders = __webpack_require__(/*! ./../helpers/parseHeaders */ "./node_modules/axios/lib/helpers/parseHeaders.js");
 var isURLSameOrigin = __webpack_require__(/*! ./../helpers/isURLSameOrigin */ "./node_modules/axios/lib/helpers/isURLSameOrigin.js");
 var createError = __webpack_require__(/*! ../core/createError */ "./node_modules/axios/lib/core/createError.js");
+var defaults = __webpack_require__(/*! ../defaults */ "./node_modules/axios/lib/defaults.js");
+var Cancel = __webpack_require__(/*! ../cancel/Cancel */ "./node_modules/axios/lib/cancel/Cancel.js");
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
     var requestData = config.data;
     var requestHeaders = config.headers;
     var responseType = config.responseType;
+    var onCanceled;
+    function done() {
+      if (config.cancelToken) {
+        config.cancelToken.unsubscribe(onCanceled);
+      }
+
+      if (config.signal) {
+        config.signal.removeEventListener('abort', onCanceled);
+      }
+    }
 
     if (utils.isFormData(requestData)) {
       delete requestHeaders['Content-Type']; // Let the browser set it
@@ -71,7 +83,13 @@ module.exports = function xhrAdapter(config) {
         request: request
       };
 
-      settle(resolve, reject, response);
+      settle(function _resolve(value) {
+        resolve(value);
+        done();
+      }, function _reject(err) {
+        reject(err);
+        done();
+      }, response);
 
       // Clean up request
       request = null;
@@ -124,14 +142,15 @@ module.exports = function xhrAdapter(config) {
 
     // Handle timeout
     request.ontimeout = function handleTimeout() {
-      var timeoutErrorMessage = 'timeout of ' + config.timeout + 'ms exceeded';
+      var timeoutErrorMessage = config.timeout ? 'timeout of ' + config.timeout + 'ms exceeded' : 'timeout exceeded';
+      var transitional = config.transitional || defaults.transitional;
       if (config.timeoutErrorMessage) {
         timeoutErrorMessage = config.timeoutErrorMessage;
       }
       reject(createError(
         timeoutErrorMessage,
         config,
-        config.transitional && config.transitional.clarifyTimeoutError ? 'ETIMEDOUT' : 'ECONNABORTED',
+        transitional.clarifyTimeoutError ? 'ETIMEDOUT' : 'ECONNABORTED',
         request));
 
       // Clean up request
@@ -185,18 +204,22 @@ module.exports = function xhrAdapter(config) {
       request.upload.addEventListener('progress', config.onUploadProgress);
     }
 
-    if (config.cancelToken) {
+    if (config.cancelToken || config.signal) {
       // Handle cancellation
-      config.cancelToken.promise.then(function onCanceled(cancel) {
+      // eslint-disable-next-line func-names
+      onCanceled = function(cancel) {
         if (!request) {
           return;
         }
-
+        reject(!cancel || (cancel && cancel.type) ? new Cancel('canceled') : cancel);
         request.abort();
-        reject(cancel);
-        // Clean up request
         request = null;
-      });
+      };
+
+      config.cancelToken && config.cancelToken.subscribe(onCanceled);
+      if (config.signal) {
+        config.signal.aborted ? onCanceled() : config.signal.addEventListener('abort', onCanceled);
+      }
     }
 
     if (!requestData) {
@@ -242,6 +265,11 @@ function createInstance(defaultConfig) {
   // Copy context to instance
   utils.extend(instance, context);
 
+  // Factory for creating new instances
+  instance.create = function create(instanceConfig) {
+    return createInstance(mergeConfig(defaultConfig, instanceConfig));
+  };
+
   return instance;
 }
 
@@ -251,15 +279,11 @@ var axios = createInstance(defaults);
 // Expose Axios class to allow class inheritance
 axios.Axios = Axios;
 
-// Factory for creating new instances
-axios.create = function create(instanceConfig) {
-  return createInstance(mergeConfig(axios.defaults, instanceConfig));
-};
-
 // Expose Cancel & CancelToken
 axios.Cancel = __webpack_require__(/*! ./cancel/Cancel */ "./node_modules/axios/lib/cancel/Cancel.js");
 axios.CancelToken = __webpack_require__(/*! ./cancel/CancelToken */ "./node_modules/axios/lib/cancel/CancelToken.js");
 axios.isCancel = __webpack_require__(/*! ./cancel/isCancel */ "./node_modules/axios/lib/cancel/isCancel.js");
+axios.VERSION = (__webpack_require__(/*! ./env/data */ "./node_modules/axios/lib/env/data.js").version);
 
 // Expose all/spread
 axios.all = function all(promises) {
@@ -331,11 +355,42 @@ function CancelToken(executor) {
   }
 
   var resolvePromise;
+
   this.promise = new Promise(function promiseExecutor(resolve) {
     resolvePromise = resolve;
   });
 
   var token = this;
+
+  // eslint-disable-next-line func-names
+  this.promise.then(function(cancel) {
+    if (!token._listeners) return;
+
+    var i;
+    var l = token._listeners.length;
+
+    for (i = 0; i < l; i++) {
+      token._listeners[i](cancel);
+    }
+    token._listeners = null;
+  });
+
+  // eslint-disable-next-line func-names
+  this.promise.then = function(onfulfilled) {
+    var _resolve;
+    // eslint-disable-next-line func-names
+    var promise = new Promise(function(resolve) {
+      token.subscribe(resolve);
+      _resolve = resolve;
+    }).then(onfulfilled);
+
+    promise.cancel = function reject() {
+      token.unsubscribe(_resolve);
+    };
+
+    return promise;
+  };
+
   executor(function cancel(message) {
     if (token.reason) {
       // Cancellation has already been requested
@@ -353,6 +408,37 @@ function CancelToken(executor) {
 CancelToken.prototype.throwIfRequested = function throwIfRequested() {
   if (this.reason) {
     throw this.reason;
+  }
+};
+
+/**
+ * Subscribe to the cancel signal
+ */
+
+CancelToken.prototype.subscribe = function subscribe(listener) {
+  if (this.reason) {
+    listener(this.reason);
+    return;
+  }
+
+  if (this._listeners) {
+    this._listeners.push(listener);
+  } else {
+    this._listeners = [listener];
+  }
+};
+
+/**
+ * Unsubscribe from the cancel signal
+ */
+
+CancelToken.prototype.unsubscribe = function unsubscribe(listener) {
+  if (!this._listeners) {
+    return;
+  }
+  var index = this._listeners.indexOf(listener);
+  if (index !== -1) {
+    this._listeners.splice(index, 1);
   }
 };
 
@@ -427,14 +513,14 @@ function Axios(instanceConfig) {
  *
  * @param {Object} config The config specific for this request (merged with this.defaults)
  */
-Axios.prototype.request = function request(config) {
+Axios.prototype.request = function request(configOrUrl, config) {
   /*eslint no-param-reassign:0*/
   // Allow for axios('example/url'[, config]) a la fetch API
-  if (typeof config === 'string') {
-    config = arguments[1] || {};
-    config.url = arguments[0];
-  } else {
+  if (typeof configOrUrl === 'string') {
     config = config || {};
+    config.url = configOrUrl;
+  } else {
+    config = configOrUrl || {};
   }
 
   config = mergeConfig(this.defaults, config);
@@ -452,9 +538,9 @@ Axios.prototype.request = function request(config) {
 
   if (transitional !== undefined) {
     validator.assertOptions(transitional, {
-      silentJSONParsing: validators.transitional(validators.boolean, '1.0.0'),
-      forcedJSONParsing: validators.transitional(validators.boolean, '1.0.0'),
-      clarifyTimeoutError: validators.transitional(validators.boolean, '1.0.0')
+      silentJSONParsing: validators.transitional(validators.boolean),
+      forcedJSONParsing: validators.transitional(validators.boolean),
+      clarifyTimeoutError: validators.transitional(validators.boolean)
     }, false);
   }
 
@@ -689,6 +775,7 @@ var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/util
 var transformData = __webpack_require__(/*! ./transformData */ "./node_modules/axios/lib/core/transformData.js");
 var isCancel = __webpack_require__(/*! ../cancel/isCancel */ "./node_modules/axios/lib/cancel/isCancel.js");
 var defaults = __webpack_require__(/*! ../defaults */ "./node_modules/axios/lib/defaults.js");
+var Cancel = __webpack_require__(/*! ../cancel/Cancel */ "./node_modules/axios/lib/cancel/Cancel.js");
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -696,6 +783,10 @@ var defaults = __webpack_require__(/*! ../defaults */ "./node_modules/axios/lib/
 function throwIfCancellationRequested(config) {
   if (config.cancelToken) {
     config.cancelToken.throwIfRequested();
+  }
+
+  if (config.signal && config.signal.aborted) {
+    throw new Cancel('canceled');
   }
 }
 
@@ -813,7 +904,8 @@ module.exports = function enhanceError(error, config, code, request, response) {
       stack: this.stack,
       // Axios
       config: this.config,
-      code: this.code
+      code: this.code,
+      status: this.response && this.response.status ? this.response.status : null
     };
   };
   return error;
@@ -846,17 +938,6 @@ module.exports = function mergeConfig(config1, config2) {
   config2 = config2 || {};
   var config = {};
 
-  var valueFromConfig2Keys = ['url', 'method', 'data'];
-  var mergeDeepPropertiesKeys = ['headers', 'auth', 'proxy', 'params'];
-  var defaultToConfig2Keys = [
-    'baseURL', 'transformRequest', 'transformResponse', 'paramsSerializer',
-    'timeout', 'timeoutMessage', 'withCredentials', 'adapter', 'responseType', 'xsrfCookieName',
-    'xsrfHeaderName', 'onUploadProgress', 'onDownloadProgress', 'decompress',
-    'maxContentLength', 'maxBodyLength', 'maxRedirects', 'transport', 'httpAgent',
-    'httpsAgent', 'cancelToken', 'socketPath', 'responseEncoding'
-  ];
-  var directMergeKeys = ['validateStatus'];
-
   function getMergedValue(target, source) {
     if (utils.isPlainObject(target) && utils.isPlainObject(source)) {
       return utils.merge(target, source);
@@ -868,51 +949,74 @@ module.exports = function mergeConfig(config1, config2) {
     return source;
   }
 
+  // eslint-disable-next-line consistent-return
   function mergeDeepProperties(prop) {
     if (!utils.isUndefined(config2[prop])) {
-      config[prop] = getMergedValue(config1[prop], config2[prop]);
+      return getMergedValue(config1[prop], config2[prop]);
     } else if (!utils.isUndefined(config1[prop])) {
-      config[prop] = getMergedValue(undefined, config1[prop]);
+      return getMergedValue(undefined, config1[prop]);
     }
   }
 
-  utils.forEach(valueFromConfig2Keys, function valueFromConfig2(prop) {
+  // eslint-disable-next-line consistent-return
+  function valueFromConfig2(prop) {
     if (!utils.isUndefined(config2[prop])) {
-      config[prop] = getMergedValue(undefined, config2[prop]);
+      return getMergedValue(undefined, config2[prop]);
     }
-  });
+  }
 
-  utils.forEach(mergeDeepPropertiesKeys, mergeDeepProperties);
-
-  utils.forEach(defaultToConfig2Keys, function defaultToConfig2(prop) {
+  // eslint-disable-next-line consistent-return
+  function defaultToConfig2(prop) {
     if (!utils.isUndefined(config2[prop])) {
-      config[prop] = getMergedValue(undefined, config2[prop]);
+      return getMergedValue(undefined, config2[prop]);
     } else if (!utils.isUndefined(config1[prop])) {
-      config[prop] = getMergedValue(undefined, config1[prop]);
+      return getMergedValue(undefined, config1[prop]);
     }
-  });
+  }
 
-  utils.forEach(directMergeKeys, function merge(prop) {
+  // eslint-disable-next-line consistent-return
+  function mergeDirectKeys(prop) {
     if (prop in config2) {
-      config[prop] = getMergedValue(config1[prop], config2[prop]);
+      return getMergedValue(config1[prop], config2[prop]);
     } else if (prop in config1) {
-      config[prop] = getMergedValue(undefined, config1[prop]);
+      return getMergedValue(undefined, config1[prop]);
     }
+  }
+
+  var mergeMap = {
+    'url': valueFromConfig2,
+    'method': valueFromConfig2,
+    'data': valueFromConfig2,
+    'baseURL': defaultToConfig2,
+    'transformRequest': defaultToConfig2,
+    'transformResponse': defaultToConfig2,
+    'paramsSerializer': defaultToConfig2,
+    'timeout': defaultToConfig2,
+    'timeoutMessage': defaultToConfig2,
+    'withCredentials': defaultToConfig2,
+    'adapter': defaultToConfig2,
+    'responseType': defaultToConfig2,
+    'xsrfCookieName': defaultToConfig2,
+    'xsrfHeaderName': defaultToConfig2,
+    'onUploadProgress': defaultToConfig2,
+    'onDownloadProgress': defaultToConfig2,
+    'decompress': defaultToConfig2,
+    'maxContentLength': defaultToConfig2,
+    'maxBodyLength': defaultToConfig2,
+    'transport': defaultToConfig2,
+    'httpAgent': defaultToConfig2,
+    'httpsAgent': defaultToConfig2,
+    'cancelToken': defaultToConfig2,
+    'socketPath': defaultToConfig2,
+    'responseEncoding': defaultToConfig2,
+    'validateStatus': mergeDirectKeys
+  };
+
+  utils.forEach(Object.keys(config1).concat(Object.keys(config2)), function computeConfigValue(prop) {
+    var merge = mergeMap[prop] || mergeDeepProperties;
+    var configValue = merge(prop);
+    (utils.isUndefined(configValue) && merge !== mergeDirectKeys) || (config[prop] = configValue);
   });
-
-  var axiosKeys = valueFromConfig2Keys
-    .concat(mergeDeepPropertiesKeys)
-    .concat(defaultToConfig2Keys)
-    .concat(directMergeKeys);
-
-  var otherKeys = Object
-    .keys(config1)
-    .concat(Object.keys(config2))
-    .filter(function filterAxiosKeys(key) {
-      return axiosKeys.indexOf(key) === -1;
-    });
-
-  utils.forEach(otherKeys, mergeDeepProperties);
 
   return config;
 };
@@ -1078,7 +1182,7 @@ var defaults = {
   }],
 
   transformResponse: [function transformResponse(data) {
-    var transitional = this.transitional;
+    var transitional = this.transitional || defaults.transitional;
     var silentJSONParsing = transitional && transitional.silentJSONParsing;
     var forcedJSONParsing = transitional && transitional.forcedJSONParsing;
     var strictJSONParsing = !silentJSONParsing && this.responseType === 'json';
@@ -1113,12 +1217,12 @@ var defaults = {
 
   validateStatus: function validateStatus(status) {
     return status >= 200 && status < 300;
-  }
-};
+  },
 
-defaults.headers = {
-  common: {
-    'Accept': 'application/json, text/plain, */*'
+  headers: {
+    common: {
+      'Accept': 'application/json, text/plain, */*'
+    }
   }
 };
 
@@ -1132,6 +1236,18 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
+
+/***/ }),
+
+/***/ "./node_modules/axios/lib/env/data.js":
+/*!********************************************!*\
+  !*** ./node_modules/axios/lib/env/data.js ***!
+  \********************************************/
+/***/ ((module) => {
+
+module.exports = {
+  "version": "0.26.0"
+};
 
 /***/ }),
 
@@ -1346,7 +1462,7 @@ module.exports = function isAbsoluteURL(url) {
   // A URL is considered absolute if it begins with "<scheme>://" or "//" (protocol-relative URL).
   // RFC 3986 defines scheme name as a sequence of characters beginning with a letter and followed
   // by any combination of letters, digits, plus, period, or hyphen.
-  return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url);
+  return /^([a-z][a-z\d+\-.]*:)?\/\//i.test(url);
 };
 
 
@@ -1356,10 +1472,12 @@ module.exports = function isAbsoluteURL(url) {
 /*!********************************************************!*\
   !*** ./node_modules/axios/lib/helpers/isAxiosError.js ***!
   \********************************************************/
-/***/ ((module) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
+
+var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/utils.js");
 
 /**
  * Determines whether the payload is an error thrown by Axios
@@ -1368,7 +1486,7 @@ module.exports = function isAbsoluteURL(url) {
  * @returns {boolean} True if the payload is an error thrown by Axios, otherwise false
  */
 module.exports = function isAxiosError(payload) {
-  return (typeof payload === 'object') && (payload.isAxiosError === true);
+  return utils.isObject(payload) && (payload.isAxiosError === true);
 };
 
 
@@ -1587,7 +1705,7 @@ module.exports = function spread(callback) {
 "use strict";
 
 
-var pkg = __webpack_require__(/*! ./../../package.json */ "./node_modules/axios/package.json");
+var VERSION = (__webpack_require__(/*! ../env/data */ "./node_modules/axios/lib/env/data.js").version);
 
 var validators = {};
 
@@ -1599,48 +1717,26 @@ var validators = {};
 });
 
 var deprecatedWarnings = {};
-var currentVerArr = pkg.version.split('.');
-
-/**
- * Compare package versions
- * @param {string} version
- * @param {string?} thanVersion
- * @returns {boolean}
- */
-function isOlderVersion(version, thanVersion) {
-  var pkgVersionArr = thanVersion ? thanVersion.split('.') : currentVerArr;
-  var destVer = version.split('.');
-  for (var i = 0; i < 3; i++) {
-    if (pkgVersionArr[i] > destVer[i]) {
-      return true;
-    } else if (pkgVersionArr[i] < destVer[i]) {
-      return false;
-    }
-  }
-  return false;
-}
 
 /**
  * Transitional option validator
- * @param {function|boolean?} validator
- * @param {string?} version
- * @param {string} message
+ * @param {function|boolean?} validator - set to false if the transitional option has been removed
+ * @param {string?} version - deprecated version / removed since version
+ * @param {string?} message - some message with additional info
  * @returns {function}
  */
 validators.transitional = function transitional(validator, version, message) {
-  var isDeprecated = version && isOlderVersion(version);
-
   function formatMessage(opt, desc) {
-    return '[Axios v' + pkg.version + '] Transitional option \'' + opt + '\'' + desc + (message ? '. ' + message : '');
+    return '[Axios v' + VERSION + '] Transitional option \'' + opt + '\'' + desc + (message ? '. ' + message : '');
   }
 
   // eslint-disable-next-line func-names
   return function(value, opt, opts) {
     if (validator === false) {
-      throw new Error(formatMessage(opt, ' has been removed in ' + version));
+      throw new Error(formatMessage(opt, ' has been removed' + (version ? ' in ' + version : '')));
     }
 
-    if (isDeprecated && !deprecatedWarnings[opt]) {
+    if (version && !deprecatedWarnings[opt]) {
       deprecatedWarnings[opt] = true;
       // eslint-disable-next-line no-console
       console.warn(
@@ -1686,7 +1782,6 @@ function assertOptions(options, schema, allowUnknown) {
 }
 
 module.exports = {
-  isOlderVersion: isOlderVersion,
   assertOptions: assertOptions,
   validators: validators
 };
@@ -1716,7 +1811,7 @@ var toString = Object.prototype.toString;
  * @returns {boolean} True if value is an Array, otherwise false
  */
 function isArray(val) {
-  return toString.call(val) === '[object Array]';
+  return Array.isArray(val);
 }
 
 /**
@@ -1757,7 +1852,7 @@ function isArrayBuffer(val) {
  * @returns {boolean} True if value is an FormData, otherwise false
  */
 function isFormData(val) {
-  return (typeof FormData !== 'undefined') && (val instanceof FormData);
+  return toString.call(val) === '[object FormData]';
 }
 
 /**
@@ -1771,7 +1866,7 @@ function isArrayBufferView(val) {
   if ((typeof ArrayBuffer !== 'undefined') && (ArrayBuffer.isView)) {
     result = ArrayBuffer.isView(val);
   } else {
-    result = (val) && (val.buffer) && (val.buffer instanceof ArrayBuffer);
+    result = (val) && (val.buffer) && (isArrayBuffer(val.buffer));
   }
   return result;
 }
@@ -1878,7 +1973,7 @@ function isStream(val) {
  * @returns {boolean} True if value is a URLSearchParams object, otherwise false
  */
 function isURLSearchParams(val) {
-  return typeof URLSearchParams !== 'undefined' && val instanceof URLSearchParams;
+  return toString.call(val) === '[object URLSearchParams]';
 }
 
 /**
@@ -2068,7 +2163,18 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
+ // to declare global things and used in all laravel balde we must use window.{name}
 
+window.scrollToId = function (id) {
+  if (id != null) {
+    var elm = document.getElementById(id);
+    elm.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+      inline: "nearest"
+    });
+  }
+};
 
 /***/ }),
 
@@ -19673,15 +19779,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var ssr_window__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ssr-window */ "./node_modules/ssr-window/ssr-window.esm.js");
 /**
- * Dom7 4.0.2
+ * Dom7 4.0.4
  * Minimalistic JavaScript library for DOM manipulation, with a jQuery-compatible API
  * https://framework7.io/docs/dom7.html
  *
- * Copyright 2021, Vladimir Kharlampidi
+ * Copyright 2022, Vladimir Kharlampidi
  *
  * Licensed under MIT
  *
- * Released on: December 13, 2021
+ * Released on: January 11, 2022
  */
 
 
@@ -19702,8 +19808,12 @@ function makeReactive(obj) {
 
 class Dom7 extends Array {
   constructor(items) {
-    super(...(items || []));
-    makeReactive(this);
+    if (typeof items === 'number') {
+      super(items);
+    } else {
+      super(...(items || []));
+      makeReactive(this);
+    }
   }
 
 }
@@ -21334,7 +21444,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var ssr_window__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ssr-window */ "./node_modules/ssr-window/ssr-window.esm.js");
 
-function getBreakpoint(breakpoints, base = 'window', containerEl) {
+function getBreakpoint(breakpoints, base, containerEl) {
+  if (base === void 0) {
+    base = 'window';
+  }
+
   if (!breakpoints || base === 'container' && !containerEl) return undefined;
   let breakpoint = false;
   const window = (0,ssr_window__WEBPACK_IMPORTED_MODULE_0__.getWindow)();
@@ -21721,9 +21835,13 @@ const prototypes = {
 const extendedDefaults = {};
 
 class Swiper {
-  constructor(...args) {
+  constructor() {
     let el;
     let params;
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
 
     if (args.length === 1 && args[0].constructor && Object.prototype.toString.call(args[0]).slice(8, -1) === 'Object') {
       params = args[0];
@@ -21956,7 +22074,15 @@ class Swiper {
     swiper.emit('_slideClasses', updates);
   }
 
-  slidesPerViewDynamic(view = 'current', exact = false) {
+  slidesPerViewDynamic(view, exact) {
+    if (view === void 0) {
+      view = 'current';
+    }
+
+    if (exact === void 0) {
+      exact = false;
+    }
+
     const swiper = this;
     const {
       params,
@@ -22064,7 +22190,11 @@ class Swiper {
     swiper.emit('update');
   }
 
-  changeDirection(newDirection, needUpdate = true) {
+  changeDirection(newDirection, needUpdate) {
+    if (needUpdate === void 0) {
+      needUpdate = true;
+    }
+
     const swiper = this;
     const currentDirection = swiper.params.direction;
 
@@ -22202,7 +22332,15 @@ class Swiper {
     return swiper;
   }
 
-  destroy(deleteInstance = true, cleanStyles = true) {
+  destroy(deleteInstance, cleanStyles) {
+    if (deleteInstance === void 0) {
+      deleteInstance = true;
+    }
+
+    if (cleanStyles === void 0) {
+      cleanStyles = true;
+    }
+
     const swiper = this;
     const {
       params,
@@ -22408,6 +22546,7 @@ __webpack_require__.r(__webpack_exports__);
   noSwipingSelector: null,
   // Passive Listeners
   passiveListeners: true,
+  maxBackfaceHiddenSlides: 10,
   // NS
   containerModifierClass: 'swiper-',
   // NEW
@@ -22458,11 +22597,15 @@ __webpack_require__.r(__webpack_exports__);
     const self = this;
     if (typeof handler !== 'function') return self;
 
-    function onceHandler(...args) {
+    function onceHandler() {
       self.off(events, onceHandler);
 
       if (onceHandler.__emitterProxy) {
         delete onceHandler.__emitterProxy;
+      }
+
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
       }
 
       handler.apply(self, args);
@@ -22513,12 +22656,16 @@ __webpack_require__.r(__webpack_exports__);
     return self;
   },
 
-  emit(...args) {
+  emit() {
     const self = this;
     if (!self.eventsListeners) return self;
     let events;
     let data;
     let context;
+
+    for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      args[_key2] = arguments[_key2];
+    }
 
     if (typeof args[0] === 'string' || Array.isArray(args[0])) {
       events = args[0];
@@ -22915,6 +23062,17 @@ function onTouchEnd(event) {
       stopIndex = i;
       groupSize = slidesGrid[slidesGrid.length - 1] - slidesGrid[slidesGrid.length - 2];
     }
+  }
+
+  let rewindFirstIndex = null;
+  let rewindLastIndex = null;
+
+  if (params.rewind) {
+    if (swiper.isBeginning) {
+      rewindLastIndex = swiper.params.virtual && swiper.params.virtual.enabled && swiper.virtual ? swiper.virtual.slides.length - 1 : swiper.slides.length - 1;
+    } else if (swiper.isEnd) {
+      rewindFirstIndex = 0;
+    }
   } // Find current slide size
 
 
@@ -22929,11 +23087,17 @@ function onTouchEnd(event) {
     }
 
     if (swiper.swipeDirection === 'next') {
-      if (ratio >= params.longSwipesRatio) swiper.slideTo(stopIndex + increment);else swiper.slideTo(stopIndex);
+      if (ratio >= params.longSwipesRatio) swiper.slideTo(params.rewind && swiper.isEnd ? rewindFirstIndex : stopIndex + increment);else swiper.slideTo(stopIndex);
     }
 
     if (swiper.swipeDirection === 'prev') {
-      if (ratio > 1 - params.longSwipesRatio) swiper.slideTo(stopIndex + increment);else swiper.slideTo(stopIndex);
+      if (ratio > 1 - params.longSwipesRatio) {
+        swiper.slideTo(stopIndex + increment);
+      } else if (rewindLastIndex !== null && ratio < 0 && Math.abs(ratio) > params.longSwipesRatio) {
+        swiper.slideTo(rewindLastIndex);
+      } else {
+        swiper.slideTo(stopIndex);
+      }
     }
   } else {
     // Short swipes
@@ -22946,11 +23110,11 @@ function onTouchEnd(event) {
 
     if (!isNavButtonTarget) {
       if (swiper.swipeDirection === 'next') {
-        swiper.slideTo(stopIndex + increment);
+        swiper.slideTo(rewindFirstIndex !== null ? rewindFirstIndex : stopIndex + increment);
       }
 
       if (swiper.swipeDirection === 'prev') {
-        swiper.slideTo(stopIndex);
+        swiper.slideTo(rewindLastIndex !== null ? rewindLastIndex : stopIndex);
       }
     } else if (e.target === swiper.navigation.nextEl) {
       swiper.slideTo(stopIndex + increment);
@@ -23013,8 +23177,9 @@ function onTouchMove(event) {
   }
 
   if (!swiper.allowTouchMove) {
-    // isMoved = true;
-    swiper.allowClick = false;
+    if (!(0,_shared_dom_js__WEBPACK_IMPORTED_MODULE_1__["default"])(e.target).is(data.focusableElements)) {
+      swiper.allowClick = false;
+    }
 
     if (data.isTouched) {
       Object.assign(touches, {
@@ -23219,7 +23384,11 @@ __webpack_require__.r(__webpack_exports__);
 
  // Modified from https://stackoverflow.com/questions/54520554/custom-element-getrootnode-closest-function-crossing-multiple-parent-shadowd
 
-function closestElement(selector, base = this) {
+function closestElement(selector, base) {
+  if (base === void 0) {
+    base = this;
+  }
+
   function __closestFrom(el) {
     if (!el || el === (0,ssr_window__WEBPACK_IMPORTED_MODULE_0__.getDocument)() || el === (0,ssr_window__WEBPACK_IMPORTED_MODULE_0__.getWindow)()) return null;
     if (el.assignedSlot) el = el.assignedSlot;
@@ -23314,7 +23483,14 @@ function onTouchStart(event) {
 
   if (e.type !== 'touchstart') {
     let preventDefault = true;
-    if ($targetEl.is(data.focusableElements)) preventDefault = false;
+
+    if ($targetEl.is(data.focusableElements)) {
+      preventDefault = false;
+
+      if ($targetEl[0].nodeName === 'SELECT') {
+        data.isTouched = false;
+      }
+    }
 
     if (document.activeElement && (0,_shared_dom_js__WEBPACK_IMPORTED_MODULE_1__["default"])(document.activeElement).is(data.focusableElements) && document.activeElement !== $targetEl[0]) {
       document.activeElement.blur();
@@ -23325,6 +23501,10 @@ function onTouchStart(event) {
     if ((params.touchStartForcePreventDefault || shouldPreventDefault) && !$targetEl[0].isContentEditable) {
       e.preventDefault();
     }
+  }
+
+  if (swiper.params.freeMode && swiper.params.freeMode.enabled && swiper.freeMode && swiper.animating && !params.cssMode) {
+    swiper.freeMode.onTouchStart();
   }
 
   swiper.emit('touchStart', e);
@@ -23701,7 +23881,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _shared_utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../shared/utils.js */ "./node_modules/swiper/shared/utils.js");
 
 function moduleExtendParams(params, allModulesParams) {
-  return function extendParams(obj = {}) {
+  return function extendParams(obj) {
+    if (obj === void 0) {
+      obj = {};
+    }
+
     const moduleParamName = Object.keys(obj)[0];
     const moduleParams = obj[moduleParamName];
 
@@ -23753,16 +23937,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var ssr_window__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ssr-window */ "./node_modules/ssr-window/ssr-window.esm.js");
 
-function Observer({
-  swiper,
-  extendParams,
-  on,
-  emit
-}) {
+function Observer(_ref) {
+  let {
+    swiper,
+    extendParams,
+    on,
+    emit
+  } = _ref;
   const observers = [];
   const window = (0,ssr_window__WEBPACK_IMPORTED_MODULE_0__.getWindow)();
 
-  const attach = (target, options = {}) => {
+  const attach = function (target, options) {
+    if (options === void 0) {
+      options = {};
+    }
+
     const ObserverFunc = window.MutationObserver || window.WebkitMutationObserver;
     const observer = new ObserverFunc(mutations => {
       // The observerUpdate event should only be triggered
@@ -23843,13 +24032,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var ssr_window__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ssr-window */ "./node_modules/ssr-window/ssr-window.esm.js");
 
-function Resize({
-  swiper,
-  on,
-  emit
-}) {
+function Resize(_ref) {
+  let {
+    swiper,
+    on,
+    emit
+  } = _ref;
   const window = (0,ssr_window__WEBPACK_IMPORTED_MODULE_0__.getWindow)();
   let observer = null;
+  let animationFrame = null;
 
   const resizeHandler = () => {
     if (!swiper || swiper.destroyed || !swiper.initialized) return;
@@ -23860,30 +24051,37 @@ function Resize({
   const createObserver = () => {
     if (!swiper || swiper.destroyed || !swiper.initialized) return;
     observer = new ResizeObserver(entries => {
-      const {
-        width,
-        height
-      } = swiper;
-      let newWidth = width;
-      let newHeight = height;
-      entries.forEach(({
-        contentBoxSize,
-        contentRect,
-        target
-      }) => {
-        if (target && target !== swiper.el) return;
-        newWidth = contentRect ? contentRect.width : (contentBoxSize[0] || contentBoxSize).inlineSize;
-        newHeight = contentRect ? contentRect.height : (contentBoxSize[0] || contentBoxSize).blockSize;
-      });
+      animationFrame = window.requestAnimationFrame(() => {
+        const {
+          width,
+          height
+        } = swiper;
+        let newWidth = width;
+        let newHeight = height;
+        entries.forEach(_ref2 => {
+          let {
+            contentBoxSize,
+            contentRect,
+            target
+          } = _ref2;
+          if (target && target !== swiper.el) return;
+          newWidth = contentRect ? contentRect.width : (contentBoxSize[0] || contentBoxSize).inlineSize;
+          newHeight = contentRect ? contentRect.height : (contentBoxSize[0] || contentBoxSize).blockSize;
+        });
 
-      if (newWidth !== width || newHeight !== height) {
-        resizeHandler();
-      }
+        if (newWidth !== width || newHeight !== height) {
+          resizeHandler();
+        }
+      });
     });
     observer.observe(swiper.el);
   };
 
   const removeObserver = () => {
+    if (animationFrame) {
+      window.cancelAnimationFrame(animationFrame);
+    }
+
     if (observer && observer.unobserve && swiper.el) {
       observer.unobserve(swiper.el);
       observer = null;
@@ -23962,7 +24160,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ slideNext)
 /* harmony export */ });
 /* eslint no-unused-vars: "off" */
-function slideNext(speed = this.params.speed, runCallbacks = true, internal) {
+function slideNext(speed, runCallbacks, internal) {
+  if (speed === void 0) {
+    speed = this.params.speed;
+  }
+
+  if (runCallbacks === void 0) {
+    runCallbacks = true;
+  }
+
   const swiper = this;
   const {
     animating,
@@ -24006,7 +24212,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ slidePrev)
 /* harmony export */ });
 /* eslint no-unused-vars: "off" */
-function slidePrev(speed = this.params.speed, runCallbacks = true, internal) {
+function slidePrev(speed, runCallbacks, internal) {
+  if (speed === void 0) {
+    speed = this.params.speed;
+  }
+
+  if (runCallbacks === void 0) {
+    runCallbacks = true;
+  }
+
   const swiper = this;
   const {
     params,
@@ -24063,7 +24277,8 @@ function slidePrev(speed = this.params.speed, runCallbacks = true, internal) {
   }
 
   if (params.rewind && swiper.isBeginning) {
-    return swiper.slideTo(swiper.slides.length - 1, speed, runCallbacks, internal);
+    const lastIndex = swiper.params.virtual && swiper.params.virtual.enabled && swiper.virtual ? swiper.virtual.slides.length - 1 : swiper.slides.length - 1;
+    return swiper.slideTo(lastIndex, speed, runCallbacks, internal);
   }
 
   return swiper.slideTo(prevIndex, speed, runCallbacks, internal);
@@ -24083,7 +24298,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ slideReset)
 /* harmony export */ });
 /* eslint no-unused-vars: "off" */
-function slideReset(speed = this.params.speed, runCallbacks = true, internal) {
+function slideReset(speed, runCallbacks, internal) {
+  if (speed === void 0) {
+    speed = this.params.speed;
+  }
+
+  if (runCallbacks === void 0) {
+    runCallbacks = true;
+  }
+
   const swiper = this;
   return swiper.slideTo(swiper.activeIndex, speed, runCallbacks, internal);
 }
@@ -24103,7 +24326,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _shared_utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../shared/utils.js */ "./node_modules/swiper/shared/utils.js");
 
-function slideTo(index = 0, speed = this.params.speed, runCallbacks = true, internal, initial) {
+function slideTo(index, speed, runCallbacks, internal, initial) {
+  if (index === void 0) {
+    index = 0;
+  }
+
+  if (speed === void 0) {
+    speed = this.params.speed;
+  }
+
+  if (runCallbacks === void 0) {
+    runCallbacks = true;
+  }
+
   if (typeof index !== 'number' && typeof index !== 'string') {
     throw new Error(`The 'index' argument cannot have type other than 'number' or 'string'. [${typeof index}] given.`);
   }
@@ -24353,7 +24588,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ slideToClosest)
 /* harmony export */ });
 /* eslint no-unused-vars: "off" */
-function slideToClosest(speed = this.params.speed, runCallbacks = true, internal, threshold = 0.5) {
+function slideToClosest(speed, runCallbacks, internal, threshold) {
+  if (speed === void 0) {
+    speed = this.params.speed;
+  }
+
+  if (runCallbacks === void 0) {
+    runCallbacks = true;
+  }
+
+  if (threshold === void 0) {
+    threshold = 0.5;
+  }
+
   const swiper = this;
   let index = swiper.activeIndex;
   const skip = Math.min(swiper.params.slidesPerGroupSkip, index);
@@ -24398,7 +24645,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ slideToLoop)
 /* harmony export */ });
-function slideToLoop(index = 0, speed = this.params.speed, runCallbacks = true, internal) {
+function slideToLoop(index, speed, runCallbacks, internal) {
+  if (index === void 0) {
+    index = 0;
+  }
+
+  if (speed === void 0) {
+    speed = this.params.speed;
+  }
+
+  if (runCallbacks === void 0) {
+    runCallbacks = true;
+  }
+
   const swiper = this;
   let newIndex = index;
 
@@ -24470,12 +24729,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ transitionEmit)
 /* harmony export */ });
-function transitionEmit({
-  swiper,
-  runCallbacks,
-  direction,
-  step
-}) {
+function transitionEmit(_ref) {
+  let {
+    swiper,
+    runCallbacks,
+    direction,
+    step
+  } = _ref;
   const {
     activeIndex,
     previousIndex
@@ -24519,7 +24779,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _transitionEmit_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./transitionEmit.js */ "./node_modules/swiper/core/transition/transitionEmit.js");
 
-function transitionEnd(runCallbacks = true, direction) {
+function transitionEnd(runCallbacks, direction) {
+  if (runCallbacks === void 0) {
+    runCallbacks = true;
+  }
+
   const swiper = this;
   const {
     params
@@ -24550,7 +24814,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _transitionEmit_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./transitionEmit.js */ "./node_modules/swiper/core/transition/transitionEmit.js");
 
-function transitionStart(runCallbacks = true, direction) {
+function transitionStart(runCallbacks, direction) {
+  if (runCallbacks === void 0) {
+    runCallbacks = true;
+  }
+
   const swiper = this;
   const {
     params
@@ -24584,7 +24852,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _shared_utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../shared/utils.js */ "./node_modules/swiper/shared/utils.js");
 
-function getSwiperTranslate(axis = this.isHorizontal() ? 'x' : 'y') {
+function getSwiperTranslate(axis) {
+  if (axis === void 0) {
+    axis = this.isHorizontal() ? 'x' : 'y';
+  }
+
   const swiper = this;
   const {
     params,
@@ -24748,7 +25020,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _shared_utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../shared/utils.js */ "./node_modules/swiper/shared/utils.js");
 
-function translateTo(translate = 0, speed = this.params.speed, runCallbacks = true, translateBounds = true, internal) {
+function translateTo(translate, speed, runCallbacks, translateBounds, internal) {
+  if (translate === void 0) {
+    translate = 0;
+  }
+
+  if (speed === void 0) {
+    speed = this.params.speed;
+  }
+
+  if (runCallbacks === void 0) {
+    runCallbacks = true;
+  }
+
+  if (translateBounds === void 0) {
+    translateBounds = true;
+  }
+
   const swiper = this;
   const {
     params,
@@ -25507,6 +25795,17 @@ function updateSlides() {
   if (params.watchSlidesProgress) {
     swiper.updateSlidesOffset();
   }
+
+  if (!isVirtual && !params.cssMode && (params.effect === 'slide' || params.effect === 'fade')) {
+    const backFaceHiddenClass = `${params.containerModifierClass}backface-hidden`;
+    const hasClassBackfaceClassAdded = swiper.$el.hasClass(backFaceHiddenClass);
+
+    if (slidesLength <= params.maxBackfaceHiddenSlides) {
+      if (!hasClassBackfaceClassAdded) swiper.$el.addClass(backFaceHiddenClass);
+    } else if (hasClassBackfaceClassAdded) {
+      swiper.$el.removeClass(backFaceHiddenClass);
+    }
+  }
 }
 
 /***/ }),
@@ -25624,7 +25923,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _shared_dom_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../shared/dom.js */ "./node_modules/swiper/shared/dom.js");
 
-function updateSlidesProgress(translate = this && this.translate || 0) {
+function updateSlidesProgress(translate) {
+  if (translate === void 0) {
+    translate = this && this.translate || 0;
+  }
+
   const swiper = this;
   const params = swiper.params;
   const {
@@ -25685,11 +25988,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _shared_dom_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../shared/dom.js */ "./node_modules/swiper/shared/dom.js");
 
 
-function A11y({
-  swiper,
-  extendParams,
-  on
-}) {
+function A11y(_ref) {
+  let {
+    swiper,
+    extendParams,
+    on
+  } = _ref;
   extendParams({
     a11y: {
       enabled: true,
@@ -25715,7 +26019,11 @@ function A11y({
     notification.html(message);
   }
 
-  function getRandomNumber(size = 16) {
+  function getRandomNumber(size) {
+    if (size === void 0) {
+      size = 16;
+    }
+
     const randomChar = () => Math.round(16 * Math.random()).toString(16);
 
     return 'x'.repeat(size).replace(/x/g, randomChar);
@@ -25866,6 +26174,15 @@ function A11y({
     addElControls($el, wrapperId);
   };
 
+  const handleFocus = e => {
+    const slideEl = e.target.closest(`.${swiper.params.slideClass}`);
+    if (!slideEl || !swiper.slides.includes(slideEl)) return;
+    const isActive = swiper.slides.indexOf(slideEl) === swiper.activeIndex;
+    const isVisible = swiper.params.watchSlidesProgress && swiper.visibleSlides && swiper.visibleSlides.includes(slideEl);
+    if (isActive || isVisible) return;
+    swiper.slideTo(swiper.slides.indexOf(slideEl), 0);
+  };
+
   function init() {
     const params = swiper.params.a11y;
     swiper.$el.append(liveRegion); // Container
@@ -25922,7 +26239,10 @@ function A11y({
 
     if (hasClickablePagination()) {
       swiper.pagination.$el.on('keydown', (0,_shared_classes_to_selector_js__WEBPACK_IMPORTED_MODULE_0__["default"])(swiper.params.pagination.bulletClass), onEnterOrSpaceKey);
-    }
+    } // Tab focus
+
+
+    swiper.$el.on('focus', handleFocus, true);
   }
 
   function destroy() {
@@ -25949,7 +26269,10 @@ function A11y({
 
     if (hasClickablePagination()) {
       swiper.pagination.$el.off('keydown', (0,_shared_classes_to_selector_js__WEBPACK_IMPORTED_MODULE_0__["default"])(swiper.params.pagination.bulletClass), onEnterOrSpaceKey);
-    }
+    } // Tab focus
+
+
+    swiper.$el.off('focus', handleFocus, true);
   }
 
   on('beforeInit', () => {
@@ -25958,13 +26281,8 @@ function A11y({
   on('afterInit', () => {
     if (!swiper.params.a11y.enabled) return;
     init();
-    updateNavigation();
   });
-  on('toEdge', () => {
-    if (!swiper.params.a11y.enabled) return;
-    updateNavigation();
-  });
-  on('fromEdge', () => {
+  on('fromEdge toEdge afterInit lock unlock', () => {
     if (!swiper.params.a11y.enabled) return;
     updateNavigation();
   });
@@ -25998,12 +26316,13 @@ __webpack_require__.r(__webpack_exports__);
 /* eslint no-use-before-define: "off" */
 
 
-function Autoplay({
-  swiper,
-  extendParams,
-  on,
-  emit
-}) {
+function Autoplay(_ref) {
+  let {
+    swiper,
+    extendParams,
+    on,
+    emit
+  } = _ref;
   let timeout;
   swiper.autoplay = {
     running: false,
@@ -26138,6 +26457,7 @@ function Autoplay({
     if (swiper.params.autoplay.disableOnInteraction) {
       stop();
     } else {
+      emit('autoplayPause');
       pause();
     }
 
@@ -26152,6 +26472,7 @@ function Autoplay({
     }
 
     swiper.autoplay.paused = false;
+    emit('autoplayResume');
     run();
   }
 
@@ -26232,11 +26553,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _shared_utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../shared/utils.js */ "./node_modules/swiper/shared/utils.js");
 /* eslint no-bitwise: ["error", { "allow": [">>"] }] */
 
-function Controller({
-  swiper,
-  extendParams,
-  on
-}) {
+function Controller(_ref) {
+  let {
+    swiper,
+    extendParams,
+    on
+  } = _ref;
   extendParams({
     controller: {
       control: undefined,
@@ -26443,11 +26765,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function EffectCards({
-  swiper,
-  extendParams,
-  on
-}) {
+function EffectCards(_ref) {
+  let {
+    swiper,
+    extendParams,
+    on
+  } = _ref;
   extendParams({
     cardsEffect: {
       slideShadows: true,
@@ -26584,11 +26907,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function EffectCoverflow({
-  swiper,
-  extendParams,
-  on
-}) {
+function EffectCoverflow(_ref) {
+  let {
+    swiper,
+    extendParams,
+    on
+  } = _ref;
   extendParams({
     coverflowEffect: {
       rotate: 50,
@@ -26706,11 +27030,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function EffectCreative({
-  swiper,
-  extendParams,
-  on
-}) {
+function EffectCreative(_ref) {
+  let {
+    swiper,
+    extendParams,
+    on
+  } = _ref;
   extendParams({
     creativeEffect: {
       transformEl: null,
@@ -26874,11 +27199,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _shared_effect_init_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../shared/effect-init.js */ "./node_modules/swiper/shared/effect-init.js");
 
 
-function EffectCube({
-  swiper,
-  extendParams,
-  on
-}) {
+function EffectCube(_ref) {
+  let {
+    swiper,
+    extendParams,
+    on
+  } = _ref;
   extendParams({
     cubeEffect: {
       slideShadows: true,
@@ -27072,11 +27398,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function EffectFade({
-  swiper,
-  extendParams,
-  on
-}) {
+function EffectFade(_ref) {
+  let {
+    swiper,
+    extendParams,
+    on
+  } = _ref;
   extendParams({
     fadeEffect: {
       crossFade: false,
@@ -27161,11 +27488,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function EffectFlip({
-  swiper,
-  extendParams,
-  on
-}) {
+function EffectFlip(_ref) {
+  let {
+    swiper,
+    extendParams,
+    on
+  } = _ref;
   extendParams({
     flipEffect: {
       slideShadows: true,
@@ -27275,12 +27603,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _shared_utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../shared/utils.js */ "./node_modules/swiper/shared/utils.js");
 
-function freeMode({
-  swiper,
-  extendParams,
-  emit,
-  once
-}) {
+function freeMode(_ref) {
+  let {
+    swiper,
+    extendParams,
+    emit,
+    once
+  } = _ref;
   extendParams({
     freeMode: {
       enabled: false,
@@ -27293,6 +27622,16 @@ function freeMode({
       minimumVelocity: 0.02
     }
   });
+
+  function onTouchStart() {
+    const translate = swiper.getTranslate();
+    swiper.setTranslate(translate);
+    swiper.setTransition(0);
+    swiper.touchEventsData.velocities.length = 0;
+    swiper.freeMode.onTouchEnd({
+      currentPos: swiper.rtl ? swiper.translate : -swiper.translate
+    });
+  }
 
   function onTouchMove() {
     const {
@@ -27313,9 +27652,10 @@ function freeMode({
     });
   }
 
-  function onTouchEnd({
-    currentPos
-  }) {
+  function onTouchEnd(_ref2) {
+    let {
+      currentPos
+    } = _ref2;
     const {
       params,
       $wrapperEl,
@@ -27514,6 +27854,7 @@ function freeMode({
 
   Object.assign(swiper, {
     freeMode: {
+      onTouchStart,
       onTouchMove,
       onTouchEnd
     }
@@ -27533,10 +27874,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ Grid)
 /* harmony export */ });
-function Grid({
-  swiper,
-  extendParams
-}) {
+function Grid(_ref) {
+  let {
+    swiper,
+    extendParams
+  } = _ref;
   extendParams({
     grid: {
       rows: 1,
@@ -27667,12 +28009,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _shared_dom_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../shared/dom.js */ "./node_modules/swiper/shared/dom.js");
 
 
-function HashNavigation({
-  swiper,
-  extendParams,
-  emit,
-  on
-}) {
+function HashNavigation(_ref) {
+  let {
+    swiper,
+    extendParams,
+    emit,
+    on
+  } = _ref;
   let initialized = false;
   const document = (0,ssr_window__WEBPACK_IMPORTED_MODULE_0__.getDocument)();
   const window = (0,ssr_window__WEBPACK_IMPORTED_MODULE_0__.getWindow)();
@@ -27777,11 +28120,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var ssr_window__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ssr-window */ "./node_modules/ssr-window/ssr-window.esm.js");
 
-function History({
-  swiper,
-  extendParams,
-  on
-}) {
+function History(_ref) {
+  let {
+    swiper,
+    extendParams,
+    on
+  } = _ref;
   extendParams({
     history: {
       enabled: false,
@@ -27945,12 +28289,13 @@ __webpack_require__.r(__webpack_exports__);
 /* eslint-disable consistent-return */
 
 
-function Keyboard({
-  swiper,
-  extendParams,
-  on,
-  emit
-}) {
+function Keyboard(_ref) {
+  let {
+    swiper,
+    extendParams,
+    on,
+    emit
+  } = _ref;
   const document = (0,ssr_window__WEBPACK_IMPORTED_MODULE_0__.getDocument)();
   const window = (0,ssr_window__WEBPACK_IMPORTED_MODULE_0__.getWindow)();
   swiper.keyboard = {
@@ -28091,12 +28436,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _shared_dom_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../shared/dom.js */ "./node_modules/swiper/shared/dom.js");
 
 
-function Lazy({
-  swiper,
-  extendParams,
-  on,
-  emit
-}) {
+function Lazy(_ref) {
+  let {
+    swiper,
+    extendParams,
+    on,
+    emit
+  } = _ref;
   extendParams({
     lazy: {
       checkInView: false,
@@ -28115,7 +28461,11 @@ function Lazy({
   let scrollHandlerAttached = false;
   let initialImageLoaded = false;
 
-  function loadInSlide(index, loadInDuplicate = true) {
+  function loadInSlide(index, loadInDuplicate) {
+    if (loadInDuplicate === void 0) {
+      loadInDuplicate = true;
+    }
+
     const params = swiper.params.lazy;
     if (typeof index === 'undefined') return;
     if (swiper.slides.length === 0) return;
@@ -28396,9 +28746,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function Manipulation({
-  swiper
-}) {
+function Manipulation(_ref) {
+  let {
+    swiper
+  } = _ref;
   Object.assign(swiper, {
     appendSlide: _methods_appendSlide_js__WEBPACK_IMPORTED_MODULE_0__["default"].bind(swiper),
     prependSlide: _methods_prependSlide_js__WEBPACK_IMPORTED_MODULE_1__["default"].bind(swiper),
@@ -28680,12 +29031,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function Mousewheel({
-  swiper,
-  extendParams,
-  on,
-  emit
-}) {
+function Mousewheel(_ref) {
+  let {
+    swiper,
+    extendParams,
+    on,
+    emit
+  } = _ref;
   const window = (0,ssr_window__WEBPACK_IMPORTED_MODULE_0__.getWindow)();
   extendParams({
     mousewheel: {
@@ -29116,12 +29468,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _shared_dom_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../shared/dom.js */ "./node_modules/swiper/shared/dom.js");
 
 
-function Navigation({
-  swiper,
-  extendParams,
-  on,
-  emit
-}) {
+function Navigation(_ref) {
+  let {
+    swiper,
+    extendParams,
+    on,
+    emit
+  } = _ref;
   extendParams({
     navigation: {
       nextEl: null,
@@ -29319,12 +29672,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function Pagination({
-  swiper,
-  extendParams,
-  on,
-  emit
-}) {
+function Pagination(_ref) {
+  let {
+    swiper,
+    extendParams,
+    on,
+    emit
+  } = _ref;
   const pfx = 'swiper-pagination';
   extendParams({
     pagination: {
@@ -29742,11 +30096,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _shared_dom_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../shared/dom.js */ "./node_modules/swiper/shared/dom.js");
 
-function Parallax({
-  swiper,
-  extendParams,
-  on
-}) {
+function Parallax(_ref) {
+  let {
+    swiper,
+    extendParams,
+    on
+  } = _ref;
   extendParams({
     parallax: {
       enabled: false
@@ -29825,7 +30180,11 @@ function Parallax({
     });
   };
 
-  const setTransition = (duration = swiper.params.speed) => {
+  const setTransition = function (duration) {
+    if (duration === void 0) {
+      duration = swiper.params.speed;
+    }
+
     const {
       $el
     } = swiper;
@@ -29877,12 +30236,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function Scrollbar({
-  swiper,
-  extendParams,
-  on,
-  emit
-}) {
+function Scrollbar(_ref) {
+  let {
+    swiper,
+    extendParams,
+    on,
+    emit
+  } = _ref;
   const document = (0,ssr_window__WEBPACK_IMPORTED_MODULE_0__.getDocument)();
   let isTouched = false;
   let timeout = null;
@@ -30252,11 +30612,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _shared_dom_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../shared/dom.js */ "./node_modules/swiper/shared/dom.js");
 
 
-function Thumb({
-  swiper,
-  extendParams,
-  on
-}) {
+function Thumb(_ref) {
+  let {
+    swiper,
+    extendParams,
+    on
+  } = _ref;
   extendParams({
     thumbs: {
       swiper: null,
@@ -30472,11 +30833,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _shared_utils_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../shared/utils.js */ "./node_modules/swiper/shared/utils.js");
 
 
-function Virtual({
-  swiper,
-  extendParams,
-  on
-}) {
+function Virtual(_ref) {
+  let {
+    swiper,
+    extendParams,
+    on
+  } = _ref;
   extendParams({
     virtual: {
       enabled: false,
@@ -30781,12 +31143,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-function Zoom({
-  swiper,
-  extendParams,
-  on,
-  emit
-}) {
+function Zoom(_ref) {
+  let {
+    swiper,
+    extendParams,
+    on,
+    emit
+  } = _ref;
   const window = (0,ssr_window__WEBPACK_IMPORTED_MODULE_0__.getWindow)();
   extendParams({
     zoom: {
@@ -31404,7 +31767,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ classesToSelector)
 /* harmony export */ });
-function classesToSelector(classes = '') {
+function classesToSelector(classes) {
+  if (classes === void 0) {
+    classes = '';
+  }
+
   return `.${classes.trim().replace(/([\.:!\/])/g, '\\$1') // eslint-disable-line
   .replace(/ /g, '.')}`;
 }
@@ -31618,12 +31985,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ effectVirtualTransitionEnd)
 /* harmony export */ });
-function effectVirtualTransitionEnd({
-  swiper,
-  duration,
-  transformEl,
-  allSlides
-}) {
+function effectVirtualTransitionEnd(_ref) {
+  let {
+    swiper,
+    duration,
+    transformEl,
+    allSlides
+  } = _ref;
   const {
     slides,
     activeIndex,
@@ -31714,9 +32082,10 @@ __webpack_require__.r(__webpack_exports__);
 
 let deviceCached;
 
-function calcDevice({
-  userAgent
-} = {}) {
+function calcDevice(_temp) {
+  let {
+    userAgent
+  } = _temp === void 0 ? {} : _temp;
   const support = (0,_get_support_js__WEBPACK_IMPORTED_MODULE_1__.getSupport)();
   const window = (0,ssr_window__WEBPACK_IMPORTED_MODULE_0__.getWindow)();
   const platform = window.navigator.platform;
@@ -31758,7 +32127,11 @@ function calcDevice({
   return device;
 }
 
-function getDevice(overrides = {}) {
+function getDevice(overrides) {
+  if (overrides === void 0) {
+    overrides = {};
+  }
+
   if (!deviceCached) {
     deviceCached = calcDevice(overrides);
   }
@@ -31863,7 +32236,11 @@ function deleteProps(obj) {
   });
 }
 
-function nextTick(callback, delay = 0) {
+function nextTick(callback, delay) {
+  if (delay === void 0) {
+    delay = 0;
+  }
+
   return setTimeout(callback, delay);
 }
 
@@ -31890,7 +32267,11 @@ function getComputedStyle(el) {
   return style;
 }
 
-function getTranslate(el, axis = 'x') {
+function getTranslate(el, axis) {
+  if (axis === void 0) {
+    axis = 'x';
+  }
+
   const window = (0,ssr_window__WEBPACK_IMPORTED_MODULE_0__.getWindow)();
   let matrix;
   let curTransform;
@@ -31942,12 +32323,12 @@ function isNode(node) {
   return node && (node.nodeType === 1 || node.nodeType === 11);
 }
 
-function extend(...args) {
-  const to = Object(args[0]);
+function extend() {
+  const to = Object(arguments.length <= 0 ? undefined : arguments[0]);
   const noExtend = ['__proto__', 'constructor', 'prototype'];
 
-  for (let i = 1; i < args.length; i += 1) {
-    const nextSource = args[i];
+  for (let i = 1; i < arguments.length; i += 1) {
+    const nextSource = i < 0 || arguments.length <= i ? undefined : arguments[i];
 
     if (nextSource !== undefined && nextSource !== null && !isNode(nextSource)) {
       const keysArray = Object.keys(Object(nextSource)).filter(key => noExtend.indexOf(key) < 0);
@@ -31986,11 +32367,12 @@ function setCSSProperty(el, varName, varValue) {
   el.style.setProperty(varName, varValue);
 }
 
-function animateCSSModeScroll({
-  swiper,
-  targetPosition,
-  side
-}) {
+function animateCSSModeScroll(_ref) {
+  let {
+    swiper,
+    targetPosition,
+    side
+  } = _ref;
   const window = (0,ssr_window__WEBPACK_IMPORTED_MODULE_0__.getWindow)();
   const startPosition = -swiper.translate;
   let startTime = null;
@@ -32108,15 +32490,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_effect_creative_effect_creative_js__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./modules/effect-creative/effect-creative.js */ "./node_modules/swiper/modules/effect-creative/effect-creative.js");
 /* harmony import */ var _modules_effect_cards_effect_cards_js__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./modules/effect-cards/effect-cards.js */ "./node_modules/swiper/modules/effect-cards/effect-cards.js");
 /**
- * Swiper 7.4.1
+ * Swiper 8.0.6
  * Most modern mobile touch slider and framework with hardware accelerated transitions
  * https://swiperjs.com
  *
- * Copyright 2014-2021 Vladimir Kharlampidi
+ * Copyright 2014-2022 Vladimir Kharlampidi
  *
  * Released under the MIT License
  *
- * Released on: December 24, 2021
+ * Released on: February 14, 2022
  */
 
 
@@ -32144,17 +32526,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-/***/ }),
-
-/***/ "./node_modules/axios/package.json":
-/*!*****************************************!*\
-  !*** ./node_modules/axios/package.json ***!
-  \*****************************************/
-/***/ ((module) => {
-
-"use strict";
-module.exports = JSON.parse('{"name":"axios","version":"0.21.4","description":"Promise based HTTP client for the browser and node.js","main":"index.js","scripts":{"test":"grunt test","start":"node ./sandbox/server.js","build":"NODE_ENV=production grunt build","preversion":"npm test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json","postversion":"git push && git push --tags","examples":"node ./examples/server.js","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","fix":"eslint --fix lib/**/*.js"},"repository":{"type":"git","url":"https://github.com/axios/axios.git"},"keywords":["xhr","http","ajax","promise","node"],"author":"Matt Zabriskie","license":"MIT","bugs":{"url":"https://github.com/axios/axios/issues"},"homepage":"https://axios-http.com","devDependencies":{"coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.3.0","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^23.0.0","grunt-karma":"^4.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^4.0.2","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^6.3.2","karma-chrome-launcher":"^3.1.0","karma-firefox-launcher":"^2.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^4.3.6","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.8","karma-webpack":"^4.0.2","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^8.2.1","sinon":"^4.5.0","terser-webpack-plugin":"^4.2.3","typescript":"^4.0.5","url-search-params":"^0.10.0","webpack":"^4.44.2","webpack-dev-server":"^3.11.0"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"jsdelivr":"dist/axios.min.js","unpkg":"dist/axios.min.js","typings":"./index.d.ts","dependencies":{"follow-redirects":"^1.14.0"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}]}');
 
 /***/ })
 

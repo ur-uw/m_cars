@@ -321,7 +321,9 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
                 {{-- Thumbnail --}}
                 <div class="md:col-span-1 {{ $car_thumbnail != null ? 'grid grid-rows-2 gap-3' : '' }}">
-                    @error('car_thumbnail') <p class="error">{{ $message }}</p>@enderror
+                    @error('car_thumbnail')
+                        <p class="error">{{ $message }}</p>
+                    @enderror
                     <div
                         class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                         <div class="space-y-1 text-center">
@@ -356,7 +358,9 @@
                 </div>
                 {{-- Car images --}}
                 <div class="md:col-span-2">
-                    @error('car_images') <p class="error">{{ $message }}</p>@enderror
+                    @error('car_images')
+                        <p class="error">{{ $message }}</p>
+                    @enderror
                     <div
                         class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                         <div class="space-y-1 text-center">

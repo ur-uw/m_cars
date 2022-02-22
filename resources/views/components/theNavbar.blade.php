@@ -7,9 +7,10 @@
      <div class="hidden top-navbar w-full lg:inline-flex lg:flex-grow lg:w-auto transition" id="navigation">
          <ul class="bg-gray-50 lg:bg-white p-5 flex flex-col gap-6 lg:gap-12 lg:flex-row  ml-auto lg:items-center">
              @if (Route::currentRouteName() == 'home')
-                 <a href="#" class="hover:text-primary transition">Features</a>
-                 <a href="#" class="hover:text-primary transition">Pricing</a>
-                 <a href="#">Contact</a>
+                 <button onclick="scrollToId('features-section')" class="hover:text-primary transition">
+                     Features
+                 </button>
+                 <button class="hover:text-primary transition">Contact</button>
              @else
                  <a href="{{ route('accessories.show') }}"
                      class="hover:text-primary transition {{ Route::is('accessories.show') || Route::is('accessory.show') ? 'text-primary' : '' }}">Accessories</a>
@@ -21,8 +22,6 @@
                  <a href="{{ route('garage.show') }}"
                      class="hover:text-primary transition {{ Route::is('garage.show') ? 'text-primary' : '' }}">Garage</a>
                  <a href="#" class="hover:text-primary transition">Map</a>
-
-
              @endif
              @guest
                  <li>

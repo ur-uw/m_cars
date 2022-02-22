@@ -10,7 +10,7 @@
         <h3 class="text-xl text-primary">
             Price: {{ $product->price }} $
         </h3>
-        <button class="btn btn-primary transition">
+        <button wire:click='addToCart' class="btn btn-primary transition">
             Add to Cart
         </button>
     </div>

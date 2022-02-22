@@ -87,7 +87,7 @@
                 </div>
             </div>
 
-            <form class="mt-10">
+            <form class="mt-10" wire:submit.prevent>
                 <!-- Colors -->
                 <div>
                     <h3 class="text-sm text-gray-900 font-medium">Color</h3>
@@ -136,9 +136,10 @@
                     </fieldset>
                 </div>
                 @if (!$car->user)
-                    <button type="submit"
-                        class="mt-10 w-full bg-primary border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Add
-                        to garage</button>
+                    <button type="button" wire:click='addToGarage'
+                        class="mt-10 w-full bg-primary border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Add to garage
+                    </button>
                 @endif
             </form>
         </div>
