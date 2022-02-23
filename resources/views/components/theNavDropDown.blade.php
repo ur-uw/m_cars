@@ -58,6 +58,8 @@
 
 
         <hr class="border-gray-200">
+        {{-- GARAGE --}}
+
         <a href="{{ route('garage.show') }}"
             class="flex items-center p-3 text-sm {{ Route::is('garage.show') ? 'text-primary' : 'text-gray-600' }} capitalize transition-colors duration-200 transform hover:bg-gray-100">
             <i class="fa fa-warehouse w-5 h-5 mx-1"></i>
@@ -65,6 +67,16 @@
                 Garage
             </span>
         </a>
+        @admin
+        {{-- ADMIN DASHBOARD --}}
+        <a href="{{ route('admin-dashboard') }}"
+            class="flex items-center p-3 text-sm {{ Route::is('admin-dashboard') ? 'text-primary' : 'text-gray-600' }} capitalize transition-colors duration-200 transform hover:bg-gray-100">
+            <i class="fa fa-user-astronaut w-5 h-5 mx-1"></i>
+            <span>
+                Admin Dashboard
+            </span>
+        </a>
+        @endadmin
         <hr class="border-gray-200">
         <a href="#"
             class="flex items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform hover:bg-gray-100 ">

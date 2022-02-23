@@ -34,7 +34,7 @@
                  </li>
              @endguest
              @auth
-                 @include('components.theDropDown')
+                 @include('components.theNavDropDown')
              @endauth
          </ul>
      </div>
