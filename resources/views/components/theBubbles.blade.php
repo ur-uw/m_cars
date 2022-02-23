@@ -1,4 +1,4 @@
-<div id="bubbles">
+<div class="hidden lg:block" id="bubbles">
     <div
         class="absolute -top-10 lg:top-0 -left-4 w-72 h-72 bg-indigo-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob">
     </div>
