@@ -10,6 +10,7 @@ use App\Http\Livewire\CreateAccessory;
 use App\Http\Livewire\CreateSparePart;
 use App\Http\Livewire\Explore;
 use App\Http\Livewire\Garage;
+use App\Http\Livewire\Profile;
 use App\Http\Livewire\SparePartsList;
 use App\Http\Livewire\SpareTypesList;
 use App\Models\Accessory;
@@ -61,6 +62,8 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/accessory/create', CreateAccessory::class)
             ->name('accessory.create');
+
+        Route::get('/profile', Profile::class)->name('profile.show');
     });
     Route::get('/testing', function () {
     });
