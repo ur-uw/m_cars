@@ -14,11 +14,14 @@
                 <form action="#" method="POST">
                     <div class="shadow sm:rounded-md sm:overflow-hidden">
                         <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
-
                             <div>
                                 <label class="block text-sm font-medium text-gray-700"> Photo </label>
                                 @if (Auth::user()->image != null)
-                                    <div>{{ Auth::user()->image }}</div>
+                                    <div class="flex items-center">
+                                        <img src="{{ Auth::user()->image }}" alt="User image" class="rounded-full">
+                                        <button type="button"
+                                            class="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Change</button>
+                                    </div>
                                 @else
                                     <div class="mt-1 flex items-center">
                                         <span class="inline-block h-12 w-12 rounded-full overflow-hidden bg-gray-100">
@@ -38,8 +41,7 @@
                                 <label for="about" class="block text-sm font-medium text-gray-700"> About </label>
                                 <div class="mt-1">
                                     <textarea id="about" name="about" rows="3"
-                                        class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
-                                        value="{{ Auth::user()->bio }}"></textarea>
+                                        class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md text-black">{{ Auth::user()->bio }}</textarea>
                                 </div>
                                 <p class="mt-2 text-sm text-gray-500">Brief description for your profile.</p>
                             </div>
@@ -104,6 +106,8 @@
                                     <label for="country" class="block text-sm font-medium text-gray-700">Country</label>
                                     <select id="country" name="country" autocomplete="country-name"
                                         class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                        <option value="{{ Auth::user()->address->id ?? null }}">
+                                            {{ Auth::user()->address->country ?? 'Select' }}</option>
                                         <option>United States</option>
                                         <option>Canada</option>
                                         <option>Mexico</option>
@@ -115,20 +119,23 @@
                                         address</label>
                                     <input type="text" name="street-address" id="street-address"
                                         autocomplete="street-address"
-                                        class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                        class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                        value="{{ Auth::user()->address->street ?? '' }}">
                                 </div>
 
                                 <div class="col-span-6 sm:col-span-6 lg:col-span-2">
                                     <label for="city" class="block text-sm font-medium text-gray-700">City</label>
                                     <input type="text" name="city" id="city" autocomplete="address-level2"
-                                        class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                        class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                        value="{{ Auth::user()->address->city ?? '' }}">
                                 </div>
 
                                 <div class="col-span-6 sm:col-span-3 lg:col-span-2">
                                     <label for="region" class="block text-sm font-medium text-gray-700">State /
                                         Province</label>
                                     <input type="text" name="region" id="region" autocomplete="address-level1"
-                                        class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                        class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                        value="{{ Auth::user()->address->state ?? '' }}">
                                 </div>
 
                                 <div class="col-span-6 sm:col-span-3 lg:col-span-2">
@@ -136,7 +143,8 @@
                                         Postal
                                         code</label>
                                     <input type="text" name="postal-code" id="postal-code" autocomplete="postal-code"
-                                        class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                        class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                        value="{{ Auth::user()->address->postal_code ?? '' }}">
                                 </div>
                             </div>
                         </div>
