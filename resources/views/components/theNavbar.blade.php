@@ -7,7 +7,8 @@
      <div class="hidden absolute top-20 right-0 lg:top-0 lg:right-0 z-30 w-full md:w-auto  lg:inline-flex lg:flex-grow animate-fadeIn"
          id="navigation">
          <ul
-             class="flex flex-col gap-6 bg-white p-5 rounded shadow-md shadow-gray-600 lg:shadow-none lg:gap-12 lg:flex-row items-start lg:items-center">
+             class="flex flex-col-reverse gap-6 bg-white p-5 rounded shadow-md shadow-gray-600 lg:shadow-none lg:gap-12 lg:flex-row items-start lg:items-center">
+
              @if (Route::is('home'))
                  <button onclick="scrollToId('features-section')" class="hover:text-primary transition">
                      Features

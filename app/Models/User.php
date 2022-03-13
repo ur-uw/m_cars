@@ -23,7 +23,31 @@ class User extends Authenticatable
         'email',
         'password',
         'is_admin',
+        'image',
+        'bio',
     ];
+
+    /**
+     * Get the user's first name.
+     *
+     * @return string
+     */
+    public function getFirstNameAttribute()
+    {
+        // Take substring from name sperator is space
+        return ucfirst(explode(' ', $this->name)[0]);
+    }
+
+    /**
+     * Get the user's last name.
+     *
+     * @return string
+     */
+    public function getLastNameAttribute()
+    {
+        // Take substring from name sperator is space
+        return ucfirst(explode(' ', $this->name)[1] ?? '');
+    }
 
     /**
      * The attributes that should be hidden for serialization.
