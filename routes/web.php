@@ -10,6 +10,7 @@ use App\Http\Livewire\CreateAccessory;
 use App\Http\Livewire\CreateSparePart;
 use App\Http\Livewire\Explore;
 use App\Http\Livewire\Garage;
+use App\Http\Livewire\Profile;
 use App\Http\Livewire\SparePartsList;
 use App\Http\Livewire\SpareTypesList;
 use App\Models\Accessory;
@@ -51,6 +52,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
     Route::get('/car/create', CarCreate::class)->name('car.create');
     Route::get('/garage', Garage::class)->name('garage.show');
+    Route::get('/profile', Profile::class)->name('profile.show');
+
     // Admin Routes
     Route::middleware('admin')->group(function () {
         Route::get('/admin-dashboard', AdminDashboard::class)

@@ -41,7 +41,7 @@
     @apply shadow-md py-1 px-4  lg:py-2 lg:px-6 rounded-md  ;
 }
 .btn-primary{
-    @apply bg-primary text-white hover:bg-gray-50 hover:text-dark-blue;
+    @apply bg-primary text-white hover:bg-dark-blue hover:text-white;
 }
 .btn-secondary{
     @apply bg-secondary text-white hover:bg-gray-50 hover:text-dark-blue;

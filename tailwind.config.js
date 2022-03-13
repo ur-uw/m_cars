@@ -14,8 +14,8 @@ module.exports = {
                 "app-white": "#f7f7f7",
             },
             animation: {
-                fadeIn: "fadeIn 2s ease-in-out",
-                "slide-left": "slide-left 2s ease-in-out",
+                fadeIn: "fadeIn 0.565s ease-in-out",
+                "slide-left": "slide-left 0.565s ease-in-out",
                 blob: "blob 7s infinite",
             },
             keyframes: {
