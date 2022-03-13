@@ -52,6 +52,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
     Route::get('/car/create', CarCreate::class)->name('car.create');
     Route::get('/garage', Garage::class)->name('garage.show');
+    Route::get('/profile', Profile::class)->name('profile.show');
+
     // Admin Routes
     Route::middleware('admin')->group(function () {
         Route::get('/admin-dashboard', AdminDashboard::class)
@@ -62,8 +64,6 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/accessory/create', CreateAccessory::class)
             ->name('accessory.create');
-
-        Route::get('/profile', Profile::class)->name('profile.show');
     });
     Route::get('/testing', function () {
     });
