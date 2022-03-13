@@ -32,19 +32,28 @@
                                         @enderror
                                     </div>
                                 @else
-                                    <div class="mt-1 flex items-center">
-                                        <span class="inline-block h-12 w-12 rounded-full overflow-hidden bg-gray-100">
-                                            <svg class="h-full w-full text-gray-300" fill="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path
-                                                    d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                                            </svg>
-                                        </span>
-                                        <label for="user_image"
+                                    <div class="mt-1 flex items-center gap-6 w-full">
+                                        @if ($user_image_file != null)
+                                            <img src="{{ $user_image_file->temporaryUrl() }}" alt="User image"
+                                                class="rounded-full shadow-md bg-cover"
+                                                style="height: 100px;width:100px;">
+                                        @else
+                                            <span
+                                                class="inline-block h-12 w-12 rounded-full overflow-hidden bg-gray-100">
+                                                <svg class="h-full w-full text-gray-300" fill="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path
+                                                        d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                                </svg>
+                                            </span>
+                                        @endif
+
+                                        <label for="user_image_file"
                                             class="btn relative cursor-pointer bg-white rounded-md text-md lg:text-lg lg:font-medium text-primary hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary">
                                             <span class="text-sm">Change</span>
-                                            <input wire:model='user_image' id="user_image" name="user_image" type="file"
-                                                class="sr-only" wire:model='user_image_file'>
+                                            <input wire:model='user_image_file' id="user_image_file"
+                                                name="user_image_file" type="file" class="sr-only"
+                                                wire:model='user_image_file'>
                                         </label>
                                         @error('user_image')
                                             <span class="text-red-500 text-sm">{{ $message }}</span>
