@@ -17,10 +17,19 @@
                             <div>
                                 <label class="block text-sm font-medium text-dark-blue"> Photo </label>
                                 @if (Auth::user()->image != null)
-                                    <div class="flex items-center">
-                                        <img src="{{ Auth::user()->image }}" alt="User image" class="rounded-full">
-                                        <button type="button"
-                                            class="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-dark-blue hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 ">Change</button>
+                                    <div class="flex items-center gap-6 w-full">
+                                        <img src="{{ $user_image_file != null ? $user_image_file->temporaryUrl() : Storage::url($user_image) }}"
+                                            alt="User image" class="rounded-full shadow-md bg-cover"
+                                            style="height: 100px;width:100px;">
+                                        <label for="user_image_file"
+                                            class="btn relative cursor-pointer bg-white rounded-md text-md lg:text-lg lg:font-medium text-primary hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary">
+                                            <span class="text-sm">Change</span>
+                                            <input wire:model='user_image_file' id="user_image_file"
+                                                name="user_image_file" type="file" class="sr-only">
+                                        </label>
+                                        @error('user_image')
+                                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                 @else
                                     <div class="mt-1 flex items-center">
@@ -31,8 +40,15 @@
                                                     d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
                                             </svg>
                                         </span>
-                                        <button type="button"
-                                            class="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-dark-blue hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 ">Change</button>
+                                        <label for="user_image"
+                                            class="btn relative cursor-pointer bg-white rounded-md text-md lg:text-lg lg:font-medium text-primary hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary">
+                                            <span class="text-sm">Change</span>
+                                            <input wire:model='user_image' id="user_image" name="user_image" type="file"
+                                                class="sr-only" wire:model='user_image_file'>
+                                        </label>
+                                        @error('user_image')
+                                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                 @endif
 
@@ -123,8 +139,6 @@
                                         autocomplete="country-name"
                                         class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none  focus:border-indigo-500 sm:text-sm">
                                         <option value="">Select</option>
-                                        <option value="{{ Auth::user()->address->country }}">
-                                            {{ Auth::user()->address->country }}</option>
                                         <option>Iraq</option>
                                         <option>United States</option>
                                         <option>Canada</option>

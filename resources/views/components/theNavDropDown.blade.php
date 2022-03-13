@@ -13,16 +13,16 @@
     <!-- Dropdown menu -->
     <div class="hidden absolute right-0 z-20 w-56 py-2 mt-2 overflow-hidden  rounded-md shadow-xl bg-white animate-fadeIn"
         id="dropdown-menu">
-        <a href="#"
+        <span
             class="flex items-center p-3 -mt-2 text-sm text-gray-600 transition-colors duration-200 transform hover:bg-gray-100 ">
             <img class="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9"
-                src="https://p.kindpng.com/picc/s/78-785827_user-profile-avatar-login-account-male-user-icon.png"
+                src="{{ Auth::user()->image != null? Storage::url(Auth::user()->image): 'https://p.kindpng.com/picc/s/78-785827_user-profile-avatar-login-account-male-user-icon.png' }}"
                 alt="Profile Avatar">
             <div class="mx-1">
                 <h1 class="text-sm font-semibold text-gray-700">{{ Auth::user()->name }}</h1>
                 <p class="text-sm text-gray-500">{{ Auth::user()->email }}</p>
             </div>
-        </a>
+        </span>
 
         <hr class="border-gray-200">
 
