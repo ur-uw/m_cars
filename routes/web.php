@@ -45,7 +45,7 @@ Route::get('/car-details/{car}', CarDetails::class)->name('car_details.show');
 Route::get('/spare-parts', SpareTypesList::class)->name('spare_types.show');
 Route::get('/spare-parts/{category}', SparePartsList::class)->name('spare_part.show');
 Route::get('/accessories', AccessoriesTypesList::class)->name('accessories.show');
-Route::get('/accessories/{accessory_type}', AccessoriesList::class)->name('accessory.show');
+Route::get('/accessories/{category}', AccessoriesList::class)->name('accessory.show');
 
 // Auth Routes
 Route::middleware('auth')->group(function () {
