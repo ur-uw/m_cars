@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Car;
 use App\Models\CarDetails;
+use App\Models\Category;
 use App\Models\Manufacturer;
 use App\Models\Type;
 use App\Models\User;
@@ -18,12 +19,12 @@ class CarSeeder extends Seeder
      */
     public function run()
     {
-        $types_count = Type::count();
-        Manufacturer::all()->each(function (Manufacturer $manufacturer) use ($types_count) {
-            $cars =  Car::factory(rand(1, 3))->make([
-                'type_id' => rand(1, $types_count),
+        // Seed Cars table
+        Manufacturer::all()->each(function (Manufacturer $manufacturer) {
+            Car::factory(rand(1, 3))->create([
+                'category_id' => Category::where('name', 'Cars')->inRandomOrder()->first()->id,
+                'manufacturer_id' => $manufacturer->id,
             ]);
-            $manufacturer->cars()->saveMany($cars);
         });
     }
 }
