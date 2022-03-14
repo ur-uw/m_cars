@@ -2,10 +2,9 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Category;
 use App\Models\Manufacturer;
-use App\Models\SparePart;
-use App\Models\SpareType;
-use App\Utility\DirectoryUtils;
+use App\Models\Product;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Storage;
@@ -25,7 +24,7 @@ class CreateSparePart extends Component
         'name' => 'required|string|max:20',
         'price' => 'required|numeric',
         'image' => 'required|image|mimes:jpeg,png,jpg|max:2048|dimensions:max_width=670,max_height=350',
-        'spareType' => 'required|exists:App\Models\SpareType,id',
+        'spareType' => 'required|exists:App\Models\Category,id',
         'manufacturer' => 'required|exists:App\Models\Manufacturer,id',
 
     ];
@@ -38,12 +37,12 @@ class CreateSparePart extends Component
     public function submit()
     {
         $this->validate($this->rules);
-        $sparePath = 'public/spare_parts/' . Str::snake(SpareType::firstWhere('id', $this->spareType)->name);
+        $sparePath = 'public/spare_parts/' . Str::snake(Category::firstWhere('id', $this->spareType)->name);
         Storage::makeDirectory($sparePath);
         $spareImage =  $this->image->store($sparePath);
-        SparePart::create([
+        Product::create([
             'name' => $this->name,
-            'spare_type_id' => $this->spareType,
+            'category_id' => $this->spareType,
             'manufacturer_id' => $this->manufacturer,
             'image' => $spareImage,
             'price' => $this->price,
@@ -54,7 +53,9 @@ class CreateSparePart extends Component
     public function render()
     {
         return view('livewire.create-spare-part', [
-            'spareTypes' => SpareType::latest()
+            'spareTypes' => Category::firstWhere('name', 'Spare Parts')
+                ->children()
+                ->latest()
                 ->orderBy('name')
                 ->get(),
             'manufacturers' => Manufacturer::latest()
