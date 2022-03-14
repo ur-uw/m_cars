@@ -22,7 +22,10 @@ class CarSeeder extends Seeder
         // Seed Cars table
         Manufacturer::all()->each(function (Manufacturer $manufacturer) {
             Car::factory(rand(1, 3))->create([
-                'category_id' => Category::where('name', 'Cars')->inRandomOrder()->first()->id,
+                'category_id' => Category::where('parent_id', Category::firstWhere('name', 'Cars')->id)
+                    ->inRandomOrder()
+                    ->first()
+                    ->id,
                 'manufacturer_id' => $manufacturer->id,
             ]);
         });

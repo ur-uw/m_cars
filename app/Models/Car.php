@@ -54,7 +54,7 @@ class Car extends Model
      */
     public function category(): BelongsTo
     {
-        return $this->belongsTo(Category::class, 'category_id');
+        return $this->belongsTo(Category::class);
     }
 
     public function scopeSearch($query, $term)
