@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Car;
 use App\Models\CarDetails;
+use App\Models\Category;
 use App\Models\Manufacturer;
 use App\Models\Type;
 use Auth;
@@ -144,7 +145,7 @@ class CarCreate extends Component
             'thumb_nail' => $thumbnail,
             'action' => $this->action,
             'images' => $carImages,
-            'type_id' => $this->type,
+            'category_id' => $this->type,
             'user_id' => $this->getUserId(),
         ]);
         $car->details()->save($car_details);
@@ -156,7 +157,9 @@ class CarCreate extends Component
         return view('livewire.car-create', [
             'manufacturers' => Manufacturer::orderBy('name')
                 ->get(),
-            'types' => Type::orderBy('name')
+            'types' => Category::firstWhere('name', 'Cars')
+                ->children()
+                ->orderBy('name')
                 ->get(),
         ])
             ->extends('layouts.app');
