@@ -25,7 +25,7 @@ class ProductSeeder extends Seeder
         $categories = Category::whereIn('parent_id', $parent_categories->pluck('id'));
         $categories->each(function (Category $category) {
             $productImagesPath = "public/" . Str::snake(Category::where('id', $category->parent_id)->first()->name) . '/' . Str::snake($category->name);
-            $productImages = Storage::allFiles();
+            $productImages = Storage::allFiles($productImagesPath);
             foreach ($productImages as $productImage) {
                 if (preg_match('~\.(jpeg|jpg|png)$~', $productImage)) {
                     Product::factory([
