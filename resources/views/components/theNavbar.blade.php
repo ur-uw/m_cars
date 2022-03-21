@@ -35,7 +35,7 @@
                  </li>
              @endguest
              @auth
-                 @include('components.theNavDropDown')
+                 <livewire:the-nav-drop-down />
              @endauth
          </ul>
      </div>

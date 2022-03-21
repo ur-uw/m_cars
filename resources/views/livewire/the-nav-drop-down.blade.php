@@ -3,7 +3,7 @@
     <button id="dropdown-menu-button"
         class="relative z-10 flex items-center p-2 text-sm text-white bg-primary border border-transparent rounded-md focus:border-blue-500 focus:ring-opacity-40  focus:ring-blue-500 focus:ring  focus:outline-none
         shadow-md w-full lg:w-auto">
-        <span class="mx-1 w-full text-center lg:w-auto lg:text-left">{{ Auth::user()->name }}</span>
+        <span class="mx-1 w-full text-center lg:w-auto lg:text-left">{{ $name }}</span>
         <svg class="w-5 h-5 mx-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 15.713L18.01 9.70299L16.597 8.28799L12 12.888L7.40399 8.28799L5.98999 9.70199L12 15.713Z"
                 fill="currentColor"></path>
@@ -16,11 +16,11 @@
         <span
             class="flex items-center p-3 -mt-2 text-sm text-gray-600 transition-colors duration-200 transform hover:bg-gray-100 ">
             <img class="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9"
-                src="{{ Auth::user()->image != null? Storage::url(Auth::user()->image): 'https://p.kindpng.com/picc/s/78-785827_user-profile-avatar-login-account-male-user-icon.png' }}"
+                src="{{ $image != null? Storage::url($image): 'https://p.kindpng.com/picc/s/78-785827_user-profile-avatar-login-account-male-user-icon.png' }}"
                 alt="Profile Avatar">
             <div class="mx-1">
-                <h1 class="text-sm font-semibold text-gray-700">{{ Auth::user()->name }}</h1>
-                <p class="text-sm text-gray-500">{{ Auth::user()->email }}</p>
+                <h1 class="text-sm font-semibold text-gray-700">{{ $name }}</h1>
+                <p class="text-sm text-gray-500">{{ $email }}</p>
             </div>
         </span>
 
