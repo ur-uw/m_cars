@@ -7,6 +7,7 @@ use App\Http\Livewire\AdminDashboard;
 use App\Http\Livewire\CarCreate;
 use App\Http\Livewire\CarDetails;
 use App\Http\Livewire\Cart\CartView;
+use App\Http\Livewire\Checkout;
 use App\Http\Livewire\CreateAccessory;
 use App\Http\Livewire\CreateSparePart;
 use App\Http\Livewire\Explore;
@@ -55,6 +56,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/garage', Garage::class)->name('garage.show');
     Route::get('/profile', Profile::class)->name('profile.show');
     Route::get('/cart', CartView::class)->name('cart.show');
+    Route::get('/checkout', Checkout::class)->name('checkout.show');
     // Admin Routes
     Route::middleware('admin')->group(function () {
         Route::get('/admin-dashboard', AdminDashboard::class)

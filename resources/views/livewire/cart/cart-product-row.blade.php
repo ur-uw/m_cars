@@ -12,7 +12,7 @@
          {{ $quantity }}
      </td>
      <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-500 text-sm leading-5">
-         <div class="flex justify-evenly items-center">
+         <div class="flex flex-col gap-3 lg:gap-0 lg:flex-row lg:justify-evenly lg:items-center">
              <div class="flex flex-col gap-3">
                  <button wire:click='increaseItemQty({{ $product->id }})' type="submit"
                      class="btn btn-primary transition font-bold">
@@ -25,7 +25,8 @@
                      </button>
                  @endif
              </div>
-             <button wire:click='removeFromCart' type="submit" class="btn btn-secondary transition font-bold">
+             <button wire:click='removeFromCart' type="submit"
+                 class="btn bg-black hover:bg-gray-700 text-white transition font-bold">
                  Remove
              </button>
          </div>

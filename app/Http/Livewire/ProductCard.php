@@ -34,6 +34,11 @@ class ProductCard extends Component
                 $product->name,
                 1,
                 $product->price / 100,
+                0,
+                [
+                    'image' => $product->image,
+                    'description' => $product->description,
+                ]
             );
 
             $this->emit('cart_updated');
