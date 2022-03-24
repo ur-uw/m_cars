@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Livewire\AccessoriesList;
 use App\Http\Livewire\AccessoriesTypesList;
 use App\Http\Livewire\AdminDashboard;
@@ -56,7 +57,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/garage', Garage::class)->name('garage.show');
     Route::get('/profile', Profile::class)->name('profile.show');
     Route::get('/cart', CartView::class)->name('cart.show');
-    Route::get('/checkout', Checkout::class)->name('checkout.show');
+    Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout.show');
+    Route::post('/checkout', [CheckoutController::class, 'charge'])->name('checkout.charge');
     // Admin Routes
     Route::middleware('admin')->group(function () {
         Route::get('/admin-dashboard', AdminDashboard::class)
