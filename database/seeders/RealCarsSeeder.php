@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Car;
 use App\Models\CarDetails;
+use App\Models\Category;
 use App\Models\Manufacturer;
 use App\Models\Type;
 use Illuminate\Database\Seeder;
@@ -101,7 +102,7 @@ class RealCarsSeeder extends Seeder
                     $counter += 1;
                 }
                 $car = Car::factory()->make([
-                    'type_id' => Type::inRandomOrder()->first()->id,
+                    'category_id' => Category::where('name', 'Cars')->inRandomOrder()->first()->id,
                     'model' => $model,
                     'images' => $carImages,
                     'thumb_nail' => $carImagesObjects[0]['thumbnailLink'],

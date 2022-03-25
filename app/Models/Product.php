@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Accessory extends Model
+class Product extends Model
 {
     use HasFactory;
     protected $fillable = [
         'name',
         'price',
         'image',
-        'accessory_type_id',
+        'category_id',
         'manufacturer_id',
     ];
 
@@ -24,7 +24,7 @@ class Accessory extends Model
      */
     public function accessoryType(): BelongsTo
     {
-        return $this->belongsTo(AccessoryType::class);
+        return $this->belongsTo(Category::class);
     }
 
 

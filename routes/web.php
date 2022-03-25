@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Livewire\AccessoriesList;
 use App\Http\Livewire\AccessoriesTypesList;
 use App\Http\Livewire\AdminDashboard;
 use App\Http\Livewire\CarCreate;
 use App\Http\Livewire\CarDetails;
+use App\Http\Livewire\Cart\CartView;
 use App\Http\Livewire\CreateAccessory;
 use App\Http\Livewire\CreateSparePart;
 use App\Http\Livewire\Explore;
@@ -13,7 +15,6 @@ use App\Http\Livewire\Garage;
 use App\Http\Livewire\Profile;
 use App\Http\Livewire\SparePartsList;
 use App\Http\Livewire\SpareTypesList;
-use App\Models\Accessory;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,9 +44,9 @@ Route::middleware('guest')->group(function () {
 Route::get('/explore', Explore::class)->name('explore.show');
 Route::get('/car-details/{car}', CarDetails::class)->name('car_details.show');
 Route::get('/spare-parts', SpareTypesList::class)->name('spare_types.show');
-Route::get('/spare-parts/{spare_type}', SparePartsList::class)->name('spare_part.show');
+Route::get('/spare-parts/{category}', SparePartsList::class)->name('spare_part.show');
 Route::get('/accessories', AccessoriesTypesList::class)->name('accessories.show');
-Route::get('/accessories/{accessory_type}', AccessoriesList::class)->name('accessory.show');
+Route::get('/accessories/{category}', AccessoriesList::class)->name('accessory.show');
 
 // Auth Routes
 Route::middleware('auth')->group(function () {
@@ -53,7 +54,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/car/create', CarCreate::class)->name('car.create');
     Route::get('/garage', Garage::class)->name('garage.show');
     Route::get('/profile', Profile::class)->name('profile.show');
-
+    Route::get('/cart', CartView::class)->name('cart.show');
+    Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout.show');
+    Route::post('/checkout', [CheckoutController::class, 'charge'])->name('checkout.charge');
     // Admin Routes
     Route::middleware('admin')->group(function () {
         Route::get('/admin-dashboard', AdminDashboard::class)

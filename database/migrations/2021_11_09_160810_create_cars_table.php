@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Category;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -25,8 +26,7 @@ class CreateCarsTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->foreignId('type_id')
-                ->constrained()
+            $table->foreignIdFor(Category::class, 'category_id')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 

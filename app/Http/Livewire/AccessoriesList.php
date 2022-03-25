@@ -2,14 +2,14 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Accessory;
-use App\Models\AccessoryType;
+use App\Models\Category;
 use App\Models\Manufacturer;
+use App\Models\Product;
 use Livewire\Component;
 
 class AccessoriesList extends Component
 {
-    public AccessoryType $accessory_type;
+    public Category $category;
     public $term;
     public $filterManufacturer;
     public $manufacturers;
@@ -28,7 +28,7 @@ class AccessoriesList extends Component
         return view(
             'livewire.accessories-list',
             [
-                'accessories' => Accessory::where('accessory_type_id', $this->accessory_type->id)
+                'accessories' => Product::where('category_id', $this->category->id)
                     ->when($this->filterManufacturer, function ($query, $man) {
                         return $query->where('manufacturer_id', $man);
                     })

@@ -15,7 +15,7 @@ class Car extends Model
     protected $fillable = [
         'model',
         'manufacturer_id',
-        'type_id',
+        'category_id',
         'car_details_id',
         'thumb_nail',
         'images',
@@ -48,13 +48,13 @@ class Car extends Model
     }
 
     /**
-     * Get the type that owns the Car
+     * Get the category that owns the Car
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function type(): BelongsTo
+    public function category(): BelongsTo
     {
-        return $this->belongsTo(Type::class);
+        return $this->belongsTo(Category::class);
     }
 
     public function scopeSearch($query, $term)

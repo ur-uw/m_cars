@@ -3,14 +3,17 @@
 namespace App\Http\Livewire;
 
 use App\Models\AccessoryType;
+use App\Models\Category;
 use Livewire\Component;
 
 class AccessoriesTypesList extends Component
 {
-    public $accessoryTypes;
+    public $category;
     public function mount()
     {
-        $this->accessoryTypes = AccessoryType::latest()
+        $this->category = Category::firstWhere('name', 'Accessories')
+            ->children()
+            ->latest()
             ->orderBy('name')
             ->get();
     }

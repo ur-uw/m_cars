@@ -1,5 +1,5 @@
 @section('page-title')
-    {{ Str::upper($accessory_type->name) }}
+    {{ Str::upper($category->name) }}
 @endsection
 <div class="container">
     {{-- Search section --}}
@@ -44,7 +44,7 @@
     {{-- Accessories Section --}}
     <section>
         <h1 class="text-center text-lg lg:font-semibold lg:text-4xl capitalize mb-2">
-            {{ $accessory_type->name }}
+            {{ $category->name }}
         </h1>
         @if (count($accessories) > 0)
             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-4">
