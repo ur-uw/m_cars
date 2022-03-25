@@ -13,7 +13,6 @@
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.4.1",
         "laravel/framework": "^v8.83.1",
-        "laravel/sanctum": "^v2.14.1",
         "laravel/tinker": "^2.5",
         "livewire/livewire": "^v2.10.4",
         "cartalyst/stripe-laravel": "^13.0"
