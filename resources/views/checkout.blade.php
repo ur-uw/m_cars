@@ -35,8 +35,8 @@
                     <div class="col-span-6 sm:col-span-4">
                         <label for="email-address" class="block text-sm font-medium text-dark-blue">Email
                             address</label>
-                        <input required value="{{ $user->email }}" type="text" name="email" id="email-address"
-                            autocomplete="email"
+                        <input required value="{{ old('email') ?? $user->email }}" type="text" name="email"
+                            id="email-address" autocomplete="email"
                             class="mt-1  focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                             value="{{ old('email') }}">
                         @error('email')
@@ -46,7 +46,7 @@
 
                     <div class="col-span-6 sm:col-span-4">
                         <label for="name" class="block text-sm font-medium text-dark-blue">Name</label>
-                        <input required value='{{ $user->name }}' type="text" name="name" id="name"
+                        <input required value='{{ old('name') ?? $user->name }}' type="text" name="name" id="name"
                             class="mt-1  focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                             value="{{ old('name') }}">
                         @error('name')
@@ -56,7 +56,8 @@
 
                     <div class="col-span-6 sm:col-span-4">
                         <label for="address" class="block text-sm font-medium text-dark-blue">Address</label>
-                        <input required value='{{ $user->address->street }}' type="text" name="address" id="address"
+                        <input required value='{{ old('address') ?? ($user->address->street ?? '') }}' type="text"
+                            name="address" id="address"
                             class="mt-1  focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                             value="{{ old('address') }}">
                         @error('address')
@@ -67,7 +68,8 @@
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label for="city" class="block text-sm font-medium text-dark-blue">City</label>
-                            <input required value='{{ $user->address->city }}' type="text" name="city" id="city"
+                            <input required value='{{ old('city') ?? ($user->address->city ?? '') }}' type="text"
+                                name="city" id="city"
                                 class="mt-1  focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                                 value="{{ old('city') }}">
                             @error('city')
@@ -77,7 +79,8 @@
 
                         <div>
                             <label for="state" class="block text-sm font-medium text-dark-blue">State</label>
-                            <input required value='{{ $user->address->state }}' type="text" name="state" id="address"
+                            <input required value='{{ old('state') ?? ($user->address->state ?? '') }}' type="text"
+                                name="state" id="address"
                                 class="mt-1  focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                                 value="{{ old('state') }}">
                             @error('state')
@@ -87,8 +90,8 @@
 
                         <div>
                             <label for="postal_code" class="block text-sm font-medium text-dark-blue">Postal Code</label>
-                            <input required value='{{ $user->address->postal_code }}' type="text" name="postal_code"
-                                id="postal_code"
+                            <input required value='{{ old('postal_code') ?? ($user->address->postal_code ?? '') }}'
+                                type="text" name="postal_code" id="postal_code"
                                 class="mt-1  focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                                 value="{{ old('postal_code') }}">
                             @error('postal_code')
@@ -111,7 +114,8 @@
                     <div class="col-span-6 sm:col-span-4">
                         <label for="name_on_card" class="block text-sm font-medium text-dark-blue">Name on Card
                         </label>
-                        <input required value='{{ $user->name }}' type="text" name="name_on_card" id="name_on_card"
+                        <input required value='{{ old('name_on_card') ?? $user->name }}' type="text" name="name_on_card"
+                            id="name_on_card"
                             class="mt-1  focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                             value="{{ old('name_on_card') }}">
                         @error('name_on_card')
