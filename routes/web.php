@@ -8,7 +8,6 @@ use App\Http\Livewire\AdminDashboard;
 use App\Http\Livewire\CarCreate;
 use App\Http\Livewire\CarDetails;
 use App\Http\Livewire\Cart\CartView;
-use App\Http\Livewire\Checkout;
 use App\Http\Livewire\CreateAccessory;
 use App\Http\Livewire\CreateSparePart;
 use App\Http\Livewire\Explore;
@@ -16,7 +15,6 @@ use App\Http\Livewire\Garage;
 use App\Http\Livewire\Profile;
 use App\Http\Livewire\SparePartsList;
 use App\Http\Livewire\SpareTypesList;
-use App\Models\Accessory;
 use Illuminate\Support\Facades\Route;
 
 /*

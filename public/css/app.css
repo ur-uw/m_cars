@@ -891,6 +891,18 @@ select {
 .w-10 {
   width: 2.5rem;
 }
+.w-screen {
+  width: 100vw;
+}
+.w-0\.5 {
+  width: 0.125rem;
+}
+.w-0 {
+  width: 0px;
+}
+.w-1\/2 {
+  width: 50%;
+}
 .min-w-full {
   min-width: 100%;
 }
@@ -1511,6 +1523,10 @@ select {
 .text-blue-600 {
   --tw-text-opacity: 1;
   color: rgb(37 99 235 / var(--tw-text-opacity));
+}
+.text-green-300 {
+  --tw-text-opacity: 1;
+  color: rgb(134 239 172 / var(--tw-text-opacity));
 }
 .underline {
   -webkit-text-decoration-line: underline;
