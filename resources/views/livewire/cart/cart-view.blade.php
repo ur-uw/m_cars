@@ -1,8 +1,8 @@
 <section class="relative">
     <a class="btn btn-primary text-primary relative -top-4 left-4 lg:fixed lg:top-auto lg:left-1 transition"
         href="{{ route('checkout.show') }}">Checkout</a>
-    <div class="container">
-        <table class="table border min-w-full mb-3">
+    <div class="container overflow-x-auto">
+        <table class="table-auto border min-w-full mb-3">
             <thead>
                 <tr>
                     <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-sm leading-4 tracking-wider"></th>

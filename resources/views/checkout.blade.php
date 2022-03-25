@@ -1,4 +1,20 @@
 @extends('layouts.app')
+@section('styles')
+    <style>
+        /* Padding for Stripe Element containers */
+        .StripeElement {
+            border: 1px solid #cccccc;
+            padding: 10px 12px;
+            border-radius: 4px;
+        }
+
+        /* Blue outline on focus */
+        .StripeElement--focus {
+            border: 2px solid rgb(82 103 223);
+        }
+
+    </style>
+@endsection
 @section('content')
     <div class="container">
         @if (count($errors) > 0)
