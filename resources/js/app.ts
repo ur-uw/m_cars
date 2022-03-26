@@ -5,6 +5,7 @@ declare global {
     interface Window {
         Swiper: any;
         scrollToId: (id: string) => void;
+        initMap: () => void;
     }
 }
 // to declare global things and used in all laravel balde we must use window.{name}

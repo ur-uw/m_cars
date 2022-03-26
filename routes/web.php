@@ -12,6 +12,7 @@ use App\Http\Livewire\CreateAccessory;
 use App\Http\Livewire\CreateSparePart;
 use App\Http\Livewire\Explore;
 use App\Http\Livewire\Garage;
+use App\Http\Livewire\Map\MapView;
 use App\Http\Livewire\Profile;
 use App\Http\Livewire\SparePartsList;
 use App\Http\Livewire\SpareTypesList;
@@ -47,6 +48,7 @@ Route::get('/spare-parts', SpareTypesList::class)->name('spare_types.show');
 Route::get('/spare-parts/{category}', SparePartsList::class)->name('spare_part.show');
 Route::get('/accessories', AccessoriesTypesList::class)->name('accessories.show');
 Route::get('/accessories/{category}', AccessoriesList::class)->name('accessory.show');
+Route::get('/map', MapView::class)->name('map.show');
 
 // Auth Routes
 Route::middleware('auth')->group(function () {

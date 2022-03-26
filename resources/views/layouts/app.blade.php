@@ -19,7 +19,7 @@
 <body class="font-Poppins min-h-screen">
     <!-- Header -->
     @if (Route::currentRouteName() != 'auth.login' && Route::currentRouteName() != 'auth.register')
-        <header class="m-10 mt-2">
+        <header class="m-10 my-2">
             @include('components.theNavbar')
         </header>
     @endif
