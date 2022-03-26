@@ -39,7 +39,7 @@ class ProductCard extends Component
                     'image' => $product->image,
                     'description' => $product->description,
                 ]
-            );
+            )->associate('App\Models\Product');
 
             $this->emit('cart_updated');
         } else {
