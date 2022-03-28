@@ -1,5 +1,7 @@
 import Swiper from "swiper";
-new Swiper(".mySwiper", {
+import "swiper/css/bundle";
+
+new Swiper(".homeSwiper", {
     slidesPerView: 2,
     spaceBetween: 20,
     freeMode: true,

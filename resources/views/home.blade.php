@@ -1,8 +1,4 @@
 @extends('layouts.app')
-@section('styles')
-    <!-- Link Swiper's CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-@endsection
 @section('page-title')
     Home
 @endsection
@@ -45,11 +41,11 @@
 
         {{-- Brands --}}
         <section class="container">
-            <div class="swiper mySwiper">
-                <div class="swiper-wrapper">
+            <div class="swiper homeSwiper">
+                <div class="swiper-wrapper p-3">
                     @foreach (Storage::files('public/logos') as $car_brand)
-                        <div class="h-24 w-24 flex justify-center p-3 rouneded-lg bg-gray-50 swiper-slide  ">
-                            <img src="{{ Storage::url($car_brand) }}" class="h-100 w-100" alt="car_brand">
+                        <div class="flex justify-center p-3 rounded-lg bg-gray-50 swiper-slide shadow-sm">
+                            <img src="{{ Storage::url($car_brand) }}" class="car-logo" alt="car_brand">
                         </div>
                     @endforeach
                 </div>
