@@ -17,6 +17,8 @@ window.initMap = function () {
     zoom: 6,
     center: baghdad,
     fullscreenControl: false,
+    mapTypeControl: false,
+    streetViewControl: false,
     mapId: "6e21f68e87eba133"
   }); // Get User location
 

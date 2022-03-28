@@ -588,9 +588,6 @@ select {
   white-space: nowrap;
   border-width: 0;
 }
-.fixed {
-  position: fixed;
-}
 .absolute {
   position: absolute;
 }
@@ -644,9 +641,6 @@ select {
 }
 .left-4 {
   left: 1rem;
-}
-.left-0 {
-  left: 0px;
 }
 .z-10 {
   z-index: 10;
@@ -741,9 +735,6 @@ select {
 .ml-auto {
   margin-left: auto;
 }
-.mt-2 {
-  margin-top: 0.5rem;
-}
 .mb-2 {
   margin-bottom: 0.5rem;
 }
@@ -765,6 +756,9 @@ select {
 .mt-16 {
   margin-top: 4rem;
 }
+.mt-2 {
+  margin-top: 0.5rem;
+}
 .ml-2 {
   margin-left: 0.5rem;
 }
@@ -773,9 +767,6 @@ select {
 }
 .-ml-px {
   margin-left: -1px;
-}
-.mb-0 {
-  margin-bottom: 0px;
 }
 .block {
   display: block;
