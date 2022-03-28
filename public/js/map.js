@@ -1,11 +1,27 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
+/******/ 	// The require scope
+/******/ 	var __webpack_require__ = {};
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
 var __webpack_exports__ = {};
 /*!*****************************!*\
   !*** ./resources/js/map.ts ***!
   \*****************************/
- // Initialize and add the map
-
+__webpack_require__.r(__webpack_exports__);
+// Initialize and add the map
 window.initMap = function () {
   // The location of Baghdad
   var baghdad = {
@@ -45,7 +61,31 @@ window.initMap = function () {
       maximumAge: 0,
       timeout: Infinity
     });
+    places === null || places === void 0 ? void 0 : places.forEach(function (element) {
+      // The marker, positioned at a place
+      var marker = new google.maps.Marker({
+        position: {
+          lat: element.longitude,
+          lng: element.latitude
+        },
+        map: map,
+        clickable: true
+      });
+      var infoWindow = new google.maps.InfoWindow({
+        position: {
+          lat: element.longitude,
+          lng: element.latitude
+        },
+        ariaLabel: element.description,
+        content: element.name
+      });
+      marker.addListener("click", function () {
+        infoWindow.open(map, marker);
+      });
+    });
   }
 };
+
+
 /******/ })()
 ;

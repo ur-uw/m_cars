@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
             CarSeeder::class,
             CarDetailsSeeder::class,
             ProductSeeder::class,
+            ServicePlaceTypeSeeder::class,
+            ServicePlaceSeeder::class,
         ]);
     }
 }

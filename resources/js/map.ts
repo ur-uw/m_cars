@@ -1,3 +1,5 @@
+import { ServicePlace } from "./service_place";
+
 // Initialize and add the map
 window.initMap = () => {
     // The location of Baghdad
@@ -44,5 +46,27 @@ window.initMap = () => {
                 timeout: Infinity,
             }
         );
+        places?.forEach((element: ServicePlace) => {
+            // The marker, positioned at a place
+            const marker = new google.maps.Marker({
+                position: {
+                    lat: element.longitude,
+                    lng: element.latitude,
+                },
+                map: map,
+                clickable: true,
+            });
+            const infoWindow = new google.maps.InfoWindow({
+                position: {
+                    lat: element.longitude,
+                    lng: element.latitude,
+                },
+                ariaLabel: element.description,
+                content: element.name,
+            });
+            marker.addListener("click", function () {
+                infoWindow.open(map, marker);
+            });
+        });
     }
 };
