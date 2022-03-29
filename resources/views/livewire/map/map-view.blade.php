@@ -1,3 +1,6 @@
+@section('page-title')
+    Map
+@endsection
 @section('styles')
     <style>
         /* Set the size of the div element that contains the map */
@@ -15,9 +18,6 @@
 <div id="map"></div>
 
 @section('scripts')
-    <script>
-        const places = {!! json_encode($places->toArray()) !!};
-    </script>
     <script async
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAdfWSat-fHuct3Ba33AeqcHfyrvUUIzj8&callback=initMap">
     </script>
