@@ -151,7 +151,7 @@ async function moveToUserLocation(
 ): Promise<google.maps.Marker | null> {
     const geolocation = navigator.geolocation;
     if (geolocation) {
-        const position = await LocationService.getPosition({
+        const position: any = await LocationService.getPosition({
             enableHighAccuracy: true,
             maximumAge: 0,
             timeout: Infinity,
@@ -160,6 +160,7 @@ async function moveToUserLocation(
             lat: position.coords.latitude,
             lng: position.coords.longitude,
         };
+
         // The marker, positioned at user location
         const newMarker = new google.maps.Marker({
             position: pos,
