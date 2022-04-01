@@ -2164,6 +2164,67 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./resources/js/services/distance_calculator.ts":
+/*!******************************************************!*\
+  !*** ./resources/js/services/distance_calculator.ts ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "haversine_distance": () => (/* binding */ haversine_distance)
+/* harmony export */ });
+var haversine_distance = function haversine_distance(mk1, pos2) {
+  if (mk1.getPosition() !== undefined) {
+    var R = 3958.8; // Radius of the Earth in miles
+
+    var rlat1 = mk1.getPosition().lat() * (Math.PI / 180); // Convert degrees to radians
+
+    var rlat2 = pos2.lat * (Math.PI / 180); // Convert degrees to radians
+
+    var difflat = rlat2 - rlat1; // Radian difference (latitudes)
+
+    var difflon = (pos2.lng - mk1.getPosition().lng()) * (Math.PI / 180); // Radian difference (longitudes)
+
+    var d = 2 * R * Math.asin(Math.sqrt(Math.sin(difflat / 2) * Math.sin(difflat / 2) + Math.cos(rlat1) * Math.cos(rlat2) * Math.sin(difflon / 2) * Math.sin(difflon / 2)));
+    return d;
+  }
+
+  return 0;
+};
+
+/***/ }),
+
+/***/ "./resources/js/services/location_service.ts":
+/*!***************************************************!*\
+  !*** ./resources/js/services/location_service.ts ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "LocationService": () => (/* binding */ LocationService)
+/* harmony export */ });
+var LocationService =
+/** @class */
+function () {
+  function LocationService() {}
+
+  LocationService.getPosition = function (options) {
+    return new Promise(function (resolve, reject) {
+      return navigator.geolocation.getCurrentPosition(resolve, reject, options);
+    });
+  };
+
+  return LocationService;
+}();
+
+
+
+/***/ }),
+
 /***/ "./node_modules/process/browser.js":
 /*!*****************************************!*\
   !*** ./node_modules/process/browser.js ***!
@@ -2436,6 +2497,8 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _services_distance_calculator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./services/distance_calculator */ "./resources/js/services/distance_calculator.ts");
+/* harmony import */ var _services_location_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./services/location_service */ "./resources/js/services/location_service.ts");
 var __awaiter = undefined && undefined.__awaiter || function (thisArg, _arguments, P, generator) {
   function adopt(value) {
     return value instanceof P ? value : new P(function (resolve) {
@@ -2579,11 +2642,13 @@ var __generator = undefined && undefined.__generator || function (thisArg, body)
   }
 };
 
+
+
  // Initialize and add the map
 
 window.initMap = function () {
   return __awaiter(void 0, void 0, void 0, function () {
-    var baghdad, map, userLocationButton;
+    var baghdad, map, servicePlaces, userLocationButton;
     return __generator(this, function (_a) {
       switch (_a.label) {
         case 0:
@@ -2599,6 +2664,12 @@ window.initMap = function () {
             streetViewControl: false,
             mapId: "6e21f68e87eba133"
           });
+          return [4
+          /*yield*/
+          , getServicePlaces()];
+
+        case 1:
+          servicePlaces = _a.sent();
           userLocationButton = document.createElement("button");
           userLocationButton.classList.add("btn");
           userLocationButton.classList.add("btn-primary");
@@ -2610,15 +2681,39 @@ window.initMap = function () {
           });
           map.controls[google.maps.ControlPosition.TOP_RIGHT].push(userLocationButton); // Get User location
 
-          moveToUserLocation(map); // Show service places on the map
+          moveToUserLocation(map).then(function (marker) {
+            // Create button to get nearest service place
+            var nearestServicePlaceButton = document.createElement("button");
+            nearestServicePlaceButton.classList.add("btn");
+            nearestServicePlaceButton.classList.add("btn-primary");
+            nearestServicePlaceButton.classList.add("transition");
+            nearestServicePlaceButton.style.margin = "0.5rem";
+            nearestServicePlaceButton.innerHTML = "<i class=\"fa-solid fa-screwdriver-wrench text-lg\"></i>";
+            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(nearestServicePlaceButton);
+            nearestServicePlaceButton.addEventListener("click", function () {
+              if (servicePlaces != null && marker != null) {
+                var nearestServicePlace = getNearestServicePlace(marker, servicePlaces);
 
-          return [4
-          /*yield*/
-          , getServicePlaces(map)];
+                if (nearestServicePlace != null) {
+                  var cameraOptions = {
+                    center: {
+                      lat: nearestServicePlace.latitude,
+                      lng: nearestServicePlace.longitude
+                    },
+                    zoom: 18
+                  };
+                  map.setCenter(cameraOptions.center);
+                  map.setZoom(cameraOptions.zoom);
+                }
+              }
+            });
+          })["catch"](function (e) {
+            return console.error(e);
+          }); // Show service places on the map
 
-        case 1:
-          // Show service places on the map
-          _a.sent();
+          if (servicePlaces !== null) {
+            showServicePlaces(map, servicePlaces);
+          }
 
           return [2
           /*return*/
@@ -2629,7 +2724,7 @@ window.initMap = function () {
 }; // Add service places to the map
 
 
-function getServicePlaces(map) {
+function getServicePlaces() {
   return __awaiter(this, void 0, void 0, function () {
     var response, servicePlaces;
     return __generator(this, function (_a) {
@@ -2642,61 +2737,97 @@ function getServicePlaces(map) {
         case 1:
           response = _a.sent();
           servicePlaces = response.data["service_places"];
-          servicePlaces.forEach(function (servicePlace) {
-            var marker = new google.maps.Marker({
-              position: {
-                lat: servicePlace.longitude,
-                lng: servicePlace.latitude
-              },
-              map: map,
-              clickable: true
-            });
-            var infoWindow = new google.maps.InfoWindow({
-              content: "<div class=\"flex flex-col space-y-1\">\n            <div class=\"text-primary\">".concat(servicePlace.name, "</div>\n            <div class=\"text-gray-500\">").concat(servicePlace.description, "</div>\n            ").concat(servicePlace.phone_number.length > 0 ? "<div class=\"text-gray-500\"> <span class=\"text-black font-semibold text-sm\">Phone Number: </span> ".concat(servicePlace.phone_number, "</div>") : "", "\n            </div>")
-            });
-            marker.addListener("click", function () {
-              infoWindow.open(map, marker);
-            });
-          });
           return [2
           /*return*/
-          ];
+          , servicePlaces];
       }
+    });
+  });
+} // Show service places on the map
+
+
+function showServicePlaces(map, servicePlaces) {
+  servicePlaces.forEach(function (servicePlace) {
+    var marker = new google.maps.Marker({
+      position: {
+        lat: servicePlace.latitude,
+        lng: servicePlace.longitude
+      },
+      map: map,
+      clickable: true
+    });
+    var infoWindow = new google.maps.InfoWindow({
+      content: "<div class=\"flex flex-col space-y-1\">\n            <div class=\"text-primary\">".concat(servicePlace.name, "</div>\n            <div class=\"text-gray-500\">").concat(servicePlace.description, "</div>\n            ").concat(servicePlace.phone_number.length > 0 ? "<div class=\"text-gray-500\"> <span class=\"text-black font-semibold text-sm\">Phone Number: </span> ".concat(servicePlace.phone_number, "</div>") : "", "\n            </div>")
+    });
+    marker.addListener("click", function () {
+      infoWindow.open(map, marker);
     });
   });
 } // TODO: REMOVE OLD MARKER
 
 
 function moveToUserLocation(map) {
-  var geolocation = navigator.geolocation;
+  return __awaiter(this, void 0, void 0, function () {
+    var geolocation, position, pos, newMarker;
+    return __generator(this, function (_a) {
+      switch (_a.label) {
+        case 0:
+          geolocation = navigator.geolocation;
+          if (!geolocation) return [3
+          /*break*/
+          , 2];
+          return [4
+          /*yield*/
+          , _services_location_service__WEBPACK_IMPORTED_MODULE_2__.LocationService.getPosition({
+            enableHighAccuracy: true,
+            maximumAge: 0,
+            timeout: Infinity
+          })];
 
-  if (geolocation) {
-    geolocation.getCurrentPosition(function (position) {
-      var pos = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      }; // The marker, positioned at user location
+        case 1:
+          position = _a.sent();
+          pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+          newMarker = new google.maps.Marker({
+            position: pos,
+            map: map,
+            icon: "./assets/svg/current_pos.svg"
+          }); // Center map on user location
 
-      var newMarker = new google.maps.Marker({
-        position: pos,
-        map: map,
-        icon: "./assets/svg/current_pos.svg"
-      }); // Center map on user location
+          map.setZoom(16);
+          map.panTo(pos);
+          return [2
+          /*return*/
+          , newMarker];
 
-      map.moveCamera({
-        center: pos
-      });
-      map.setZoom(16);
-      map.setCenter(pos);
-      return newMarker;
-    }, function () {
-      // Browser doesn't support Geolocation
-      return null;
-    }, {
-      enableHighAccuracy: true,
-      maximumAge: 0,
-      timeout: Infinity
+        case 2:
+          return [2
+          /*return*/
+          , null];
+      }
     });
+  });
+} // Get nearest service place
+
+
+function getNearestServicePlace(marker, servicePlaces) {
+  // get nearest service place
+  if (servicePlaces.length > 0) {
+    var nearestServicePlace = servicePlaces.reduce(function (p1, p2) {
+      var distance1 = (0,_services_distance_calculator__WEBPACK_IMPORTED_MODULE_1__.haversine_distance)(marker, {
+        lat: p1.latitude,
+        lng: p1.longitude
+      });
+      var distance2 = (0,_services_distance_calculator__WEBPACK_IMPORTED_MODULE_1__.haversine_distance)(marker, {
+        lat: p2.latitude,
+        lng: p2.longitude
+      });
+      return distance1 < distance2 ? p1 : p2;
+    }); // Return nearest service place
+
+    return nearestServicePlace;
   }
 
   return null;
