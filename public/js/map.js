@@ -2648,7 +2648,7 @@ var __generator = undefined && undefined.__generator || function (thisArg, body)
 
 window.initMap = function () {
   return __awaiter(void 0, void 0, void 0, function () {
-    var baghdad, map, servicePlaces, userLocationButton;
+    var baghdad, map, servicePlaces, userLocationButton, servicePlacesMarkers;
     return __generator(this, function (_a) {
       switch (_a.label) {
         case 0:
@@ -2679,7 +2679,12 @@ window.initMap = function () {
           userLocationButton.addEventListener("click", function () {
             moveToUserLocation(map);
           });
-          map.controls[google.maps.ControlPosition.TOP_RIGHT].push(userLocationButton); // Get User location
+          map.controls[google.maps.ControlPosition.TOP_RIGHT].push(userLocationButton); // Show service places on the map
+
+          if (servicePlaces !== null) {
+            servicePlacesMarkers = showServicePlaces(map, servicePlaces);
+          } // Get User location
+
 
           moveToUserLocation(map).then(function (marker) {
             // Create button to get nearest service place
@@ -2692,29 +2697,39 @@ window.initMap = function () {
             map.controls[google.maps.ControlPosition.TOP_RIGHT].push(nearestServicePlaceButton);
             nearestServicePlaceButton.addEventListener("click", function () {
               if (servicePlaces != null && marker != null) {
-                var nearestServicePlace = getNearestServicePlace(marker, servicePlaces);
+                var nearestServicePlace_1 = getNearestServicePlace(marker, servicePlaces);
 
-                if (nearestServicePlace != null) {
+                if (nearestServicePlace_1 != null) {
                   var cameraOptions = {
                     center: {
-                      lat: nearestServicePlace.latitude,
-                      lng: nearestServicePlace.longitude
+                      lat: nearestServicePlace_1.latitude,
+                      lng: nearestServicePlace_1.longitude
                     },
                     zoom: 18
-                  };
+                  }; // Get nearest places markers
+
+                  var nearestPlaceMarkers = servicePlacesMarkers === null || servicePlacesMarkers === void 0 ? void 0 : servicePlacesMarkers.filter(function (marker) {
+                    return JSON.stringify(marker.getPosition()) === JSON.stringify({
+                      lat: nearestServicePlace_1.latitude,
+                      lng: nearestServicePlace_1.longitude
+                    });
+                  });
+
+                  if (nearestPlaceMarkers != null && (nearestPlaceMarkers === null || nearestPlaceMarkers === void 0 ? void 0 : nearestPlaceMarkers.length) > 0) {
+                    // Open nearest place info window
+                    nearestPlaceMarkers[0].setAnimation(google.maps.Animation.DROP);
+                    new google.maps.event.trigger(nearestPlaceMarkers[0], "click");
+                  }
+
                   map.setCenter(cameraOptions.center);
+                  map.setTilt(45);
                   map.setZoom(cameraOptions.zoom);
                 }
               }
             });
           })["catch"](function (e) {
             return console.error(e);
-          }); // Show service places on the map
-
-          if (servicePlaces !== null) {
-            showServicePlaces(map, servicePlaces);
-          }
-
+          });
           return [2
           /*return*/
           ];
@@ -2747,6 +2762,9 @@ function getServicePlaces() {
 
 
 function showServicePlaces(map, servicePlaces) {
+  // Create markers for service places
+  var markers = [];
+  var infoWindow = new google.maps.InfoWindow();
   servicePlaces.forEach(function (servicePlace) {
     var marker = new google.maps.Marker({
       position: {
@@ -2756,13 +2774,13 @@ function showServicePlaces(map, servicePlaces) {
       map: map,
       clickable: true
     });
-    var infoWindow = new google.maps.InfoWindow({
-      content: "<div class=\"flex flex-col space-y-1\">\n            <div class=\"text-primary\">".concat(servicePlace.name, "</div>\n            <div class=\"text-gray-500\">").concat(servicePlace.description, "</div>\n            ").concat(servicePlace.phone_number.length > 0 ? "<div class=\"text-gray-500\"> <span class=\"text-black font-semibold text-sm\">Phone Number: </span> ".concat(servicePlace.phone_number, "</div>") : "", "\n            </div>")
-    });
     marker.addListener("click", function () {
+      infoWindow.setContent("<div class=\"flex flex-col space-y-1\">\n            <div class=\"text-primary\">".concat(servicePlace.name, "</div>\n            <div class=\"text-gray-500\">").concat(servicePlace.description, "</div>\n            ").concat(servicePlace.phone_number.length > 0 ? "<div class=\"text-gray-500\"> <span class=\"text-black font-semibold text-sm\">Phone Number: </span> ".concat(servicePlace.phone_number, "</div>") : "", "\n            </div>"));
       infoWindow.open(map, marker);
     });
+    markers.push(marker);
   });
+  return markers;
 } // TODO: REMOVE OLD MARKER
 
 

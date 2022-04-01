@@ -37,6 +37,11 @@ window.initMap = async () => {
     map.controls[google.maps.ControlPosition.TOP_RIGHT].push(
         userLocationButton
     );
+    let servicePlacesMarkers: google.maps.Marker[] | null;
+    // Show service places on the map
+    if (servicePlaces !== null) {
+        servicePlacesMarkers = showServicePlaces(map, servicePlaces);
+    }
 
     // Get User location
     moveToUserLocation(map)
@@ -65,17 +70,38 @@ window.initMap = async () => {
                             },
                             zoom: 18,
                         };
+                        // Get nearest places markers
+                        const nearestPlaceMarkers =
+                            servicePlacesMarkers?.filter((marker) => {
+                                return (
+                                    JSON.stringify(marker.getPosition()) ===
+                                    JSON.stringify({
+                                        lat: nearestServicePlace.latitude,
+                                        lng: nearestServicePlace.longitude,
+                                    })
+                                );
+                            });
+                        if (
+                            nearestPlaceMarkers != null &&
+                            nearestPlaceMarkers?.length > 0
+                        ) {
+                            // Open nearest place info window
+                            nearestPlaceMarkers[0].setAnimation(
+                                google.maps.Animation.DROP
+                            );
+                            new google.maps.event.trigger(
+                                nearestPlaceMarkers[0],
+                                "click"
+                            );
+                        }
                         map.setCenter(cameraOptions.center!);
+                        map.setTilt(45);
                         map.setZoom(cameraOptions.zoom!);
                     }
                 }
             });
         })
         .catch((e) => console.error(e));
-    // Show service places on the map
-    if (servicePlaces !== null) {
-        showServicePlaces(map, servicePlaces);
-    }
 };
 
 // Add service places to the map
@@ -89,7 +115,10 @@ async function getServicePlaces(): Promise<ServicePlace[] | null> {
 function showServicePlaces(
     map: google.maps.Map,
     servicePlaces: ServicePlace[]
-) {
+): google.maps.Marker[] | null {
+    // Create markers for service places
+    const markers: google.maps.Marker[] = [];
+    let infoWindow = new google.maps.InfoWindow();
     servicePlaces.forEach((servicePlace: ServicePlace) => {
         const marker = new google.maps.Marker({
             position: {
@@ -99,8 +128,9 @@ function showServicePlaces(
             map: map,
             clickable: true,
         });
-        const infoWindow = new google.maps.InfoWindow({
-            content: `<div class="flex flex-col space-y-1">
+
+        marker.addListener("click", () => {
+            infoWindow.setContent(`<div class="flex flex-col space-y-1">
             <div class="text-primary">${servicePlace.name}</div>
             <div class="text-gray-500">${servicePlace.description}</div>
             ${
@@ -108,12 +138,12 @@ function showServicePlaces(
                     ? `<div class="text-gray-500"> <span class="text-black font-semibold text-sm">Phone Number: </span> ${servicePlace.phone_number}</div>`
                     : ""
             }
-            </div>`,
-        });
-        marker.addListener("click", () => {
+            </div>`);
             infoWindow.open(map, marker);
         });
+        markers.push(marker);
     });
+    return markers;
 }
 // TODO: REMOVE OLD MARKER
 async function moveToUserLocation(
