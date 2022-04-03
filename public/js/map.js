@@ -2772,7 +2772,8 @@ function showServicePlaces(map, servicePlaces) {
         lng: servicePlace.longitude
       },
       map: map,
-      clickable: true
+      clickable: true,
+      icon: servicePlace.service_place_type.name == "Car Care" ? "./assets/svg/care_place_marker.svg" : "./assets/svg/service_place_marker.svg"
     });
     marker.addListener("click", function () {
       infoWindow.setContent("<div class=\"flex flex-col space-y-1\">\n            <div class=\"text-primary\">".concat(servicePlace.name, "</div>\n            <div class=\"text-gray-500\">").concat(servicePlace.description, "</div>\n            ").concat(servicePlace.phone_number.length > 0 ? "<div class=\"text-gray-500\"> <span class=\"text-black font-semibold text-sm\">Phone Number: </span> ".concat(servicePlace.phone_number, "</div>") : "", "\n            </div>"));

@@ -4,5 +4,8 @@ export interface ServicePlace {
     phone_number: string;
     latitude: number;
     longitude: number;
-    spare_part_type: string;
+    service_place_type: {
+        id: number;
+        name: string;
+    };
 }

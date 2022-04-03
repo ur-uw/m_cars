@@ -18,6 +18,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('api')->get('/service-places', function () {
     return response()
         ->json([
-            'service_places' => ServicePlace::with('servicePlaceType')->get(),
+            'service_places' => ServicePlace::with('servicePlaceType:id,name')->get(),
         ]);
 });

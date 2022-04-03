@@ -127,6 +127,10 @@ function showServicePlaces(
             },
             map: map,
             clickable: true,
+            icon:
+                servicePlace.service_place_type.name == "Car Care"
+                    ? "./assets/svg/care_place_marker.svg"
+                    : "./assets/svg/service_place_marker.svg",
         });
 
         marker.addListener("click", () => {
