@@ -26,6 +26,7 @@ window.initMap = async () => {
     // Create button to move to user location
     const userLocationButton: HTMLButtonElement =
         document.createElement("button");
+    userLocationButton.setAttribute("title", "Move to your location");
     userLocationButton.classList.add("btn");
     userLocationButton.classList.add("btn-primary");
     userLocationButton.classList.add("transition");
@@ -49,6 +50,10 @@ window.initMap = async () => {
             // Create button to get nearest service place
             const nearestServicePlaceButton: HTMLButtonElement =
                 document.createElement("button");
+            nearestServicePlaceButton.setAttribute(
+                "title",
+                "Locate nearest service place"
+            );
             nearestServicePlaceButton.classList.add("btn");
             nearestServicePlaceButton.classList.add("btn-primary");
             nearestServicePlaceButton.classList.add("transition");
@@ -61,7 +66,11 @@ window.initMap = async () => {
             nearestServicePlaceButton.addEventListener("click", () => {
                 if (servicePlaces != null && marker != null) {
                     const nearestServicePlace: ServicePlace | null =
-                        getNearestServicePlace(marker, servicePlaces);
+                        getNearestServicePlace(
+                            marker,
+                            servicePlaces,
+                            "Car Service"
+                        );
                     if (nearestServicePlace != null) {
                         const cameraOptions: google.maps.CameraOptions = {
                             center: {
@@ -78,6 +87,68 @@ window.initMap = async () => {
                                     JSON.stringify({
                                         lat: nearestServicePlace.latitude,
                                         lng: nearestServicePlace.longitude,
+                                    })
+                                );
+                            });
+                        if (
+                            nearestPlaceMarkers != null &&
+                            nearestPlaceMarkers?.length > 0
+                        ) {
+                            // Open nearest place info window
+                            nearestPlaceMarkers[0].setAnimation(
+                                google.maps.Animation.DROP
+                            );
+                            new google.maps.event.trigger(
+                                nearestPlaceMarkers[0],
+                                "click"
+                            );
+                        }
+                        map.setCenter(cameraOptions.center!);
+                        map.setTilt(45);
+                        map.setZoom(cameraOptions.zoom!);
+                    }
+                }
+            });
+            // Create button to get nearest care place
+            const nearestCarePlaceButton: HTMLButtonElement =
+                document.createElement("button");
+            nearestCarePlaceButton.setAttribute(
+                "title",
+                "Locate nearest care place"
+            );
+            nearestCarePlaceButton.classList.add("btn");
+            nearestCarePlaceButton.classList.add("btn-primary");
+            nearestCarePlaceButton.classList.add("transition");
+            nearestCarePlaceButton.style.margin = "0.5rem";
+            nearestCarePlaceButton.innerHTML = `<i class="fa-solid fa-spray-can-sparkles text-lg"></i>`;
+
+            map.controls[google.maps.ControlPosition.TOP_RIGHT].push(
+                nearestCarePlaceButton
+            );
+            nearestCarePlaceButton.addEventListener("click", () => {
+                if (servicePlaces != null && marker != null) {
+                    const nearestCarePlace: ServicePlace | null =
+                        getNearestServicePlace(
+                            marker,
+                            servicePlaces,
+                            "Car Care"
+                        );
+                    if (nearestCarePlace != null) {
+                        const cameraOptions: google.maps.CameraOptions = {
+                            center: {
+                                lat: nearestCarePlace.latitude,
+                                lng: nearestCarePlace.longitude,
+                            },
+                            zoom: 18,
+                        };
+                        // Get nearest places markers
+                        const nearestPlaceMarkers =
+                            servicePlacesMarkers?.filter((marker) => {
+                                return (
+                                    JSON.stringify(marker.getPosition()) ===
+                                    JSON.stringify({
+                                        lat: nearestCarePlace.latitude,
+                                        lng: nearestCarePlace.longitude,
                                     })
                                 );
                             });
@@ -182,12 +253,16 @@ async function moveToUserLocation(
 // Get nearest service place
 function getNearestServicePlace(
     marker: google.maps.Marker,
-    servicePlaces: ServicePlace[]
+    servicePlaces: ServicePlace[],
+    type: string
 ): ServicePlace | null {
     // get nearest service place
     if (servicePlaces.length > 0) {
-        const nearestServicePlace = servicePlaces.reduce(
-            (p1: ServicePlace, p2) => {
+        const nearestServicePlace: ServicePlace = servicePlaces
+            .filter(
+                (place: ServicePlace) => place.service_place_type.name === type
+            )
+            .reduce((p1: ServicePlace, p2) => {
                 const distance1 = haversine_distance(marker, {
                     lat: p1.latitude,
                     lng: p1.longitude,
@@ -197,8 +272,7 @@ function getNearestServicePlace(
                     lng: p2.longitude,
                 });
                 return distance1 < distance2 ? p1 : p2;
-            }
-        );
+            });
         // Return nearest service place
         return nearestServicePlace;
     }
