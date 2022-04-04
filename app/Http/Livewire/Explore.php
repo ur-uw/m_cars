@@ -30,12 +30,9 @@ class Explore extends Component
 
     public function mount()
     {
-        if (session()->has('login:success')) {
-            $msg = session()->get('login:success');
-            toast("Welcome Back $msg", 'success');
-        } else if (session()->has('register:success')) {
-            $msg = session()->get('register:success');
-            toast("Welcome $msg", 'success');
+        if (session()->has('success')) {
+            $msg = session()->get('success');
+            toast($msg, 'success');
         }
     }
     public function render()
