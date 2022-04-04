@@ -26,10 +26,10 @@
     <main>
         @yield('content')
     </main>
+    @include('sweetalert::alert')
     @livewireScripts
     <script src="{{ asset('js/app.js') }}"></script>
     @yield('scripts')
-    @include('sweetalert::alert')
 </body>
 
 </html>

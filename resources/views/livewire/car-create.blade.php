@@ -2,7 +2,13 @@
     Create Car
 @endsection
 <div>
+    @if (count($errors) > 0)
+        <div class="container p-5 my-4 text-center text-white transition bg-red-500 rounded shadow-md fade">
+            {{ $errors->first() }}
+        </div>
+    @endif
     <div class="flex items-center justify-center gap-3 mb-3">
+
         {{-- Step indicators --}}
         @for ($i = 0; $i < count($pages); $i++)
             <button type='button'
@@ -11,15 +17,15 @@
             </button>
         @endfor
     </div>
-    <h1 class="text-lg text-center font-semibold lg:font-bold lg:text-4xl">{{ $pages[$currentPage]['heading'] }}</h1>
-    <form wire:submit.prevent='submit' class="container space-y-7 py-5 px-16 lg:px-28">
+    <h1 class="text-lg font-semibold text-center lg:font-bold lg:text-4xl">{{ $pages[$currentPage]['heading'] }}</h1>
+    <form wire:submit.prevent='submit' class="container px-16 py-5 space-y-7 lg:px-28">
         @if ($currentPage == 0)
             {{-- First step --}}
-            <div class="flex flex-col md:flex-row items-center gap-3">
+            <div class="flex flex-col items-center gap-3 md:flex-row">
                 <div class="lg:flex-1">
                     <label for="model" class="text-md lg:text-lg lg:font-medium">Model Name</label>
                     <input id="model" wire:model.debounce.350ms='model' name="model" type="text" placeholder="Ex: X6">
-                    <p class="text-app-grey text-xs mt-1">Do not exceed 20 characters when entering model name!
+                    <p class="mt-1 text-xs text-app-grey">Do not exceed 20 characters when entering model name!
                     </p>
                     @error('model')
                         <p class="error">
@@ -31,7 +37,7 @@
                     <label for="color" class="text-md lg:text-lg lg:font-medium">Car Color</label>
                     <input id="color" type="text" name="color" wire:model.debounce.350ms='color'
                         placeholder="Ex: #ffffff">
-                    <p class="text-app-grey text-xs mt-1">Enter color name in hex format!</p>
+                    <p class="mt-1 text-xs text-app-grey">Enter color name in hex format!</p>
                     @error('color')
                         <p class="error">
                             {{ $message }}
@@ -82,7 +88,7 @@
                 </div>
             </div>
             {{-- Manufacturer and Date --}}
-            <div class="flex flex-col md:flex-row items-center gap-3">
+            <div class="flex flex-col items-center gap-3 md:flex-row">
                 <div class="lg:flex-1">
                     <label for="manufactured_at" class="text-md lg:text-lg lg:font-medium">Manufacture Date</label>
                     {{-- TODO: make custom date picker --}}
@@ -104,16 +110,14 @@
                         </p>
                     @enderror
                 </div>
-
             </div>
             {{-- Description --}}
-            <div class="flex flex-col items-center lg:flex-row lg:items-start gap-3">
+            <div class="flex flex-col items-center gap-3 lg:flex-row lg:items-start">
 
                 <div class="flex-1">
                     <label for="description" class="text-md lg:text-lg lg:font-medium">Description</label>
-                    <textarea name="description" id="description" cols="20" rows="5"
-                        wire:model.debounce.350ms='description'></textarea>
-                    <p class=" text-app-grey text-xs mt-1">Do not exceed 100 characters when entering car description!
+                    <textarea name="description" id="description" cols="20" rows="5" wire:model.debounce.350ms='description'></textarea>
+                    <p class="mt-1 text-xs text-app-grey">Do not exceed 100 characters when entering car description!
                     </p>
                     @error('description')
                         <p class="error">
@@ -129,7 +133,7 @@
                         <option value="FOR_RENT">For Rent</option>
                     </select>
                     @admin
-                    <div class="flex-1 flex items-center gap-2 mt-4 border border-primary shadow cursor-pointer p-5 rounded hover:shadow-xl transition"
+                    <div class="flex items-center flex-1 gap-2 p-5 mt-4 transition border rounded shadow cursor-pointer border-primary hover:shadow-xl"
                         wire:click='$toggle("formMyGarage")'>
                         <input type="checkbox" wire:model='formMyGarage' name="for_my_garage" id="for_my_garage">
                         <label for="action" class="text-md">Add to my garage</label>
@@ -143,7 +147,7 @@
             {{-- Fuel Details --}}
             <h2 class="text-md lg:text-2xl lg:font-semibold">Fuel Details</h2>
             <div>
-                <div class="flex flex-col md:flex-row lg:items-center gap-3">
+                <div class="flex flex-col gap-3 md:flex-row lg:items-center">
                     <div>
                         <label for="fuel_type" class="text-md lg:text-lg lg:font-medium">Fuel Type</label>
                         <select name="fuel_type" wire:model.lazy='fuel_type' id="fuel_type">
@@ -208,9 +212,9 @@
                 </div>
             </div>
             {{-- Speed & Engine Details --}}
-            <div class="h-px w-full shadow"></div>
+            <div class="w-full h-px shadow"></div>
             <h2 class="text-md lg:text-2xl lg:font-semibold">Speed & Engine Details</h2>
-            <div class="flex flex-col md:flex-row lg:items-center gap-3">
+            <div class="flex flex-col gap-3 md:flex-row lg:items-center">
                 <div>
                     <label for="top_speed" class="text-md lg:text-lg lg:font-medium">
                         Top Speed
@@ -248,7 +252,7 @@
                 </div>
             </div>
             {{-- Engine Details --}}
-            <div class="flex flex-col md:flex-row lg:items-center gap-3">
+            <div class="flex flex-col gap-3 md:flex-row lg:items-center">
                 <div class="lg:flex-1">
                     <label for="engine_capacity" class="text-md lg:text-lg lg:font-medium">
                         Engine Capacity
@@ -276,7 +280,7 @@
                 </div>
             </div>
             {{-- Specifications --}}
-            <div class="h-px w-full shadow"></div>
+            <div class="w-full h-px shadow"></div>
             <h2 class="text-md lg:text-2xl lg:font-semibold">Specifications</h2>
             <div class="flex flex-col gap-3 md:flex-row lg:items-center lg:gap-6">
                 <div class="flex-1">
@@ -291,7 +295,7 @@
                 </div>
                 <div class="flex-1">
                     <div class="flex items-center justify-center gap-3">
-                        <div class="flex items-center lg:flex-row gap-2">
+                        <div class="flex items-center gap-2 lg:flex-row">
                             <label for="auto" class="text-sm">Auto</label>
                             <input type="radio" name="drive_mode" value="auto" wire:model.debounce.350ms='drive_mode'>
                             <label for="manual" class="text-sm">Manual</label>
@@ -299,7 +303,7 @@
                                 wire:model.lazy='drive_mode'>
                         </div>
                         |
-                        <div class="flex flex-col items-center lg:flex-row gap-2">
+                        <div class="flex flex-col items-center gap-2 lg:flex-row">
                             <label for="four_wheel" class="text-sm">Four wheel drive?</label>
                             <input type="checkbox" id="four_wheel" name="is_four_wheel" wire:model.lazy='is_four_wheel'>
                             |
@@ -309,7 +313,7 @@
                         </div>
                     </div>
                     @error('drive_mode')
-                        <p class="error text-center">
+                        <p class="text-center error">
                             {{ $message }}
                         </p>
                     @enderror
@@ -318,24 +322,24 @@
             </div>
             {{-- Third step --}}
         @else
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            <div class="grid grid-cols-1 gap-5 lg:grid-cols-3">
                 {{-- Thumbnail --}}
                 <div class="md:col-span-1 {{ $car_thumbnail != null ? 'grid grid-rows-2 gap-3' : '' }}">
                     @error('car_thumbnail')
                         <p class="error">{{ $message }}</p>
                     @enderror
                     <div
-                        class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                        class="flex justify-center px-6 pt-5 pb-6 mt-1 border-2 border-gray-300 border-dashed rounded-md">
                         <div class="space-y-1 text-center">
-                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none"
+                            <svg class="w-12 h-12 mx-auto text-gray-400" stroke="currentColor" fill="none"
                                 viewBox="0 0 48 48" aria-hidden="true">
                                 <path
                                     d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            <div class="flex flex-col items-center md:flex-row text-sm text-gray-600">
+                            <div class="flex flex-col items-center text-sm text-gray-600 md:flex-row">
                                 <label for="thumb_nail"
-                                    class="relative cursor-pointer bg-white rounded-md text-md lg:text-lg lg:font-medium text-primary hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary">
+                                    class="relative bg-white rounded-md cursor-pointer text-md lg:text-lg lg:font-medium text-primary hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary">
                                     <span class="text-sm">Upload image preview</span>
                                     <input id="thumb_nail" name="thumb_nail" type="file" class="sr-only"
                                         wire:model='car_thumbnail'>
@@ -350,8 +354,8 @@
                     </div>
                     @if ($car_thumbnail)
                         <div
-                            class="flex items-center justify-center shadow-sm h-full w-full hover:shadow-md transition">
-                            <img class="max-h-full max-w-full object-contain"
+                            class="flex items-center justify-center w-full h-full transition shadow-sm hover:shadow-md">
+                            <img class="object-contain max-w-full max-h-full"
                                 src="{{ $car_thumbnail->temporaryUrl() }}">
                         </div>
                     @endif
@@ -362,17 +366,17 @@
                         <p class="error">{{ $message }}</p>
                     @enderror
                     <div
-                        class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                        class="flex justify-center px-6 pt-5 pb-6 mt-1 border-2 border-gray-300 border-dashed rounded-md">
                         <div class="space-y-1 text-center">
-                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none"
+                            <svg class="w-12 h-12 mx-auto text-gray-400" stroke="currentColor" fill="none"
                                 viewBox="0 0 48 48" aria-hidden="true">
                                 <path
                                     d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            <div class="flex items-center flex-col md:flex-row text-sm text-gray-600">
+                            <div class="flex flex-col items-center text-sm text-gray-600 md:flex-row">
                                 <label for="car_images"
-                                    class="relative cursor-pointer bg-white rounded-md text-md lg:text-lg lg:font-medium text-primary hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary">
+                                    class="relative bg-white rounded-md cursor-pointer text-md lg:text-lg lg:font-medium text-primary hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary">
                                     <span class="text-sm">Upload images</span>
                                     <input id="car_images" name="car_images" type="file" class="sr-only"
                                         wire:model='car_images' multiple>
@@ -389,8 +393,8 @@
                         <div class="grid grid-cols-3 gap-3 mt-3">
                             @foreach ($car_images as $car_image)
                                 <div
-                                    class="flex items-center justify-center shadow-sm h-full w-full hover:shadow-md transition">
-                                    <img class="max-h-full max-w-full object-contain"
+                                    class="flex items-center justify-center w-full h-full transition shadow-sm hover:shadow-md">
+                                    <img class="object-contain max-w-full max-h-full"
                                         src="{{ $car_image->temporaryUrl() }}">
                                 </div>
                             @endforeach
@@ -404,20 +408,20 @@
         {{-- controls --}}
         <div class="flex items-center justify-{{ $currentPage == 0 ? 'end' : 'between' }}">
             @if ($currentPage != 0)
-                <button type="button" class="btn btn-secondary transition flex items-center gap-2"
+                <button type="button" class="flex items-center gap-2 transition btn btn-secondary"
                     wire:click='previousPage'>
-                    <i class="fas fa-arrow-left text-sm"></i>
+                    <i class="text-sm fas fa-arrow-left"></i>
                     <span>Previous</span>
                 </button>
             @endif
             @if ($currentPage != count($pages) - 1)
-                <button type="button" class="btn btn-secondary transition flex items-center gap-2"
+                <button type="button" class="flex items-center gap-2 transition btn btn-secondary"
                     wire:click='nextPage'>
                     <span>Next</span>
-                    <i class="fas fa-arrow-right text-sm"></i>
+                    <i class="text-sm fas fa-arrow-right"></i>
                 </button>
             @else
-                <button type="submit" class="btn btn-secondary transition">
+                <button type="submit" class="transition btn btn-secondary">
                     Submit
                 </button>
             @endif
