@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Alert;
 use App\Http\Requests\auth\LoginRequest;
 use App\Http\Requests\auth\RegisterRequest;
 use App\Models\Car;
@@ -29,8 +30,9 @@ class AuthController extends Controller
         ];
         if (Auth::attempt($credentials, $request->remember)) {
             return redirect()->intended('explore')
-                ->withSuccess('Signed in');
+                ->with('login:success', Auth::user()->name);
         }
+        Alert::error('Login Failed', 'Please check your credentials');
         return redirect()->route('auth.login')->withErrors(
             ['auth_error' => 'Login details are not valid.']
         );
@@ -48,7 +50,8 @@ class AuthController extends Controller
         $check = $this->create($data);
         $credentials = ['email' => $check['email'], 'password' => $data['password']];
         if (Auth::attempt($credentials)) {
-            return redirect()->route('explore.show');
+            return redirect()->route('explore.show')
+                ->with('register:success', Auth::user()->name);
         }
         return redirect()->route('auth.register')->withErrors([
             'register_error' => 'Some thing went wrong, please try again.'
