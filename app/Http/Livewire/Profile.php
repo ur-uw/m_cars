@@ -46,9 +46,9 @@ class Profile extends Component
     }
     public  function updateProfile(string $userForm)
     {
-        $this->validate($this->rules);
         $newUserData = [];
         if ($userForm == 'personalInfo') {
+            $this->validate($this->rules);
             // Update the user's personal info and address
             $newUserData = [
                 'name' => $this->first_name . ' ' . $this->last_name,
@@ -68,7 +68,12 @@ class Profile extends Component
                 $addressData
             );
         } else {
-
+            $this->rules = [
+                'user_image_file' =>
+                'nullable|image|mimes:jpeg,png,jpg|max:2048',
+                'bio' => 'nullable|string:max:255',
+            ];
+            $this->validate($this->rules);
             // Update the user's bio
             $newUserData = [
                 'bio' => $this->bio,
@@ -79,6 +84,7 @@ class Profile extends Component
             }
         }
         User::where('id', auth()->id())->update($newUserData);
+        session()->flash('success', 'Profile updated successfully!');
         $this->emit('profile_updated');
     }
 
@@ -91,8 +97,6 @@ class Profile extends Component
         'state' => 'required',
         'postal_code' => 'required|numeric',
         'street_address' => 'required|string',
-        'user_image_file' =>
-        'nullable|image|mimes:jpeg,png,jpg|max:2048',
 
     ];
     public function render()
