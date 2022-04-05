@@ -18,26 +18,22 @@
 @section('content')
     <div class="container">
         @if (count($errors) > 0)
-            <div class="p-5 bg-red-500 text-white text-center my-4 rounded fade transition shadow-md">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{!! $error !!}</li>
-                    @endforeach
-                </ul>
+            <div class="alert alert-danger" role="alert">
+                {{ $errors->first() }}
             </div>
         @endif
-        <div class="flex flex-col-reverse lg:flex-row gap-6 w-full">
+        <div class="flex flex-col-reverse w-full gap-6 lg:flex-row">
             <div class="flex flex-col flex-1 space-y-6">
                 {{-- Billing Details --}}
                 <form class="flex-1 space-y-5" method="POST" action="{{ route('checkout.charge') }}" id="payment-form">
-                    <h2 class="text-lg md:text-xl font-semibold">Billing Details</h2>
+                    <h2 class="text-lg font-semibold md:text-xl">Billing Details</h2>
                     @csrf
                     <div class="col-span-6 sm:col-span-4">
                         <label for="email-address" class="block text-sm font-medium text-dark-blue">Email
                             address</label>
                         <input required value="{{ old('email') ?? $user->email }}" type="text" name="email"
                             id="email-address" autocomplete="email"
-                            class="mt-1  focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                            class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 sm:text-sm"
                             value="{{ old('email') }}">
                         @error('email')
                             <p class="error">{{ $message }}</p>
@@ -47,7 +43,7 @@
                     <div class="col-span-6 sm:col-span-4">
                         <label for="name" class="block text-sm font-medium text-dark-blue">Name</label>
                         <input required value='{{ old('name') ?? $user->name }}' type="text" name="name" id="name"
-                            class="mt-1  focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                            class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 sm:text-sm"
                             value="{{ old('name') }}">
                         @error('name')
                             <p class="error">{{ $message }}</p>
@@ -58,7 +54,7 @@
                         <label for="address" class="block text-sm font-medium text-dark-blue">Address</label>
                         <input required value='{{ old('address') ?? ($user->address->street ?? '') }}' type="text"
                             name="address" id="address"
-                            class="mt-1  focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                            class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 sm:text-sm"
                             value="{{ old('address') }}">
                         @error('address')
                             <p class="error">{{ $message }}</p>
@@ -70,7 +66,7 @@
                             <label for="city" class="block text-sm font-medium text-dark-blue">City</label>
                             <input required value='{{ old('city') ?? ($user->address->city ?? '') }}' type="text"
                                 name="city" id="city"
-                                class="mt-1  focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 sm:text-sm"
                                 value="{{ old('city') }}">
                             @error('city')
                                 <p class="error">{{ $message }}</p>
@@ -81,7 +77,7 @@
                             <label for="state" class="block text-sm font-medium text-dark-blue">State</label>
                             <input required value='{{ old('state') ?? ($user->address->state ?? '') }}' type="text"
                                 name="state" id="address"
-                                class="mt-1  focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 sm:text-sm"
                                 value="{{ old('state') }}">
                             @error('state')
                                 <p class="error">{{ $message }}</p>
@@ -92,7 +88,7 @@
                             <label for="postal_code" class="block text-sm font-medium text-dark-blue">Postal Code</label>
                             <input required value='{{ old('postal_code') ?? ($user->address->postal_code ?? '') }}'
                                 type="text" name="postal_code" id="postal_code"
-                                class="mt-1  focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 sm:text-sm"
                                 value="{{ old('postal_code') }}">
                             @error('postal_code')
                                 <p class="error">{{ $message }}</p>
@@ -102,7 +98,7 @@
                         <div>
                             <label for="phone" class="block text-sm font-medium text-dark-blue">Phone</label>
                             <input required type="text" name="phone" id="phone"
-                                class="mt-1  focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 sm:text-sm"
                                 value="{{ old('phone') }}">
                             @error('phone')
                                 <p class="error">{{ $message }}</p>
@@ -110,13 +106,13 @@
                         </div>
                     </div>
                     {{-- Payment Details --}}
-                    <h2 class="text-lg md:text-xl font-semibold">Payment Details</h2>
+                    <h2 class="text-lg font-semibold md:text-xl">Payment Details</h2>
                     <div class="col-span-6 sm:col-span-4">
                         <label for="name_on_card" class="block text-sm font-medium text-dark-blue">Name on Card
                         </label>
                         <input required value='{{ old('name_on_card') ?? $user->name }}' type="text" name="name_on_card"
                             id="name_on_card"
-                            class="mt-1  focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                            class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 sm:text-sm"
                             value="{{ old('name_on_card') }}">
                         @error('name_on_card')
                             <p class="error">{{ $message }}</p>
@@ -131,7 +127,7 @@
                         <!-- Used to display form errors. -->
                         <div id="card-errors" role="alert"></div>
                     </div>
-                    <button class="btn btn-primary transition text-center font-semibold disabled:cursor-not-allowed"
+                    <button class="font-semibold text-center transition btn btn-primary disabled:cursor-not-allowed"
                         type="submit" id="card-button">
                         Create Order
                     </button>
@@ -140,24 +136,24 @@
             </div>
             {{-- Order Details --}}
             <div class="flex flex-col gap-6 flex-2">
-                <h2 class="text-lg md:text-xl font-semibold">
+                <h2 class="text-lg font-semibold md:text-xl">
                     Your Order
                 </h2>
                 @forelse (\Gloudemans\Shoppingcart\Facades\Cart::content() as $item)
                     <div class="h-px bg-gray-500"></div>
                     <div class="flex items-center justify-between gap-2">
-                        <div class="flex items-center flex-1 gap-1 w-full h-full">
+                        <div class="flex items-center flex-1 w-full h-full gap-1">
                             <img style="height: 750x;width:75px;" class="bg-cover"
                                 src="{{ Storage::url($item->options->image) }}" alt="{{ $item->name }} image">
                             <div class="flex flex-col gap-2 md:gap-3">
-                                <p class="text-md  font-medium md:text-lg md:font-semibold text-dark-blue">
+                                <p class="font-medium text-md md:text-lg md:font-semibold text-dark-blue">
                                     {{ $item->name }}
                                 </p>
-                                <p class="text-xs md:text-sm text-gray-700">{{ $item->options->description }}</p>
+                                <p class="text-xs text-gray-700 md:text-sm">{{ $item->options->description }}</p>
                                 <p class="text-sm font-medium text-dark-blue">${{ $item->price * 100 }}</p>
                             </div>
                         </div>
-                        <div class="text-sm font-medium text-dark-blue border p-2 rounded-sm">{{ $item->qty }}</div>
+                        <div class="p-2 text-sm font-medium border rounded-sm text-dark-blue">{{ $item->qty }}</div>
                     </div>
                     <div class="h-px bg-gray-500"></div>
                 @empty
@@ -165,17 +161,17 @@
                 @endforelse
                 {{-- Price details --}}
                 @if (!\Gloudemans\Shoppingcart\Facades\Cart::content()->isEmpty())
-                    <div class="flex justify-between items-center">
+                    <div class="flex items-center justify-between">
                         <p class="text-sm font-medium text-dark-blue">Subtotal</p>
                         <p class="text-sm font-medium text-dark-blue">
                             ${{ \Gloudemans\Shoppingcart\Facades\Cart::subtotal() * 100 }}</p>
                     </div>
-                    <div class="flex justify-between items-center">
+                    <div class="flex items-center justify-between">
                         <p class="text-sm font-medium text-dark-blue">Tax</p>
                         <p class="text-sm font-medium text-dark-blue">
                             %{{ \Gloudemans\Shoppingcart\Facades\Cart::tax() * 100 }}</p>
                     </div>
-                    <div class="flex justify-between items-center">
+                    <div class="flex items-center justify-between">
                         <p class="text-sm font-semibold text-dark-blue">Total</p>
                         <p class="text-sm font-semibold text-dark-blue">
                             ${{ \Gloudemans\Shoppingcart\Facades\Cart::total() * 100 }}</p>

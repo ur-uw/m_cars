@@ -28,7 +28,13 @@ class Explore extends Component
         $this->resetPage();
     }
 
-
+    public function mount()
+    {
+        if (session()->has('success')) {
+            $msg = session()->get('success');
+            toast($msg, 'success');
+        }
+    }
     public function render()
     {
         return view(

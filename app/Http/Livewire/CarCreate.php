@@ -1,12 +1,11 @@
 <?php
-
+// TODO: use sweet alert when car is created
 namespace App\Http\Livewire;
 
 use App\Models\Car;
 use App\Models\CarDetails;
 use App\Models\Category;
 use App\Models\Manufacturer;
-use App\Models\Type;
 use Auth;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -14,35 +13,7 @@ use Livewire\WithFileUploads;
 class CarCreate extends Component
 {
     use WithFileUploads;
-
-    public $currentPage = 0;
-    public $fuel_type;
-    public $model;
-    public $color;
-    public $price;
-    public $plate_number;
-    public $type;
-    public $manufacturer;
-    public $manufactured_at;
-    public $description;
-    public $tank_capacity;
-    public $battery_capacity;
-    public $engine_capacity;
-    public $fuel_economy;
-    public $top_speed;
-    public $acceleration;
-    public $gearbox_speeds;
-    public $number_cylinders;
-    public $seating_capacity;
-    public $drive_mode;
-    public $is_four_wheel;
-    public $is_auto_drive;
-    public $car_thumbnail;
-    public $action;
-    public $formMyGarage = true;
-
-    public $car_images = [];
-    public $pages = [
+    public $currentPage = 0, $fuel_type, $model, $color, $price, $plate_number, $type, $manufacturer, $manufactured_at, $description, $tank_capacity, $battery_capacity, $engine_capacity, $fuel_economy, $top_speed, $acceleration, $gearbox_speeds, $number_cylinders, $seating_capacity, $drive_mode, $is_four_wheel, $is_auto_drive, $car_thumbnail, $action, $formMyGarage = true, $car_images = [], $pages = [
         0 => [
             'heading' => "General Car Info",
         ],
@@ -74,7 +45,7 @@ class CarCreate extends Component
         'seating_capacity' => 'required|numeric',
         'drive_mode' => 'required|string',
         'car_thumbnail' =>
-        'required|image|mimes:jpeg,png,jpg|max:2048|dimensions:max_width=670,max_height=350',
+        'required|image|mimes:jpeg,png,jpg|max:2048',
         'car_images.*' =>
         'required|image|mimes:jpeg,png,jpg|max:10240',
     ];
@@ -151,6 +122,7 @@ class CarCreate extends Component
         $car->details()->save($car_details);
         $this->reset();
         $this->currentPage = 0;
+        session()->flash('success', 'Car Added Successfully');
     }
     public function render()
     {

@@ -16,7 +16,7 @@
     </title>
 </head>
 
-<body class="font-Poppins min-h-screen">
+<body class="min-h-screen font-Poppins">
     <!-- Header -->
     @if (Route::currentRouteName() != 'auth.login' && Route::currentRouteName() != 'auth.register')
         <header class="m-10 my-2">
@@ -26,6 +26,7 @@
     <main>
         @yield('content')
     </main>
+    @include('sweetalert::alert')
     @livewireScripts
     <script src="{{ asset('js/app.js') }}"></script>
     @yield('scripts')

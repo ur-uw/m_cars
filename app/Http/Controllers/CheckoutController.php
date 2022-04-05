@@ -41,8 +41,10 @@ class CheckoutController extends Controller
             Mail::send(new OrderPlaced($order));
             // SUCCESSFUL
             Cart::destroy();
-            return redirect()->route('explore.show');
+            return redirect()->route('explore.show')
+                ->withSuccess('Successfully purchased products!');
         } catch (\Cartalyst\Stripe\Exception\CardErrorException $e) {
+            toast($e->getMessage(), 'error');
             $this->insertIntoOrdersTable($request, $e->getMessage());
             return back()->withErrors('Error! ' . $e->getMessage());
         }

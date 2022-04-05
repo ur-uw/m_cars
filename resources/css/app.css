@@ -38,19 +38,19 @@
 }
 
 .btn{
-    @apply shadow-md py-1 px-4  lg:py-2 lg:px-6 rounded-md ;
+    @apply px-4 py-1 rounded-md shadow-md lg:py-2 lg:px-6 ;
 }
 .btn-primary{
-    @apply bg-primary text-white hover:bg-dark-blue hover:text-white;
+    @apply text-white bg-primary hover:bg-dark-blue hover:text-white;
 }
 .btn-secondary{
-    @apply bg-secondary text-white hover:bg-red-700 ;
+    @apply text-white bg-secondary hover:bg-red-700 ;
 }
 textarea {
   resize: none;
 }
 .error{
-    @apply text-red-500 text-xs mt-1;
+    @apply mt-1 text-xs text-red-500;
 }
 .thumbnail{
     max-height:350px ;
@@ -58,5 +58,16 @@ textarea {
 }
 
 .car-logo{
-    @apply h-24 w-24 bg-contain bg-center;
+    @apply w-24 h-24 bg-center bg-contain;
+}
+
+.alert{
+    @apply p-4 mb-5 border-l-4;
+}
+
+.alert-danger{
+    @apply text-red-700 bg-red-100 border-red-500;
+}
+.alert-success{
+    @apply text-green-700 bg-green-100 border-green-500;
 }
