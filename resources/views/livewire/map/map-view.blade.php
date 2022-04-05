@@ -18,7 +18,6 @@
 <div id="map"></div>
 
 @section('scripts')
-    <script async
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAdfWSat-fHuct3Ba33AeqcHfyrvUUIzj8&callback=initMap">
+    <script async src="https://maps.googleapis.com/maps/api/js?key={{ env('MAP_API_KEY') }}8&callback=initMap">
     </script>
 @endsection
