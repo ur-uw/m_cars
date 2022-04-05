@@ -24,7 +24,7 @@ class CreateAccessory extends Component
     protected $rules = [
         'name' => 'required|string|max:20',
         'price' => 'required|numeric',
-        'image' => 'required|image|mimes:jpeg,png,jpg|max:2048|dimensions:max_width=670,max_height=350',
+        'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         'accessoryType' => 'required|exists:App\Models\Category,id',
         'manufacturer' => 'required|exists:App\Models\Manufacturer,id',
 
@@ -48,6 +48,7 @@ class CreateAccessory extends Component
             'image' => $spareImage,
             'price' => $this->price,
         ]);
+        session()->flash('success', 'Accessory Created Successfully');
         $this->reset();
     }
 
