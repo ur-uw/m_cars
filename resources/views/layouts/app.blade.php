@@ -18,7 +18,7 @@
 
 <body class="min-h-screen font-Poppins">
     <!-- Header -->
-    @if (Route::currentRouteName() != 'auth.login' && Route::currentRouteName() != 'auth.register')
+    @if (!Route::is('auth.login') && !Route::is('auth.register'))
         <header class="m-10 my-2">
             @include('components.theNavbar')
         </header>
@@ -26,6 +26,9 @@
     <main>
         @yield('content')
     </main>
+    @if (!Route::is('map.*'))
+        @include('components.theFooter')
+    @endif
     @include('sweetalert::alert')
     @livewireScripts
     <script src="{{ asset('js/app.js') }}"></script>
