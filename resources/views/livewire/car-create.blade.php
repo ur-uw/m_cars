@@ -1,14 +1,18 @@
 @section('page-title')
     Create Car
 @endsection
-<div>
+<div class="container">
+    @if (session('success'))
+        <div class="alert alert-success" role="alert">
+            {{ session('success') }}
+        </div>
+    @endif
     @if (count($errors) > 0)
-        <div class="container p-5 my-4 text-center text-white transition bg-red-500 rounded shadow-md fade">
+        <div class="alert alert-danger" role="alert">
             {{ $errors->first() }}
         </div>
     @endif
     <div class="flex items-center justify-center gap-3 mb-3">
-
         {{-- Step indicators --}}
         @for ($i = 0; $i < count($pages); $i++)
             <button type='button'

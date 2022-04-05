@@ -1,12 +1,12 @@
 <section class="w-full h-full">
     <form wire:submit.prevent='submit' class="container w-3/4 px-16 py-5 space-y-7 lg:px-28">
         @if (session('success'))
-            <div class="p-4 mb-5 text-green-700 bg-green-100 border-l-4 border-green-500" role="alert">
+            <div class="alert alert-success" role="alert">
                 {{ session('success') }}
             </div>
         @endif
         @if (count($errors) > 0)
-            <div class="p-4 mb-5 text-red-700 bg-red-100 border-l-4 border-red-500" role="alert">
+            <div class="alert alert-danger" role="alert">
                 Check your input
             </div>
         @endif
