@@ -666,8 +666,8 @@ select {
 .col-span-6 {
   grid-column: span 6 / span 6;
 }
-.m-10 {
-  margin: 2.5rem;
+.m-5 {
+  margin: 1.25rem;
 }
 .-m-0\.5 {
   margin: -0.125rem;
@@ -825,14 +825,14 @@ select {
 .h-5 {
   height: 1.25rem;
 }
-.h-2 {
-  height: 0.5rem;
+.h-96 {
+  height: 24rem;
 }
 .h-12 {
   height: 3rem;
 }
-.h-96 {
-  height: 24rem;
+.h-2 {
+  height: 0.5rem;
 }
 .h-9 {
   height: 2.25rem;
@@ -864,20 +864,17 @@ select {
 .w-5 {
   width: 1.25rem;
 }
-.w-2 {
-  width: 0.5rem;
-}
-.w-12 {
-  width: 3rem;
-}
 .w-32 {
   width: 8rem;
 }
 .w-8 {
   width: 2rem;
 }
-.w-3\/4 {
-  width: 75%;
+.w-12 {
+  width: 3rem;
+}
+.w-2 {
+  width: 0.5rem;
 }
 .w-56 {
   width: 14rem;
@@ -1009,9 +1006,6 @@ select {
 .items-center {
   align-items: center;
 }
-.justify-start {
-  justify-content: flex-start;
-}
 .justify-center {
   justify-content: center;
 }
@@ -1070,6 +1064,11 @@ select {
   margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));
 }
+.space-x-3 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 0;
+  margin-right: calc(0.75rem * var(--tw-space-x-reverse));
+  margin-left: calc(0.75rem * calc(1 - var(--tw-space-x-reverse)));
+}
 .space-y-7 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-y-reverse: 0;
   margin-top: calc(1.75rem * calc(1 - var(--tw-space-y-reverse)));
@@ -1079,11 +1078,6 @@ select {
   --tw-space-y-reverse: 0;
   margin-top: calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(0.25rem * var(--tw-space-y-reverse));
-}
-.space-x-3 > :not([hidden]) ~ :not([hidden]) {
-  --tw-space-x-reverse: 0;
-  margin-right: calc(0.75rem * var(--tw-space-x-reverse));
-  margin-left: calc(0.75rem * calc(1 - var(--tw-space-x-reverse)));
 }
 .self-center {
   align-self: center;
@@ -1320,30 +1314,17 @@ select {
   padding-left: 0.75rem;
   padding-right: 0.75rem;
 }
-.px-16 {
-  padding-left: 4rem;
-  padding-right: 4rem;
-}
 .px-8 {
   padding-left: 2rem;
   padding-right: 2rem;
 }
+.px-16 {
+  padding-left: 4rem;
+  padding-right: 4rem;
+}
 .px-2 {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
-}
-.px-10 {
-  padding-left: 2.5rem;
-  padding-right: 2.5rem;
-}
-.pt-5 {
-  padding-top: 1.25rem;
-}
-.pb-6 {
-  padding-bottom: 1.5rem;
-}
-.pl-1 {
-  padding-left: 0.25rem;
 }
 .pt-10 {
   padding-top: 2.5rem;
@@ -1356,6 +1337,15 @@ select {
 }
 .pt-4 {
   padding-top: 1rem;
+}
+.pt-5 {
+  padding-top: 1.25rem;
+}
+.pb-6 {
+  padding-bottom: 1.5rem;
+}
+.pl-1 {
+  padding-left: 0.25rem;
 }
 .text-left {
   text-align: left;
@@ -1480,14 +1470,6 @@ select {
   --tw-text-opacity: 1;
   color: rgb(250 89 89 / var(--tw-text-opacity));
 }
-.text-gray-400 {
-  --tw-text-opacity: 1;
-  color: rgb(156 163 175 / var(--tw-text-opacity));
-}
-.text-gray-600 {
-  --tw-text-opacity: 1;
-  color: rgb(75 85 99 / var(--tw-text-opacity));
-}
 .text-gray-900 {
   --tw-text-opacity: 1;
   color: rgb(17 24 39 / var(--tw-text-opacity));
@@ -1499,6 +1481,14 @@ select {
 .text-indigo-600 {
   --tw-text-opacity: 1;
   color: rgb(79 70 229 / var(--tw-text-opacity));
+}
+.text-gray-400 {
+  --tw-text-opacity: 1;
+  color: rgb(156 163 175 / var(--tw-text-opacity));
+}
+.text-gray-600 {
+  --tw-text-opacity: 1;
+  color: rgb(75 85 99 / var(--tw-text-opacity));
 }
 .text-gray-300 {
   --tw-text-opacity: 1;
@@ -1701,13 +1691,13 @@ textarea {
   --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
   box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
 }
-.focus-within\:ring-primary:focus-within {
-  --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(82 103 223 / var(--tw-ring-opacity));
-}
 .focus-within\:ring-indigo-500:focus-within {
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(99 102 241 / var(--tw-ring-opacity));
+}
+.focus-within\:ring-primary:focus-within {
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(82 103 223 / var(--tw-ring-opacity));
 }
 .focus-within\:ring-offset-2:focus-within {
   --tw-ring-offset-width: 2px;
@@ -1947,6 +1937,9 @@ textarea {
   .md\:flex-row {
     flex-direction: row;
   }
+  .md\:items-start {
+    align-items: flex-start;
+  }
   .md\:items-center {
     align-items: center;
   }
@@ -1987,38 +1980,6 @@ textarea {
   }
 }
 @media (min-width: 1024px) {
-  .lg\:container {
-    width: 100%;
-    margin-right: auto;
-    margin-left: auto;
-    padding-right: 1rem;
-    padding-left: 1rem;
-  }
-  @media (min-width: 640px) {
-    .lg\:container {
-      max-width: 640px;
-    }
-  }
-  @media (min-width: 768px) {
-    .lg\:container {
-      max-width: 768px;
-    }
-  }
-  @media (min-width: 1024px) {
-    .lg\:container {
-      max-width: 1024px;
-    }
-  }
-  @media (min-width: 1280px) {
-    .lg\:container {
-      max-width: 1280px;
-    }
-  }
-  @media (min-width: 1536px) {
-    .lg\:container {
-      max-width: 1536px;
-    }
-  }
   .lg\:fixed {
     position: fixed;
   }
@@ -2046,12 +2007,19 @@ textarea {
   .lg\:row-span-3 {
     grid-row: span 3 / span 3;
   }
+  .lg\:m-10 {
+    margin: 2.5rem;
+  }
   .lg\:m-0 {
     margin: 0px;
   }
   .lg\:my-8 {
     margin-top: 2rem;
     margin-bottom: 2rem;
+  }
+  .lg\:my-2 {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
   }
   .lg\:ml-20 {
     margin-left: 5rem;
@@ -2131,11 +2099,11 @@ textarea {
   .lg\:grid-cols-4 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
-  .lg\:grid-cols-3 {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
   .lg\:grid-cols-1 {
     grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  .lg\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
   .lg\:grid-rows-\[auto\2c auto\2c 1fr\] {
     grid-template-rows: auto auto 1fr;
@@ -2210,17 +2178,13 @@ textarea {
     padding-top: 120px;
     padding-bottom: 120px;
   }
-  .lg\:px-28 {
-    padding-left: 7rem;
-    padding-right: 7rem;
-  }
   .lg\:px-8 {
     padding-left: 2rem;
     padding-right: 2rem;
   }
-  .lg\:px-16 {
-    padding-left: 4rem;
-    padding-right: 4rem;
+  .lg\:px-28 {
+    padding-left: 7rem;
+    padding-right: 7rem;
   }
   .lg\:pt-16 {
     padding-top: 4rem;
