@@ -10,7 +10,7 @@ use Auth;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
-class CarCreate extends Component
+class CreateCar extends Component
 {
     use WithFileUploads;
     public $currentPage = 0, $fuel_type, $model, $color, $price, $plate_number, $type, $manufacturer, $manufactured_at, $description, $tank_capacity, $battery_capacity, $engine_capacity, $fuel_economy, $top_speed, $acceleration, $gearbox_speeds, $number_cylinders, $seating_capacity, $drive_mode, $is_four_wheel, $is_auto_drive, $car_thumbnail, $action, $formMyGarage = true, $car_images = [], $pages = [
@@ -126,7 +126,7 @@ class CarCreate extends Component
     }
     public function render()
     {
-        return view('livewire.car-create', [
+        return view('livewire.create-car', [
             'manufacturers' => Manufacturer::orderBy('name')
                 ->get(),
             'types' => Category::firstWhere('name', 'Cars')

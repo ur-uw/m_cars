@@ -1,5 +1,5 @@
 <section class="w-full h-full">
-    <form wire:submit.prevent='submit' class="container w-3/4 px-16 py-5 space-y-7 lg:px-28">
+    <form wire:submit.prevent='submit' class="container py-5 lg:w-3/4 space-y-7 lg:px-28">
         @if (session('success'))
             <div class="alert alert-success" role="alert">
                 {{ session('success') }}
@@ -10,7 +10,7 @@
                 Check your input
             </div>
         @endif
-        <div class="flex items-center w-full gap-3">
+        <div class="flex flex-col w-full gap-3 lg:flex-row lg:items-center">
             <div class="flex-1">
                 <label for="name" class="text-md lg:text-lg lg:font-medium">Accessory Name</label>
                 <input id="name" wire:model.debounce.350ms='name' name="name" type="text" placeholder="Ex: Roof Covers">
@@ -35,7 +35,7 @@
                 @enderror
             </div>
         </div>
-        <div class="flex items-center w-full gap-3">
+        <div class="flex flex-col w-full gap-3 lg:flex-row lg:items-center">
             <div class="flex-1">
                 <label for="price" class="text-md lg:text-lg lg:font-medium">Accessory Price</label>
                 <input id="price" wire:model.debounce.350ms='price' name="price" type="text">
