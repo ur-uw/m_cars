@@ -22,11 +22,11 @@
         @endfor
     </div>
     <h1 class="text-lg font-semibold text-center lg:font-bold lg:text-4xl">{{ $pages[$currentPage]['heading'] }}</h1>
-    <form wire:submit.prevent='submit' class="container px-16 py-5 space-y-7 lg:px-28">
+    <form wire:submit.prevent='submit' class="container py-5 space-y-7 lg:px-28">
         @if ($currentPage == 0)
             {{-- First step --}}
-            <div class="flex flex-col items-center gap-3 md:flex-row">
-                <div class="lg:flex-1">
+            <div class="flex flex-col gap-3 md:items-center md:flex-row">
+                <div class="flex-1">
                     <label for="model" class="text-md lg:text-lg lg:font-medium">Model Name</label>
                     <input id="model" wire:model.debounce.350ms='model' name="model" type="text" placeholder="Ex: X6">
                     <p class="mt-1 text-xs text-app-grey">Do not exceed 20 characters when entering model name!
@@ -37,7 +37,7 @@
                         </p>
                     @enderror
                 </div>
-                <div>
+                <div class="flex-1">
                     <label for="color" class="text-md lg:text-lg lg:font-medium">Car Color</label>
                     <input id="color" type="text" name="color" wire:model.debounce.350ms='color'
                         placeholder="Ex: #ffffff">
@@ -92,8 +92,8 @@
                 </div>
             </div>
             {{-- Manufacturer and Date --}}
-            <div class="flex flex-col items-center gap-3 md:flex-row">
-                <div class="lg:flex-1">
+            <div class="flex flex-col w-full gap-3 md:items-center md:flex-row ">
+                <div class="flex-1">
                     <label for="manufactured_at" class="text-md lg:text-lg lg:font-medium">Manufacture Date</label>
                     {{-- TODO: make custom date picker --}}
                     <input type="date" name="manufactured_at" id="manufactured_at" wire:model.lazy='manufactured_at'>
@@ -103,7 +103,7 @@
                         </p>
                     @enderror
                 </div>
-                <div>
+                <div class="flex-1">
                     <label for="price" class="text-md lg:text-lg lg:font-medium">Price <sub
                             class="text-xs text-primary">$</sub>
                     </label>
@@ -116,9 +116,9 @@
                 </div>
             </div>
             {{-- Description --}}
-            <div class="flex flex-col items-center gap-3 lg:flex-row lg:items-start">
+            <div class="flex flex-col items-center gap-3 md:flex-row md:items-start">
 
-                <div class="flex-1">
+                <div class="flex-1 w-full">
                     <label for="description" class="text-md lg:text-lg lg:font-medium">Description</label>
                     <textarea name="description" id="description" cols="20" rows="5" wire:model.debounce.350ms='description'></textarea>
                     <p class="mt-1 text-xs text-app-grey">Do not exceed 100 characters when entering car description!
@@ -129,7 +129,7 @@
                         </p>
                     @enderror
                 </div>
-                <div class="flex flex-col items-center">
+                <div class="flex flex-col items-center w-full md:w-auto">
                     <label for="action" class="text-md lg:text-lg lg:font-medium">Action</label>
                     <select wire:model='action' name="action" id="action">
                         <option value="">Just Show in Garage</option>
@@ -137,7 +137,7 @@
                         <option value="FOR_RENT">For Rent</option>
                     </select>
                     @admin
-                    <div class="flex items-center flex-1 gap-2 p-5 mt-4 transition border rounded shadow cursor-pointer border-primary hover:shadow-xl"
+                    <div class="flex items-center flex-1 w-full gap-2 p-5 mt-4 transition border rounded shadow cursor-pointer md:w-auto border-primary hover:shadow-xl"
                         wire:click='$toggle("formMyGarage")'>
                         <input type="checkbox" wire:model='formMyGarage' name="for_my_garage" id="for_my_garage">
                         <label for="action" class="text-md">Add to my garage</label>
@@ -307,7 +307,7 @@
                                 wire:model.lazy='drive_mode'>
                         </div>
                         |
-                        <div class="flex flex-col items-center gap-2 lg:flex-row">
+                        <div class="flex items-center gap-2">
                             <label for="four_wheel" class="text-sm">Four wheel drive?</label>
                             <input type="checkbox" id="four_wheel" name="is_four_wheel" wire:model.lazy='is_four_wheel'>
                             |

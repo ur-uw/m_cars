@@ -1318,10 +1318,6 @@ select {
   padding-left: 2rem;
   padding-right: 2rem;
 }
-.px-16 {
-  padding-left: 4rem;
-  padding-right: 4rem;
-}
 .px-2 {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
@@ -2006,9 +2002,6 @@ textarea {
   }
   .lg\:row-span-3 {
     grid-row: span 3 / span 3;
-  }
-  .lg\:m-10 {
-    margin: 2.5rem;
   }
   .lg\:m-0 {
     margin: 0px;
