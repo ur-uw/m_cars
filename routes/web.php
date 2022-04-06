@@ -5,10 +5,11 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Livewire\AccessoriesList;
 use App\Http\Livewire\AccessoriesTypesList;
 use App\Http\Livewire\AdminDashboard;
-use App\Http\Livewire\CarCreate;
 use App\Http\Livewire\CarDetails;
 use App\Http\Livewire\Cart\CartView;
 use App\Http\Livewire\CreateAccessory;
+use App\Http\Livewire\CreateCar;
+use App\Http\Livewire\CreatePlace;
 use App\Http\Livewire\CreateSparePart;
 use App\Http\Livewire\Explore;
 use App\Http\Livewire\Garage;
@@ -53,7 +54,7 @@ Route::get('/map', MapView::class)->name('map.show');
 // Auth Routes
 Route::middleware('auth')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
-    Route::get('/car/create', CarCreate::class)->name('car.create');
+    Route::get('/car/create', CreateCar::class)->name('car.create');
     Route::get('/garage', Garage::class)->name('garage.show');
     Route::get('/profile', Profile::class)->name('profile.show');
     Route::get('/cart', CartView::class)->name('cart.show');
@@ -69,6 +70,9 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/accessory/create', CreateAccessory::class)
             ->name('accessory.create');
+
+        Route::get('/place/create', CreatePlace::class)
+            ->name('place.create');
     });
     Route::get('/testing', function () {
     });
