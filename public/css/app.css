@@ -1903,6 +1903,38 @@ textarea {
   }
 }
 @media (min-width: 768px) {
+  .md\:container {
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+  @media (min-width: 640px) {
+    .md\:container {
+      max-width: 640px;
+    }
+  }
+  @media (min-width: 768px) {
+    .md\:container {
+      max-width: 768px;
+    }
+  }
+  @media (min-width: 1024px) {
+    .md\:container {
+      max-width: 1024px;
+    }
+  }
+  @media (min-width: 1280px) {
+    .md\:container {
+      max-width: 1280px;
+    }
+  }
+  @media (min-width: 1536px) {
+    .md\:container {
+      max-width: 1536px;
+    }
+  }
   .md\:col-span-1 {
     grid-column: span 1 / span 1;
   }
@@ -1923,6 +1955,9 @@ textarea {
   }
   .md\:w-1\/2 {
     width: 50%;
+  }
+  .md\:w-3\/4 {
+    width: 75%;
   }
   .md\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1950,6 +1985,9 @@ textarea {
   }
   .md\:gap-6 {
     gap: 1.5rem;
+  }
+  .md\:rounded-full {
+    border-radius: 9999px;
   }
   .md\:px-6 {
     padding-left: 1.5rem;
