@@ -29,7 +29,7 @@ class SparePartsList extends Component
         return view(
             'livewire.spare-parts-list',
             [
-                'spare_parts' => Product::where('category_id', $this->category->id)
+                'spare_parts' => Product::with('manufacturer')->where('category_id', $this->category->id)
                     ->when($this->filterManufacturer, function ($query, $man) {
                         return $query->where('manufacturer_id', $man);
                     })

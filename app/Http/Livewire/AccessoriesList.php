@@ -28,7 +28,7 @@ class AccessoriesList extends Component
         return view(
             'livewire.accessories-list',
             [
-                'accessories' => Product::where('category_id', $this->category->id)
+                'accessories' => Product::with('manufacturer')->where('category_id', $this->category->id)
                     ->when($this->filterManufacturer, function ($query, $man) {
                         return $query->where('manufacturer_id', $man);
                     })
