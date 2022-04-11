@@ -78,5 +78,17 @@ module.exports = {
     plugins: [
         require("@tailwindcss/forms"),
         require("@tailwindcss/aspect-ratio"),
+        require("daisyui"),
     ],
+
+    daisyui: {
+        styled: true,
+        themes: false,
+        base: true,
+        utils: true,
+        logs: true,
+        rtl: false,
+        prefix: "ds-",
+        darkTheme: "dark",
+    },
 };

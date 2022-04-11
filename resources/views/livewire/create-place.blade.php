@@ -13,7 +13,7 @@
         {{-- Name and Phone --}}
         <div class="flex flex-col w-full gap-3 lg:flex-row lg:items-center">
             <div class="flex-1">
-                <label for="name" class="text-md lg:text-lg lg:font-medium">Place Name</label>
+                <label for="name" class="text-base lg:text-lg lg:font-medium">Place Name</label>
                 <input id="name" wire:model.debounce.350ms='name' name="name" type="text">
                 @error('name')
                     <p class="error">
@@ -22,7 +22,7 @@
                 @enderror
             </div>
             <div class="flex-1">
-                <label for="phone" class="text-md lg:text-lg lg:font-medium">Phone Number</label>
+                <label for="phone" class="text-base lg:text-lg lg:font-medium">Phone Number</label>
                 <input id="phone" wire:model.debounce.350ms='phone' name="phone" type="text">
                 @error('phone')
                     <p class="error">
@@ -34,7 +34,7 @@
         {{-- Place coordinates --}}
         <div class="flex flex-col w-full gap-3 lg:flex-row lg:items-center">
             <div class="flex-1">
-                <label for="latitude" class="text-md lg:text-lg lg:font-medium">Latitude</label>
+                <label for="latitude" class="text-base lg:text-lg lg:font-medium">Latitude</label>
                 <input id="latitude" wire:model.debounce.350ms='latitude' name="latitude" type="text">
                 @error('latitude')
                     <p class="error">
@@ -43,7 +43,7 @@
                 @enderror
             </div>
             <div class="flex-1">
-                <label for="longitude" class="text-md lg:text-lg lg:font-medium">Longitude</label>
+                <label for="longitude" class="text-base lg:text-lg lg:font-medium">Longitude</label>
                 <input id="longitude" wire:model.debounce.350ms='longitude' name="longitude" type="text">
                 @error('longitude')
                     <p class="error">
@@ -55,7 +55,7 @@
         {{-- Place description --}}
         <div class="flex flex-col-reverse w-full gap-5 lg:flex-row lg:items-start">
             <div class="flex-1">
-                <label for="description" class="text-md lg:text-lg lg:font-medium">Description</label>
+                <label for="description" class="text-base lg:text-lg lg:font-medium">Description</label>
                 <textarea wire:model.debounce.350ms='description' name="description" id="description" cols="30" rows="5"
                     maxlength="255"></textarea>
                 @error('description')
@@ -65,7 +65,7 @@
                 @enderror
             </div>
             <div class="flex flex-col justify-center gap-1 flex-2">
-                <label for="type" class="text-md lg:text-lg lg:font-medium">Place Type</label>
+                <label for="type" class="text-base lg:text-lg lg:font-medium">Place Type</label>
                 <select name="type" id="type" wire:model='type'>
                     <option selected value="">Select</option>
                     @forelse ($placeTypes as $placeType)

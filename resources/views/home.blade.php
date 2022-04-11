@@ -34,7 +34,7 @@
                 </div>
                 {{-- Hero Image --}}
                 <div class="relative flex flex-col items-center justify-center mb-3 lg:mb-0 lg:full lg:w-7/12">
-                    <img src="{{ asset('assets/imgs/bmw.png') }}" alt="bmw_img">
+                    <img src="{{ asset('assets/imgs/bmw-min.png') }}" alt="bmw_img">
                 </div>
             </div>
         </section>

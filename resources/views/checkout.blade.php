@@ -146,7 +146,7 @@
                             <img style="height: 750x;width:75px;" class="bg-cover"
                                 src="{{ Storage::url($item->options->image) }}" alt="{{ $item->name }} image">
                             <div class="flex flex-col gap-2 md:gap-3">
-                                <p class="font-medium text-md md:text-lg md:font-semibold text-dark-blue">
+                                <p class="text-base font-medium md:text-lg md:font-semibold text-dark-blue">
                                     {{ $item->name }}
                                 </p>
                                 <p class="text-xs text-gray-700 md:text-sm">{{ $item->options->description }}</p>

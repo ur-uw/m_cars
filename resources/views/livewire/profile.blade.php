@@ -32,7 +32,7 @@
                                             alt="User image" class="bg-cover rounded-full shadow-md"
                                             style="height: 100px;width:100px;">
                                         <label for="user_image_file"
-                                            class="relative bg-white rounded-md cursor-pointer btn text-md lg:text-lg lg:font-medium text-primary hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary">
+                                            class="relative bg-white rounded-md cursor-pointer btn text-base lg:text-lg lg:font-medium text-primary hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary">
                                             <span class="text-sm">Change</span>
                                             <input wire:model='user_image_file' id="user_image_file"
                                                 name="user_image_file" type="file" class="sr-only">
@@ -59,7 +59,7 @@
                                         @endif
 
                                         <label for="user_image_file"
-                                            class="relative bg-white rounded-md cursor-pointer btn text-md lg:text-lg lg:font-medium text-primary hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary">
+                                            class="relative bg-white rounded-md cursor-pointer btn text-base lg:text-lg lg:font-medium text-primary hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary">
                                             <span class="text-sm">Change</span>
                                             <input wire:model='user_image_file' id="user_image_file"
                                                 name="user_image_file" type="file" class="sr-only"

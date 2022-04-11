@@ -6,7 +6,7 @@
     <div class="flex flex-col lg:flex-row-reverse h-screen w-full">
         {{-- Image section --}}
         <div class="flex flex-col items-center gap-3 lg:p-20 p-10 bg-indigo-50 flex-1 lg:h-full lg:w-full">
-            <p class="text-app-grey text-md lg:text-xl">Nice to see you again</p>
+            <p class="text-app-grey text-base lg:text-xl">Nice to see you again</p>
             <h2 class="text-3xl lg:text-4xl font-bold text-primary">Welcome back</h2>
             <img class="h-full w-full" src="{{ asset('assets/svg/auth_logo.svg') }}" alt="auth_image">
         </div>

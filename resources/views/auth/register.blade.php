@@ -6,7 +6,7 @@
     <div class="flex flex-col lg:flex-row-reverse h-screen w-full">
         {{-- Image section --}}
         <div class="flex flex-col items-center gap-3 lg:p-20 p-10 bg-indigo-50 flex-1 lg:h-full lg:w-full">
-            <p class="text-app-grey text-md">The world of cars is waiting</p>
+            <p class="text-app-grey text-base">The world of cars is waiting</p>
             <h2 class="text-3xl lg:text-4xl font-bold text-primary">Create an account</h2>
             <img class="h-full w-full" src="{{ asset('assets/svg/register.svg') }}" alt="auth_image">
         </div>
