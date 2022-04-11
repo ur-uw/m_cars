@@ -6,11 +6,11 @@
     <div class="flex flex-col gap-24 md:gap-28 lg:gap-16">
         {{-- Hero Section --}}
         <section>
-            <div class="flex flex-col-reverse lg:flex-row relative">
+            <div class="relative flex flex-col-reverse lg:flex-row">
                 {{-- Headings --}}
-                <div class="container lg:w-5/12 lg:ml-20 relative">
+                <div class="container relative lg:w-5/12 lg:ml-20">
                     @include('components.theBubbles')
-                    <h1 class="text-xl text-center font-semibold lg:hidden">Premium Car Service in Iraq</h1>
+                    <h1 class="text-xl font-semibold text-center lg:hidden">Premium Car Service in Iraq</h1>
                     <div class="hidden lg:flex lg:flex-col lg:text-7xl lg:font-bold">
                         <span>Premium</span>
                         <span>Car Services</span>
@@ -26,14 +26,14 @@
                         here and now.
                     </p>
                     {{-- Call to action --}}
-                    <div class="mt-3 w-full flex items-center justify-center lg:justify-start">
+                    <div class="flex items-center justify-center w-full mt-3 lg:justify-start">
                         <a href="{{ route('auth.register') }}"
-                            class="btn btn-primary text-lg font-semibold z-10 transition">Start
+                            class="z-10 text-lg font-semibold transition btn btn-primary">Start
                             Now</a>
                     </div>
                 </div>
                 {{-- Hero Image --}}
-                <div class="flex flex-col items-center justify-center mb-3 lg:mb-0 lg:full lg:w-7/12 relative">
+                <div class="relative flex flex-col items-center justify-center mb-3 lg:mb-0 lg:full lg:w-7/12">
                     <img src="{{ asset('assets/imgs/bmw.png') }}" alt="bmw_img">
                 </div>
             </div>
@@ -42,10 +42,11 @@
         {{-- Brands --}}
         <section class="container">
             <div class="swiper homeSwiper">
-                <div class="swiper-wrapper p-3">
-                    @foreach (Storage::files('public/logos') as $car_brand)
-                        <div class="flex justify-center p-3 rounded-lg bg-gray-50 swiper-slide shadow-sm">
-                            <img src="{{ Storage::url($car_brand) }}" class="car-logo" alt="car_brand">
+                <div class="p-3 swiper-wrapper">
+                    @foreach ($logos as $car_brand)
+                        <div class="flex justify-center p-3 rounded-lg shadow-sm bg-gray-50 swiper-slide">
+                            <img src='{{ asset('assets/imgs/logos/' . $car_brand->getFilename()) }}'
+                                class="car-logo" alt="{{ $car_brand->getFilenameWithoutExtension() }}">
                         </div>
                     @endforeach
                 </div>

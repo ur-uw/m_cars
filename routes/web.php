@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\HomeController;
 use App\Http\Livewire\AccessoriesList;
 use App\Http\Livewire\AccessoriesTypesList;
 use App\Http\Livewire\AdminDashboard;
@@ -31,9 +32,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('home');
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Guest routes
 Route::middleware('guest')->group(function () {

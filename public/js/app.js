@@ -2210,10 +2210,6 @@ new swiper__WEBPACK_IMPORTED_MODULE_0__["default"](".homeSwiper", {
   spaceBetween: 20,
   freeMode: true,
   grabCursor: true,
-  autoplay: {
-    delay: 3000,
-    disableOnInteraction: true
-  },
   breakpoints: {
     640: {
       slidesPerView: 2,
