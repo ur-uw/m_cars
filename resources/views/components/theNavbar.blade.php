@@ -35,7 +35,7 @@
 
     @guest
         <li>
-            <a href="{{ route('auth.login') }}" class="flex items-center gap-2 transition btn btn-secondary">
+            <a href="{{ route('auth.login') }}" class="flex items-center gap-2 ml-2 transition btn btn-secondary">
                 <span>Login</span>
                 <i class="text-sm fas fa-arrow-right"></i>
             </a>
