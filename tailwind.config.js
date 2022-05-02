@@ -83,12 +83,21 @@ module.exports = {
 
     daisyui: {
         styled: true,
-        themes: false,
         base: true,
         utils: true,
+        themes: [
+            {
+                light: {
+                    ...require("daisyui/src/colors/themes")[
+                        "[data-theme=light]"
+                    ],
+                    primary: "#5267DF",
+                    "primary-focus": "#5267DF",
+                },
+            },
+        ],
         logs: true,
         rtl: false,
         prefix: "ds-",
-        darkTheme: "dark",
     },
 };
