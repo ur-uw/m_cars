@@ -1,4 +1,4 @@
- <section class="bg-white relative" id="features-section">
+ <section class="relative bg-white" id="features-section">
      <div class="container px-6 py-10 mx-auto">
          <h1 class="text-3xl font-semibold text-gray-800 capitalize lg:text-4xl">explore our <br>
              awesome <span class="underline decoration-primary">Features</span>
@@ -8,7 +8,7 @@
              M Cars offers modern and versatile car management tools for your car.
          </p>
 
-         <div class="grid grid-cols-1 gap-8 mt-8 xl:mt-12 xl:gap-12 md:grid-cols-2 xl:grid-cols-3 relative">
+         <div class="relative grid grid-cols-1 gap-8 mt-8 xl:mt-12 xl:gap-12 md:grid-cols-2 xl:grid-cols-3">
              {{-- Explore Cars --}}
              <div class="p-8 space-y-3 border-2 border-primary rounded-xl">
                  <span class="inline-block text-primary">
@@ -35,7 +35,7 @@
                  </p>
 
                  <a href="{{ route('explore.show') }}"
-                     class="inline-flex p-2 text-primary capitalize transition-colors duration-200 transform bg-blue-100 rounded-full hover:underline hover:text-blue-600">
+                     class="inline-flex p-2 capitalize transition-colors duration-200 transform bg-blue-100 rounded-full text-primary hover:underline hover:text-blue-600">
                      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
                          stroke="currentColor">
                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -44,7 +44,7 @@
                  </a>
              </div>
              {{-- Spare/Accessory Pars --}}
-             <div class="p-8 space-y-3 border-2 border-primary  rounded-xl">
+             <div class="p-8 space-y-3 border-2 border-primary rounded-xl">
                  <span class="inline-block text-primary">
                      <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="50" height="50"
                          viewBox="0 0 172 172" style=" fill:#000000;">
@@ -77,7 +77,7 @@
                  </p>
 
                  <a href="{{ route('spare_types.show') }}"
-                     class="inline-flex p-2 text-primary capitalize transition-colors duration-200 transform bg-blue-100 rounded-full hover:underline hover:text-blue-600">
+                     class="inline-flex p-2 capitalize transition-colors duration-200 transform bg-blue-100 rounded-full text-primary hover:underline hover:text-blue-600">
                      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
                          stroke="currentColor">
                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -113,8 +113,8 @@
                      M Cars shows the nearest car maintenance/care workshops near you.
                  </p>
 
-                 <a href="#"
-                     class="inline-flex p-2 text-primary capitalize transition-colors duration-200 transform bg-blue-100 rounded-full hover:underline hover:text-blue-600">
+                 <a href="{{ route('map.show') }}"
+                     class="inline-flex p-2 capitalize transition-colors duration-200 transform bg-blue-100 rounded-full text-primary hover:underline hover:text-blue-600">
                      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
                          stroke="currentColor">
                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

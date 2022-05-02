@@ -12,7 +12,7 @@
         @endif
         <div class="flex flex-col w-full gap-3 lg:flex-row lg:items-center">
             <div class="flex-1">
-                <label for="name" class="text-md lg:text-lg lg:font-medium">Spare Part Name</label>
+                <label for="name" class="text-base lg:text-lg lg:font-medium">Spare Part Name</label>
                 <input id="name" wire:model.debounce.350ms='name' name="name" type="text" placeholder="Ex: Air bags">
                 @error('name')
                     <p class="error">
@@ -21,7 +21,7 @@
                 @enderror
             </div>
             <div class="flex-1">
-                <label for="manufacturer" class="text-md lg:text-lg lg:font-medium">Spare Part Manufacturer</label>
+                <label for="manufacturer" class="text-base lg:text-lg lg:font-medium">Spare Part Manufacturer</label>
                 <select wire:model="manufacturer" name="manufacturer" id="manufacturer">
                     <option value="">Select Manufacturer</option>
                     @foreach ($manufacturers as $manufacturer)
@@ -37,7 +37,7 @@
         </div>
         <div class="flex flex-col w-full gap-3 lg:flex-row lg:items-center">
             <div class="flex-1">
-                <label for="price" class="text-md lg:text-lg lg:font-medium">Spare Part Price</label>
+                <label for="price" class="text-base lg:text-lg lg:font-medium">Spare Part Price</label>
                 <input id="price" wire:model.debounce.350ms='price' name="price" type="text">
                 @error('price')
                     <p class="error">
@@ -46,7 +46,7 @@
                 @enderror
             </div>
             <div class="flex-1">
-                <label for="type" class="text-md lg:text-lg lg:font-medium">Spare Part Type</label>
+                <label for="type" class="text-base lg:text-lg lg:font-medium">Spare Part Type</label>
                 <select wire:model='spareType' name="spareType" id="spareType">
                     <option value="">Select a Type</option>
                     @foreach ($spareTypes as $spareType)

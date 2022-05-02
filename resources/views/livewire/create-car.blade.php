@@ -27,7 +27,7 @@
             {{-- First step --}}
             <div class="flex flex-col gap-3 md:items-center md:flex-row">
                 <div class="flex-1">
-                    <label for="model" class="text-md lg:text-lg lg:font-medium">Model Name</label>
+                    <label for="model" class="text-base lg:text-lg lg:font-medium">Model Name</label>
                     <input id="model" wire:model.debounce.350ms='model' name="model" type="text" placeholder="Ex: X6">
                     <p class="mt-1 text-xs text-app-grey">Do not exceed 20 characters when entering model name!
                     </p>
@@ -38,7 +38,7 @@
                     @enderror
                 </div>
                 <div class="flex-1">
-                    <label for="color" class="text-md lg:text-lg lg:font-medium">Car Color</label>
+                    <label for="color" class="text-base lg:text-lg lg:font-medium">Car Color</label>
                     <input id="color" type="text" name="color" wire:model.debounce.350ms='color'
                         placeholder="Ex: #ffffff">
                     <p class="mt-1 text-xs text-app-grey">Enter color name in hex format!</p>
@@ -52,7 +52,7 @@
             <div>
                 <div class="flex flex-col gap-3 md:flex-row lg:items-center ">
                     <div class="lg:w-1/4">
-                        <label for="manufacturer" class="text-md lg:text-lg lg:font-medium">Manufacturer</label>
+                        <label for="manufacturer" class="text-base lg:text-lg lg:font-medium">Manufacturer</label>
                         <select wire:model.lazy='manufacturer' name="manufacturer" id="manufacturer">
                             <option value="">Select</option>
                             @foreach ($manufacturers as $man)
@@ -66,7 +66,7 @@
                         @enderror
                     </div>
                     <div class="lg:w-1/4">
-                        <label for="type" class="text-md lg:text-lg lg:font-medium">Car Type</label>
+                        <label for="type" class="text-base lg:text-lg lg:font-medium">Car Type</label>
                         <select name="type" id="type" name="type" wire:model.lazy='type'>
                             <option value="">Select</option>
                             @foreach ($types as $type)
@@ -80,7 +80,7 @@
                         @enderror
                     </div>
                     <div class="lg:w-1/2">
-                        <label for="plate_number" class="text-md lg:text-lg lg:font-medium">Plate Number</label>
+                        <label for="plate_number" class="text-base lg:text-lg lg:font-medium">Plate Number</label>
                         <input type="text" name="plate_number" id="plate_number"
                             wire:model.debounce.350ms='plate_number' placeholder="Ex: 33-2S1-BNX" />
                         @error('plate_number')
@@ -94,7 +94,7 @@
             {{-- Manufacturer and Date --}}
             <div class="flex flex-col w-full gap-3 md:items-center md:flex-row ">
                 <div class="flex-1">
-                    <label for="manufactured_at" class="text-md lg:text-lg lg:font-medium">Manufacture Date</label>
+                    <label for="manufactured_at" class="text-base lg:text-lg lg:font-medium">Manufacture Date</label>
                     {{-- TODO: make custom date picker --}}
                     <input type="date" name="manufactured_at" id="manufactured_at" wire:model.lazy='manufactured_at'>
                     @error('manufactured_at')
@@ -104,7 +104,7 @@
                     @enderror
                 </div>
                 <div class="flex-1">
-                    <label for="price" class="text-md lg:text-lg lg:font-medium">Price <sub
+                    <label for="price" class="text-base lg:text-lg lg:font-medium">Price <sub
                             class="text-xs text-primary">$</sub>
                     </label>
                     <input type="number" name="price" id="price" wire:model.debounce.350ms="price">
@@ -119,7 +119,7 @@
             <div class="flex flex-col items-center gap-3 md:flex-row md:items-start">
 
                 <div class="flex-1 w-full">
-                    <label for="description" class="text-md lg:text-lg lg:font-medium">Description</label>
+                    <label for="description" class="text-base lg:text-lg lg:font-medium">Description</label>
                     <textarea name="description" id="description" cols="20" rows="5" wire:model.debounce.350ms='description'></textarea>
                     <p class="mt-1 text-xs text-app-grey">Do not exceed 100 characters when entering car description!
                     </p>
@@ -130,7 +130,7 @@
                     @enderror
                 </div>
                 <div class="flex flex-col items-center w-full md:w-auto">
-                    <label for="action" class="text-md lg:text-lg lg:font-medium">Action</label>
+                    <label for="action" class="text-base lg:text-lg lg:font-medium">Action</label>
                     <select wire:model='action' name="action" id="action">
                         <option value="">Just Show in Garage</option>
                         <option value="FOR_SALE">For Sale</option>
@@ -140,7 +140,7 @@
                     <div class="flex items-center flex-1 w-full gap-2 p-5 mt-4 transition border rounded shadow cursor-pointer md:w-auto border-primary hover:shadow-xl"
                         wire:click='$toggle("formMyGarage")'>
                         <input type="checkbox" wire:model='formMyGarage' name="for_my_garage" id="for_my_garage">
-                        <label for="action" class="text-md">Add to my garage</label>
+                        <label for="action" class="text-base">Add to my garage</label>
                     </div>
                     @endadmin
                 </div>
@@ -149,11 +149,11 @@
             {{-- Second step --}}
         @elseif ($currentPage == 1)
             {{-- Fuel Details --}}
-            <h2 class="text-md lg:text-2xl lg:font-semibold">Fuel Details</h2>
+            <h2 class="text-base lg:text-2xl lg:font-semibold">Fuel Details</h2>
             <div>
                 <div class="flex flex-col gap-3 md:flex-row lg:items-center">
                     <div>
-                        <label for="fuel_type" class="text-md lg:text-lg lg:font-medium">Fuel Type</label>
+                        <label for="fuel_type" class="text-base lg:text-lg lg:font-medium">Fuel Type</label>
                         <select name="fuel_type" wire:model.lazy='fuel_type' id="fuel_type">
                             <option value="">Select</option>
                             {{-- TODO: add fuel types to database --}}
@@ -170,7 +170,7 @@
                     </div>
                     <div class="flex-1">
                         @if ($fuel_type == 'electricity')
-                            <label for="battery_capacity" class="text-md lg:text-lg lg:font-medium">Battery
+                            <label for="battery_capacity" class="text-base lg:text-lg lg:font-medium">Battery
                                 Capacity</label>
                             <input type="number" id="battery_capacity" name="battery_capacity"
                                 wire:model.debounce.350ms='battery_capacity'>
@@ -180,7 +180,7 @@
                                 </p>
                             @enderror
                         @else
-                            <label for="tank_capacity" class="text-md lg:text-lg lg:font-medium">Tank Capacity
+                            <label for="tank_capacity" class="text-base lg:text-lg lg:font-medium">Tank Capacity
                                 <sub class="text-xs text-primary">L</sub>
                             </label>
                             <input type="number" id="tank_capacity" name="tank_capacity"
@@ -193,7 +193,7 @@
                         @endif
                     </div>
                     <div class="flex-1">
-                        <label for="fuel_economy" class="text-md lg:text-lg lg:font-medium">
+                        <label for="fuel_economy" class="text-base lg:text-lg lg:font-medium">
                             Fuel Economy
                             <sub class="text-xs text-primary">
                                 @if ($fuel_type == 'electricity')
@@ -217,10 +217,10 @@
             </div>
             {{-- Speed & Engine Details --}}
             <div class="w-full h-px shadow"></div>
-            <h2 class="text-md lg:text-2xl lg:font-semibold">Speed & Engine Details</h2>
+            <h2 class="text-base lg:text-2xl lg:font-semibold">Speed & Engine Details</h2>
             <div class="flex flex-col gap-3 md:flex-row lg:items-center">
                 <div>
-                    <label for="top_speed" class="text-md lg:text-lg lg:font-medium">
+                    <label for="top_speed" class="text-base lg:text-lg lg:font-medium">
                         Top Speed
                         <sub class="text-xs text-primary">Km/H</sub>
                     </label>
@@ -232,7 +232,7 @@
                     @enderror
                 </div>
                 <div>
-                    <label for="acceleration" class="text-md lg:text-lg lg:font-medium">
+                    <label for="acceleration" class="text-base lg:text-lg lg:font-medium">
                         Acceleration
                     </label>
                     <input type="number" id="acceleration" name="acceleration" wire:model.debounce.350ms='acceleration'>
@@ -243,7 +243,7 @@
                     @enderror
                 </div>
                 <div>
-                    <label for="gearbox_speeds" class="text-md lg:text-lg lg:font-medium">
+                    <label for="gearbox_speeds" class="text-base lg:text-lg lg:font-medium">
                         Gearbox Speeds
                     </label>
                     <input type="number" id="gearbox_speeds" name="gearbox_speeds"
@@ -258,7 +258,7 @@
             {{-- Engine Details --}}
             <div class="flex flex-col gap-3 md:flex-row lg:items-center">
                 <div class="lg:flex-1">
-                    <label for="engine_capacity" class="text-md lg:text-lg lg:font-medium">
+                    <label for="engine_capacity" class="text-base lg:text-lg lg:font-medium">
                         Engine Capacity
                         <sub class="text-xs text-primary">CC</sub>
                     </label>
@@ -271,7 +271,7 @@
                     @enderror
                 </div>
                 <div class="lg:flex-1">
-                    <label for="number_cylinders" class="text-md lg:text-lg lg:font-medium">
+                    <label for="number_cylinders" class="text-base lg:text-lg lg:font-medium">
                         Number of Cylinders
                     </label>
                     <input type="number" id="number_cylinders" name="number_cylinders"
@@ -285,10 +285,10 @@
             </div>
             {{-- Specifications --}}
             <div class="w-full h-px shadow"></div>
-            <h2 class="text-md lg:text-2xl lg:font-semibold">Specifications</h2>
+            <h2 class="text-base lg:text-2xl lg:font-semibold">Specifications</h2>
             <div class="flex flex-col gap-3 md:flex-row lg:items-center lg:gap-6">
                 <div class="flex-1">
-                    <label for="seating_capacity" class="text-md lg:text-lg lg:font-medium">Seating Capacity</label>
+                    <label for="seating_capacity" class="text-base lg:text-lg lg:font-medium">Seating Capacity</label>
                     <input type="number" id="seating_capacity" name="seating_capacity"
                         wire:model.debounce.350ms='seating_capacity'>
                     @error('seating_capacity')
@@ -343,7 +343,7 @@
                             </svg>
                             <div class="flex flex-col items-center text-sm text-gray-600 md:flex-row">
                                 <label for="thumb_nail"
-                                    class="relative bg-white rounded-md cursor-pointer text-md lg:text-lg lg:font-medium text-primary hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary">
+                                    class="relative bg-white rounded-md cursor-pointer text-base lg:text-lg lg:font-medium text-primary hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary">
                                     <span class="text-sm">Upload image preview</span>
                                     <input id="thumb_nail" name="thumb_nail" type="file" class="sr-only"
                                         wire:model='car_thumbnail'>
@@ -380,7 +380,7 @@
                             </svg>
                             <div class="flex flex-col items-center text-sm text-gray-600 md:flex-row">
                                 <label for="car_images"
-                                    class="relative bg-white rounded-md cursor-pointer text-md lg:text-lg lg:font-medium text-primary hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary">
+                                    class="relative bg-white rounded-md cursor-pointer text-base lg:text-lg lg:font-medium text-primary hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary">
                                     <span class="text-sm">Upload images</span>
                                     <input id="car_images" name="car_images" type="file" class="sr-only"
                                         wire:model='car_images' multiple>

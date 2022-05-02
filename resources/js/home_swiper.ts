@@ -6,10 +6,7 @@ new Swiper(".homeSwiper", {
     spaceBetween: 20,
     freeMode: true,
     grabCursor: true,
-    autoplay: {
-        delay: 3000,
-        disableOnInteraction: true,
-    },
+
     breakpoints: {
         640: {
             slidesPerView: 2,

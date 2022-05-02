@@ -16,7 +16,7 @@ class Category extends Model
         'description'
     ];
     /**
-     * Get all of the prodcuts for the Category
+     * Get all of the products for the Category
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\HomeController;
 use App\Http\Livewire\AccessoriesList;
 use App\Http\Livewire\AccessoriesTypesList;
 use App\Http\Livewire\AdminDashboard;
 use App\Http\Livewire\CarDetails;
+use App\Http\Livewire\CarProducts;
 use App\Http\Livewire\Cart\CartView;
 use App\Http\Livewire\CreateAccessory;
 use App\Http\Livewire\CreateCar;
@@ -30,9 +32,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('home');
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Guest routes
 Route::middleware('guest')->group(function () {
@@ -50,7 +50,8 @@ Route::get('/spare-parts/{category}', SparePartsList::class)->name('spare_part.s
 Route::get('/accessories', AccessoriesTypesList::class)->name('accessories.show');
 Route::get('/accessories/{category}', AccessoriesList::class)->name('accessory.show');
 Route::get('/map', MapView::class)->name('map.show');
-
+Route::get('/{manufacturer_name}/{model}/{type}/products', CarProducts::class)
+    ->name('car_products.show');
 // Auth Routes
 Route::middleware('auth')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');

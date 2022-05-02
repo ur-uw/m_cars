@@ -78,5 +78,26 @@ module.exports = {
     plugins: [
         require("@tailwindcss/forms"),
         require("@tailwindcss/aspect-ratio"),
+        require("daisyui"),
     ],
+
+    daisyui: {
+        styled: true,
+        base: true,
+        utils: true,
+        themes: [
+            {
+                light: {
+                    ...require("daisyui/src/colors/themes")[
+                        "[data-theme=light]"
+                    ],
+                    primary: "#5267DF",
+                    "primary-focus": "#5267DF",
+                },
+            },
+        ],
+        logs: true,
+        rtl: false,
+        prefix: "ds-",
+    },
 };
