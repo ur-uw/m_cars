@@ -5,15 +5,7 @@
     {{-- Search --}}
     <div class="flex items-center gap-3 px-6 py-4 mx-auto rounded-md shadow md:rounded-full lg:w-3/4">
         <i class="text-2xl fas fa-search text-primary"></i>
-        <span class="flex-1">
-            <input wire:model.debounce.350ms='term' class="w-full border-0 " type="text"
-                placeholder="Ex: Mercedes Benz,...">
-        </span>
-        <span>
-            <button class="hidden transition lg:block btn btn-primary">
-                Search
-            </button>
-        </span>
+        <input wire:model.debounce.350ms='term' class="w-full border-0 " type="text" placeholder="Ex: Mercedes Benz,...">
     </div>
     <section class="mt-16 ">
 
