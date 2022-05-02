@@ -44,7 +44,7 @@
 
 
             <form class="mt-10" wire:submit.prevent>
-                @if (!$car->user)
+                @if ($showAddToGarage)
                     <button type="button" wire:click='addToGarage'
                         class="flex items-center justify-center w-full px-8 py-3 mt-10 text-base font-medium text-white border border-transparent rounded-md bg-primary hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         Add to garage
@@ -157,5 +157,4 @@
             </div>
         </div>
     </div>
-</div>
 </div>
