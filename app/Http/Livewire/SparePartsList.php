@@ -12,16 +12,7 @@ class SparePartsList extends Component
     public Category $category;
     public $term;
     public $filterManufacturer;
-    public $manufacturers;
 
-    public function loadManufacturers()
-    {
-        if (!$this->manufacturers) {
-            $this->manufacturers = Manufacturer::latest()
-                ->orderBy('name')
-                ->get();
-        }
-    }
 
 
     public function render()
@@ -35,6 +26,9 @@ class SparePartsList extends Component
                     })
                     ->search($this->term)
                     ->get(),
+                'manufacturers' =>  Manufacturer::latest()
+                    ->orderBy('name')
+                    ->get()
             ]
         )->extends('layouts.app');
     }

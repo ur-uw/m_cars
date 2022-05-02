@@ -12,16 +12,6 @@ class AccessoriesList extends Component
     public Category $category;
     public $term;
     public $filterManufacturer;
-    public $manufacturers;
-
-    public function loadManufacturers()
-    {
-        if (!$this->manufacturers) {
-            $this->manufacturers = Manufacturer::latest()
-                ->orderBy('name')
-                ->get();
-        }
-    }
 
     public function render()
     {
@@ -33,6 +23,10 @@ class AccessoriesList extends Component
                         return $query->where('manufacturer_id', $man);
                     })
                     ->search($this->term)
+                    ->get(),
+
+                'manufacturers' => Manufacturer::latest()
+                    ->orderBy('name')
                     ->get(),
             ]
         )->extends('layouts.app');

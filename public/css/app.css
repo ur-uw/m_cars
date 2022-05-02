@@ -1,6 +1,6 @@
 @import url(https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap);
 /* ./resources/css/app.css */
-/* ! tailwindcss v3.0.23 | MIT License | https://tailwindcss.com */
+/* ! tailwindcss v3.0.24 | MIT License | https://tailwindcss.com */
 /*
 1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
 2. Allow adding a border to an element by just adding a border-width. (https://github.com/tailwindcss/tailwindcss/pull/116)
@@ -369,6 +369,7 @@ select {
   background-size: 1.5em 1.5em;
   padding-right: 2.5rem;
   -webkit-print-color-adjust: exact;
+     -moz-print-color-adjust: exact;
           color-adjust: exact;
 }
 [multiple] {
@@ -378,6 +379,7 @@ select {
   background-size: initial;
   padding-right: 0.75rem;
   -webkit-print-color-adjust: unset;
+     -moz-print-color-adjust: unset;
           color-adjust: unset;
 }
 [type='checkbox'],[type='radio'] {
@@ -386,6 +388,7 @@ select {
           appearance: none;
   padding: 0;
   -webkit-print-color-adjust: exact;
+     -moz-print-color-adjust: exact;
           color-adjust: exact;
   display: inline-block;
   vertical-align: middle;
@@ -470,8 +473,7 @@ html {
   -webkit-tap-highlight-color: transparent;
 }
 :root {
-  --p: 259 94% 51%;
-  --pf: 259 94% 41%;
+  --p: 231 69% 60%;
   --sf: 314 100% 38%;
   --af: 174 60% 41%;
   --nf: 219 14% 22%;
@@ -504,6 +506,7 @@ html {
   --b2: 0 0% 95%;
   --b3: 180 2% 90%;
   --bc: 215 28% 17%;
+  --pf: 231 69% 60%;
 }
 [type="text"], [type="email"], [type="url"], [type="password"], [type="number"], [type="date"], [type="datetime-local"], [type="month"], [type="search"], [type="tel"], [type="time"], [type="week"], [multiple], textarea, select {
   width: 100%;
@@ -820,34 +823,22 @@ html {
     .ds-drawer-mobile > .ds-drawer-toggle ~ .ds-drawer-content {
       grid-column-start: 2;
     }
-  }
-  @media (min-width: 1024px) {
     .ds-drawer-mobile > .ds-drawer-toggle ~ .ds-drawer-side > .ds-drawer-overlay {
       visibility: visible;
     }
-  }
-  @media (min-width: 1024px) {
     .ds-drawer-mobile > .ds-drawer-toggle ~ .ds-drawer-side > .ds-drawer-overlay + * {
       --tw-translate-x: 0px;
       transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
     }
-  }
-  @media (min-width: 1024px) {
     .ds-drawer-mobile.ds-drawer-end > .ds-drawer-toggle ~ .ds-drawer-content {
       grid-column-start: 1;
     }
-  }
-  @media (min-width: 1024px) {
     .ds-drawer-mobile.ds-drawer-end > .ds-drawer-toggle ~ .ds-drawer-side {
       grid-column-start: 2;
     }
-  }
-  @media (min-width: 1024px) {
     .ds-drawer-mobile.ds-drawer-end > .ds-drawer-toggle ~ .ds-drawer-side > .ds-drawer-overlay {
       visibility: visible;
     }
-  }
-  @media (min-width: 1024px) {
     .ds-drawer-mobile.ds-drawer-end > .ds-drawer-toggle ~ .ds-drawer-side > .ds-drawer-overlay + * {
       --tw-translate-x: 0px;
       transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
@@ -926,6 +917,30 @@ html {
 .ds-dropdown.ds-dropdown-open .ds-dropdown-content, .ds-dropdown.ds-dropdown-hover:hover .ds-dropdown-content, .ds-dropdown:not(.ds-dropdown-hover):focus .ds-dropdown-content, .ds-dropdown:not(.ds-dropdown-hover):focus-within .ds-dropdown-content {
   visibility: visible;
   opacity: 1;
+}
+.ds-footer {
+  display: grid;
+  width: 100%;
+  grid-auto-flow: row;
+  place-items: start;
+  row-gap: 2.5rem;
+  -moz-column-gap: 1rem;
+       column-gap: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+.ds-footer > * {
+  display: grid;
+  place-items: start;
+  gap: 0.5rem;
+}
+@media (min-width: 48rem) {
+  .ds-footer {
+    grid-auto-flow: column;
+  }
+  .ds-footer-center {
+    grid-auto-flow: row dense;
+  }
 }
 .ds-menu {
   display: flex;
@@ -1790,6 +1805,9 @@ html {
 .list-disc {
   list-style-type: disc;
 }
+.grid-flow-col {
+  grid-auto-flow: column;
+}
 .grid-cols-2 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
@@ -1849,6 +1867,9 @@ html {
 }
 .gap-5 {
   gap: 1.25rem;
+}
+.gap-4 {
+  gap: 1rem;
 }
 .gap-x-2 {
   -moz-column-gap: 0.5rem;
@@ -2032,8 +2053,15 @@ html {
   --tw-bg-opacity: 1;
   background-color: rgb(0 0 0 / var(--tw-bg-opacity));
 }
+.bg-neutral {
+  --tw-bg-opacity: 1;
+  background-color: hsl(var(--n) / var(--tw-bg-opacity));
+}
 .bg-cover {
   background-size: cover;
+}
+.fill-current {
+  fill: currentColor;
 }
 .stroke-current {
   stroke: currentColor;
@@ -2290,6 +2318,14 @@ html {
   --tw-text-opacity: 1;
   color: rgb(0 0 0 / var(--tw-text-opacity));
 }
+.text-neutral-content {
+  --tw-text-opacity: 1;
+  color: hsl(var(--nc) / var(--tw-text-opacity));
+}
+.text-red-400 {
+  --tw-text-opacity: 1;
+  color: rgb(248 113 113 / var(--tw-text-opacity));
+}
 .underline {
   -webkit-text-decoration-line: underline;
           text-decoration-line: underline;
@@ -2389,8 +2425,6 @@ html {
   .btn {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
-  }
-  .btn {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
   }
@@ -2720,6 +2754,12 @@ textarea {
   }
   .md\:gap-6 {
     gap: 1.5rem;
+  }
+  .md\:place-self-center {
+    place-self: center;
+  }
+  .md\:justify-self-end {
+    justify-self: end;
   }
   .md\:rounded-full {
     border-radius: 9999px;

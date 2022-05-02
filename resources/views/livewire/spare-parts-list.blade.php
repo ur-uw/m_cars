@@ -21,8 +21,8 @@
             <div class="flex flex-col items-center justify-center w-full gap-3 lg:w-1/2 md:flex-row">
                 <div class="flex items-center w-full gap-3 lg:items-start lg:flex-col lg:justify-center lg:gap-0">
                     <label for="manufacturer" class="flex-1">Manufacturer</label>
-                    <select wire:click='loadManufacturers' id="manufacturer" class="flex-1"
-                        wire:model='filterManufacturer' class="text-sm">
+                    <select id="manufacturer" class="flex-1" wire:model='filterManufacturer'
+                        class="text-sm">
                         <option value="">All</option>
                         @if ($manufacturers)
                             @foreach ($manufacturers as $man)
@@ -47,8 +47,9 @@
                 @endforeach
             </div>
         @else
-            <h2 class="mt-10 text-2xl text-center text-secondary">
-                No Spare Parts!
+            <h2 class="mt-10 text-2xl text-center text-red-400">
+                No spare parts
+                {{ $filterManufacturer != null? 'for ' . $manufacturers->firstWhere('id', $filterManufacturer)->name . ' yet!': '' }}
             </h2>
         @endif
     </section>
