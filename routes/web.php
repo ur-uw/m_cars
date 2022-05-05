@@ -56,7 +56,9 @@ Route::get('/{manufacturer_name}/{model}/{type}/products', CarProducts::class)
 Route::middleware('auth')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
     Route::get('/car/create', CreateCar::class)->name('car.create');
-    Route::get('/garage', Garage::class)->name('garage.show');
+    Route::get('/garage/{page}', Garage::class)
+        ->where('page', '[1-2]+')
+        ->name('garage.show');
     Route::get('/profile', Profile::class)->name('profile.show');
     Route::get('/cart', CartView::class)->name('cart.show');
     Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout.show');

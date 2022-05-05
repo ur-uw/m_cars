@@ -5,7 +5,7 @@
             <span
                 class="flex items-center p-3 -mt-2 text-sm text-gray-600 transition-colors duration-200 transform hover:bg-gray-100 ">
                 <img class="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9"
-                    src="{{ $image != null? Storage::url($image): 'https://p.kindpng.com/picc/s/78-785827_user-profile-avatar-login-account-male-user-icon.png' }}"
+                    src="{{ $image != null ? Storage::url($image) : 'https://p.kindpng.com/picc/s/78-785827_user-profile-avatar-login-account-male-user-icon.png' }}"
                     alt="Profile Avatar">
                 <div class="mx-1">
                     <h1 class="text-xs text-gray-700 lg:font-semibold lg:text-base">{{ $name }}</h1>
@@ -43,7 +43,7 @@
         {{-- GARAGE --}}
 
         <li>
-            <a href="{{ route('garage.show') }}"
+            <a href="{{ route('garage.show', ['page' => 1]) }}"
                 class="flex items-center p-3 text-sm {{ Route::is('garage.show') ? 'text-primary' : 'text-gray-600' }} capitalize transition-colors duration-200 transform hover:bg-gray-100">
                 <i class="w-5 h-5 mx-1 text-sm md:text-base fa fa-warehouse"></i>
                 <span class="mx-1 text-xs md:text-base">

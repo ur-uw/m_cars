@@ -42,6 +42,7 @@ class Explore extends Component
             [
                 'cars' =>  Car::with(['details', 'category', 'manufacturer'])
                     ->where('action', '!=', null)
+                    ->where('user_id', null)
                     ->when($this->filterManufacturer, function ($query, $manufacturer) {
                         return $query->where('manufacturer_id', $manufacturer);
                     })->when($this->filterType, function ($query, $type) {

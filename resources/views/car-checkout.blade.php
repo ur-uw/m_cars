@@ -152,7 +152,9 @@
                             </p>
                             <p class="text-xs text-gray-700 md:text-sm">
                                 {{ Str::limit($car->details->description, 30, $end = '...') }}</p>
-                            <p class="text-sm font-medium text-dark-blue">${{ $car->details->price }}</p>
+                            <p class="text-sm font-medium text-dark-blue">
+                                ${{ $car->action == 'FOR_RENT' ? $car->details->price * session('rent_period') : $car->details->price }}
+                            </p>
                         </div>
                     </div>
                     <div class="p-2 text-sm font-medium border rounded-sm text-dark-blue">1</div>
@@ -162,7 +164,7 @@
                 <div class="flex items-center justify-between">
                     <p class="text-sm font-medium text-dark-blue">Subtotal</p>
                     <p class="text-sm font-medium text-dark-blue">
-                        ${{ (float) str_replace(',', '', $car->details->price) }}
+                        ${{ $car->action == 'FOR_RENT' ? $car->details->price * session('rent_period') : $car->details->price }}
                     </p>
                 </div>
                 <div class="flex items-center justify-between">
@@ -173,7 +175,7 @@
                 <div class="flex items-center justify-between">
                     <p class="text-sm font-semibold text-dark-blue">Total</p>
                     <p class="text-sm font-semibold text-dark-blue">
-                        ${{ (float) str_replace(',', '', $car->details->price) }}
+                        ${{ $car->action == 'FOR_RENT' ? $car->details->price * session('rent_period') : $car->details->price }}
                     </p>
                 </div>
             </div>
