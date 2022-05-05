@@ -6,6 +6,7 @@ use App\Http\Requests\CheckoutRequest;
 use App\Mail\OrderPlaced;
 use App\Models\Car;
 use App\Models\Order;
+use App\Models\UserCarRent;
 use Auth;
 use Cartalyst\Stripe\Laravel\Facades\Stripe;
 use DB;
@@ -74,7 +75,7 @@ class CheckoutController extends Controller
     public function chargeCar(CheckoutRequest $request, Car $car)
     {
         try {
-            $carPrice =  (float)str_replace(',', '', $car->details->price);
+            $carPrice = $car->action == 'FOR_RENT' ? (float)str_replace(',', '', $car->details->price) * session('rent_period') :  (float)str_replace(',', '', $car->details->price);
             Stripe::charges()->create([
                 'amount' => $carPrice,
                 'currency' => 'usd',
@@ -82,11 +83,25 @@ class CheckoutController extends Controller
                 'description' => 'Car Charge',
                 'receipt_email' => $request->email,
             ]);
-            session()->forget('car_image');
-            Auth::user()->cars()->save($car);
 
+
+            if ($car->action == 'FOR_RENT') {
+                UserCarRent::create([
+                    'user_id' => Auth::user()->id,
+                    'car_id' => $car->id,
+                    'start_date' => now(),
+                    'end_date' => now()->addHours(session('rent_period')),
+                ]);
+            } else {
+                Auth::user()->cars()->save($car);
+            }
+            session()->forget([
+                'car_image',
+                'rent_period',
+            ]);
+            $message_text = $car->action == 'FOR_RENT' ? 'Successfully rented car!' : 'Successfully purchased car!';
             return redirect()->route('explore.show')
-                ->withSuccess('Successfully purchased car!');
+                ->withSuccess($message_text);
         } catch (\Cartalyst\Stripe\Exception\CardErrorException $e) {
             toast($e->getMessage(), 'error');
             return back()->withErrors('Error! ' . $e->getMessage());
