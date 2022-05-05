@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Car extends Model
 {
@@ -15,9 +16,11 @@ class Car extends Model
     protected $fillable = [
         'model',
         'manufacturer_id',
-        'type_id',
+        'category_id',
         'car_details_id',
         'thumb_nail',
+        'images',
+        'action',
         'user_id',
     ];
     protected $casts = [
@@ -46,13 +49,13 @@ class Car extends Model
     }
 
     /**
-     * Get the type that owns the Car
+     * Get the category that owns the Car
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function type(): BelongsTo
+    public function category(): BelongsTo
     {
-        return $this->belongsTo(Type::class);
+        return $this->belongsTo(Category::class);
     }
 
     public function scopeSearch($query, $term)
@@ -82,5 +85,16 @@ class Car extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+
+    /**
+     * Get all of the userCarRent for the Car
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function userCarRent(): HasMany
+    {
+        return $this->hasMany(UserCarRent::class);
     }
 }

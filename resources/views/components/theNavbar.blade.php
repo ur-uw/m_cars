@@ -1,44 +1,44 @@
- <nav class="flex items-center p-3 flex-wrap">
-     <a href="/"><img src="{{ asset('assets/svg/branding.svg') }}" alt="logo" /></a>
-     <div class="inline-flex p-3 rounded lg:hidden ml-auto outline-none transition">
-         <i class="
-                    fas fa-bars text-2xl text-black" id="menu"></i>
-     </div>
-     <div class="hidden top-navbar w-full lg:inline-flex lg:flex-grow lg:w-auto transition" id="navigation">
-         <ul class="bg-gray-50 lg:bg-white p-5 flex flex-col gap-6 lg:gap-12 lg:flex-row  ml-auto lg:items-center">
-             @if (Route::currentRouteName() == 'home')
-                 <a href="#" class="hover:text-primary transition">Features</a>
-                 <a href="#" class="hover:text-primary transition">Pricing</a>
-                 <a href="#">Contact</a>
-             @else
-                 <a href="#" class="hover:text-primary transition">Accessories</a>
-                 <a href="#" class="hover:text-primary transition">Spare Parts</a>
-                 <a href="{{ route('explore.show') }}"
-                     class="hover:text-primary transition {{ Route::is('explore.show') ? 'text-primary' : '' }}">Explore</a>
-                 <a href="{{ route('garage.show') }}"
-                     class="hover:text-primary transition {{ Route::is('garage.show') ? 'text-primary' : '' }}">Garage</a>
+<ul class="ds-menu ds-menu-horizontal">
+    <!-- Navbar menu content here -->
+    <li> <a href="{{ route('home') }}" class=" transition {{ Route::is('home') ? 'text-primary' : '' }}">Home</a>
+    </li>
+    @if (Route::is('home'))
+        <li>
+            <button onclick="scrollToId('features-section')" class="transition ">
+                Features
+            </button>
+        </li>
+        <li>
+            <button class="transition " onclick="scrollToId('contact-us-section')">
+                Contact Us
+            </button>
+        </li>
+    @else
+        <li>
+            <a href="{{ route('accessories.show') }}"
+                class=" transition {{ Route::is('accessories.show') || Route::is('accessory.show') ? 'text-primary' : '' }}">Accessories</a>
+        </li>
+        <li>
+            <a href="{{ route('spare_types.show') }} "
+                class=" transition {{ Route::is('spare_types.show') || Route::is('spare_part.show') ? 'text-primary' : '' }}">
+                Spare Parts</a>
+        </li>
+    @endif
+    <li>
+        <a href="{{ route('map.show') }}"
+            class="{{ Route::is('map.show') ? 'text-primary' : '' }}  transition">Map</a>
+    </li>
+    <li>
+        <a href="{{ route('explore.show') }}"
+            class=" transition {{ Route::is('explore.show') || Route::is('car_details.show') ? 'text-primary' : '' }}">Explore</a>
+    </li>
 
-             @endif
-             @if (!Auth::check())
-                 <li>
-                     <a href="{{ route('auth.login') }}" class="btn btn-secondary transition flex items-center gap-2">
-                         <span>Login</span>
-                         <i class="fas fa-arrow-right text-sm"></i>
-                     </a>
-                 </li>
-             @else
-                 @if (Route::currentRouteName() != 'home')
-                     <a href="{{ route('auth.logout') }}" class="btn btn-secondary transition rounded-md uppercase">
-                         Log out
-                     </a>
-                 @else
-                     <a href="{{ route('explore.show') }}"
-                         class="btn btn-secondary transition flex items-center gap-2">
-                         <span>Explore</span>
-                         <i class="fas fa-arrow-right text-sm"></i>
-                     </a>
-                 @endif
-             @endif
-         </ul>
-     </div>
- </nav>
+    @guest
+        <li>
+            <a href="{{ route('auth.login') }}" class="flex items-center gap-2 ml-2 transition btn btn-secondary">
+                <span>Login</span>
+                <i class="text-sm fas fa-arrow-right"></i>
+            </a>
+        </li>
+    @endguest
+</ul>

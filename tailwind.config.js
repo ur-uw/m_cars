@@ -1,10 +1,9 @@
 module.exports = {
-    purge: [
+    content: [
         "./resources/**/*.blade.php",
         "./resources/**/*.js",
         "./resources/**/*.vue",
     ],
-    darkMode: false, // or 'media' or 'class'
     theme: {
         extend: {
             colors: {
@@ -15,8 +14,8 @@ module.exports = {
                 "app-white": "#f7f7f7",
             },
             animation: {
-                fadeIn: "fadeIn 2s ease-in-out",
-                "slide-left": "slide-left 2s ease-in-out",
+                fadeIn: "fadeIn 0.565s ease-in-out",
+                "slide-left": "slide-left 0.565s ease-in-out",
                 blob: "blob 7s infinite",
             },
             keyframes: {
@@ -59,6 +58,9 @@ module.exports = {
                     },
                 },
             },
+            gridTemplateRows: {
+                "[auto,auto,1fr]": "auto auto 1fr",
+            },
         },
         fontFamily: {
             Poppins: ["Poppins, sans-serif"],
@@ -73,8 +75,29 @@ module.exports = {
             },
         },
     },
-    variants: {
-        extend: {},
+    plugins: [
+        require("@tailwindcss/forms"),
+        require("@tailwindcss/aspect-ratio"),
+        require("daisyui"),
+    ],
+
+    daisyui: {
+        styled: true,
+        base: true,
+        utils: true,
+        themes: [
+            {
+                light: {
+                    ...require("daisyui/src/colors/themes")[
+                        "[data-theme=light]"
+                    ],
+                    primary: "#5267DF",
+                    "primary-focus": "#5267DF",
+                },
+            },
+        ],
+        logs: true,
+        rtl: false,
+        prefix: "ds-",
     },
-    plugins: [require("@tailwindcss/forms")],
 };

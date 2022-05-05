@@ -24,4 +24,14 @@ class Manufacturer extends Model
     {
         return $this->hasMany(Car::class);
     }
+
+    /**
+     * Get all of the products for the Manufacturer
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class);
+    }
 }

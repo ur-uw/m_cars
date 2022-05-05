@@ -40,7 +40,10 @@ class CreateCarDetailsTable extends Migration
             $table->integer('number_of_cylinders');
             $table->integer('engine_capacity');
             $table->integer('gearbox_speeds');
-            $table->foreignId('car_id');
+            $table->foreignId('car_id')
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }
