@@ -13,7 +13,7 @@
         <div class="flex flex-col items-start justify-between gap-2 lg:flex-row">
             <div class="mb-3">
                 <h1 class="text-xl font-semibold lg:text-2xl">Car Catalogue</h1>
-                <p class="text-sm">Explore out cars you might like!</p>
+                <p class="text-sm">Explore out cars you like!</p>
             </div>
             <div class="flex flex-col items-center justify-center w-full gap-3 lg:w-1/2 md:flex-row">
                 <div class="flex items-center w-full gap-3 lg:items-start lg:flex-col lg:justify-center lg:gap-0">

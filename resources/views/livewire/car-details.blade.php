@@ -39,18 +39,40 @@
         <!-- Options -->
         <div class="mt-4 lg:mt-0 lg:row-span-3">
             <h2 class="sr-only">Product information</h2>
-            <p class="text-3xl text-gray-900">${{ number_format($car->details->price, 0) }}</p>
-
-
-
-            <form class="mt-10" wire:submit.prevent>
-                @if ($showAddToGarage)
-                    <button type="button" wire:click='addToGarage'
-                        class="flex items-center justify-center w-full px-8 py-3 mt-10 text-base font-medium text-white border border-transparent rounded-md bg-primary hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        Add to garage
-                    </button>
+            <p class="text-3xl text-gray-900">
+                @if ($car->action == 'FOR_RENT')
+                    <span class="text-sm text-secondary">$/H</span>
+                @else
+                    <span>$</span>
                 @endif
-            </form>
+                {{ number_format($car->details->price, 0) }}
+            </p>
+            @if ($showRentingForm)
+                <h3 class="my-3 text-lg font-bold">Enter renting period</h3>
+                <form wire:submit.prevent='rentCar' class="py-4 my-4">
+                    <input wire:model.debounce='renting_period' name='renting_period' type="text" required
+                        placeholder="Enter renting period in hours">
+                    @error('renting_period')
+                        <span class="error">{{ $message }}</span>
+                    @enderror
+                    <div class="ds-modal-action">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            @endif
+
+            @if ($showAddToGarage)
+                <button type="button" wire:click='addToGarage'
+                    class="flex items-center justify-center w-full px-8 py-3 mt-10 text-base font-medium text-white border border-transparent rounded-md bg-primary hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Add to garage
+                </button>
+            @elseif ($showRentBtn)
+                <button type="button" wire:click='$toggle("showRentingForm")'
+                    class="flex items-center justify-center w-full px-8 py-3 mt-10 text-base font-medium text-white border border-transparent rounded-md bg-primary hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Rent now
+                </button>
+            @endif
+
         </div>
 
         <div class="py-10 lg:pt-6 lg:pb-16 lg:col-start-1 lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
@@ -100,9 +122,9 @@
                 <div class="flex justify-between item-center">
                     <h2 class="text-sm font-medium text-gray-900">Details</h2>
                     <span class="text-xs font-normal">See
-                        <a href="{{ route('car_products.show', ['manufacturer_name' => \Str::snake($car->manufacturer->name),'type' => 'Spare Parts','model' => \Str::snake($car->model)]) }}"
+                        <a href="{{ route('car_products.show', ['manufacturer_name' => \Str::lower($car->manufacturer->name), 'type' => 'Spare Parts', 'model' => \Str::snake($car->model)]) }}"
                             class="transition text-primary hover:underline">Spare parts</a> |
-                        <a href="{{ route('car_products.show', ['manufacturer_name' => \Str::snake($car->manufacturer->name),'type' => 'accessories','model' => \Str::snake($car->model)]) }}"
+                        <a href="{{ route('car_products.show', ['manufacturer_name' => \Str::lower($car->manufacturer->name), 'type' => 'accessories', 'model' => \Str::snake($car->model)]) }}"
                             class="transition text-primary hover:underline">
                             Accessories
                         </a>

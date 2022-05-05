@@ -97,4 +97,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class);
     }
+
+    /**
+     * Get all of the userCarRent for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function userCarRent(): HasMany
+    {
+        return $this->hasMany(UserCarRent::class);
+    }
 }

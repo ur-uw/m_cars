@@ -25,7 +25,8 @@
         <div class="flex flex-col-reverse w-full gap-6 lg:flex-row">
             <div class="flex flex-col flex-1 space-y-6">
                 {{-- Billing Details --}}
-                <form class="flex-1 space-y-5" method="POST" action="{{ route('checkout.charge') }}" id="payment-form">
+                <form class="flex-1 space-y-5" method="POST" action="{{ route('checkout.charge_car', ['car' => $car]) }}"
+                    id="payment-form">
                     <h2 class="text-lg font-semibold md:text-xl">Billing Details</h2>
                     @csrf
                     <div class="col-span-6 sm:col-span-4">
@@ -139,48 +140,44 @@
                 <h2 class="text-lg font-semibold md:text-xl">
                     Your Order
                 </h2>
-                @forelse (\Gloudemans\Shoppingcart\Facades\Cart::content() as $item)
-                    <div class="h-px bg-gray-500"></div>
-                    <div class="flex items-center justify-between gap-2">
-                        <div class="flex items-center flex-1 w-full h-full gap-1">
-                            <img style="height: 750x;width:75px;" class="bg-cover"
-                                src="{{ strpos($item->options->image, 'https://') !== false ? $item->options->image : Storage::url($item->options->image) }}"
-                                alt="{{ $item->name }} image">
-                            <div class="flex flex-col gap-2 md:gap-3">
-                                <p class="text-base font-medium md:text-lg md:font-semibold text-dark-blue">
-                                    {{ $item->name }}
-                                </p>
-                                <p class="text-xs text-gray-700 md:text-sm">
-                                    {{ Str::limit($item->options->description, 30, $end = '...') }}</p>
-                                <p class="text-sm font-medium text-dark-blue">${{ $item->price * 100 }}</p>
-                            </div>
+                <div class="h-px bg-gray-500"></div>
+                <div class="flex items-center justify-between gap-2">
+                    <div class="flex items-center flex-1 w-full h-full gap-1">
+                        <img style="height: 750x;width:75px;" class="bg-cover"
+                            src="{{ strpos($car_image, 'https://') !== false ? $car_image : Storage::url($car_image) }}"
+                            alt="{{ $car->model }} image">
+                        <div class="flex flex-col gap-2 md:gap-3">
+                            <p class="text-base font-medium md:text-lg md:font-semibold text-dark-blue">
+                                {{ $car->model }}
+                            </p>
+                            <p class="text-xs text-gray-700 md:text-sm">
+                                {{ Str::limit($car->details->description, 30, $end = '...') }}</p>
+                            <p class="text-sm font-medium text-dark-blue">
+                                ${{ $car->action == 'FOR_RENT' ? $car->details->price * session('rent_period') : $car->details->price }}
+                            </p>
                         </div>
-                        <div class="p-2 text-sm font-medium border rounded-sm text-dark-blue">{{ $item->qty }}</div>
                     </div>
-                    <div class="h-px bg-gray-500"></div>
-                @empty
-                    <p class="text-sm font-medium text-dark-blue">No items in cart</p>
-                @endforelse
+                    <div class="p-2 text-sm font-medium border rounded-sm text-dark-blue">1</div>
+                </div>
+                <div class="h-px bg-gray-500"></div>
                 {{-- Price details --}}
-                @if (!\Gloudemans\Shoppingcart\Facades\Cart::content()->isEmpty())
-                    <div class="flex items-center justify-between">
-                        <p class="text-sm font-medium text-dark-blue">Subtotal</p>
-                        <p class="text-sm font-medium text-dark-blue">
-                            ${{ ((float) str_replace(',', '', \Gloudemans\Shoppingcart\Facades\Cart::subtotal())) * 100 }}
-                        </p>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <p class="text-sm font-medium text-dark-blue">Tax</p>
-                        <p class="text-sm font-medium text-dark-blue">
-                            %{{ \Gloudemans\Shoppingcart\Facades\Cart::tax() * 100 }}</p>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <p class="text-sm font-semibold text-dark-blue">Total</p>
-                        <p class="text-sm font-semibold text-dark-blue">
-                            ${{ ((float) str_replace(',', '', \Gloudemans\Shoppingcart\Facades\Cart::total())) * 100 }}
-                        </p>
-                    </div>
-                @endIf
+                <div class="flex items-center justify-between">
+                    <p class="text-sm font-medium text-dark-blue">Subtotal</p>
+                    <p class="text-sm font-medium text-dark-blue">
+                        ${{ $car->action == 'FOR_RENT' ? $car->details->price * session('rent_period') : $car->details->price }}
+                    </p>
+                </div>
+                <div class="flex items-center justify-between">
+                    <p class="text-sm font-medium text-dark-blue">Tax</p>
+                    <p class="text-sm font-medium text-dark-blue">
+                        %0</p>
+                </div>
+                <div class="flex items-center justify-between">
+                    <p class="text-sm font-semibold text-dark-blue">Total</p>
+                    <p class="text-sm font-semibold text-dark-blue">
+                        ${{ $car->action == 'FOR_RENT' ? $car->details->price * session('rent_period') : $car->details->price }}
+                    </p>
+                </div>
             </div>
         </div>
     </div>

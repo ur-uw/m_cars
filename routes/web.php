@@ -56,11 +56,15 @@ Route::get('/{manufacturer_name}/{model}/{type}/products', CarProducts::class)
 Route::middleware('auth')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
     Route::get('/car/create', CreateCar::class)->name('car.create');
-    Route::get('/garage', Garage::class)->name('garage.show');
+    Route::get('/garage/{page}', Garage::class)
+        ->where('page', '[1-2]+')
+        ->name('garage.show');
     Route::get('/profile', Profile::class)->name('profile.show');
     Route::get('/cart', CartView::class)->name('cart.show');
     Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout.show');
-    Route::post('/checkout', [CheckoutController::class, 'charge'])->name('checkout.charge');
+    Route::get('/checkout/car/{car}', [CheckoutController::class, 'carCheckout'])->name('checkout.car.show');
+    Route::post('/checkout', [CheckoutController::class, 'chargeProducts'])->name('checkout.charge');
+    Route::post('/checkout/{car}', [CheckoutController::class, 'chargeCar'])->name('checkout.charge_car');
     // Admin Routes
     Route::middleware('admin')->group(function () {
         Route::get('/admin-dashboard', AdminDashboard::class)
