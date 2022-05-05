@@ -122,9 +122,9 @@
                 <div class="flex justify-between item-center">
                     <h2 class="text-sm font-medium text-gray-900">Details</h2>
                     <span class="text-xs font-normal">See
-                        <a href="{{ route('car_products.show', ['manufacturer_name' => \Str::snake($car->manufacturer->name), 'type' => 'Spare Parts', 'model' => \Str::snake($car->model)]) }}"
+                        <a href="{{ route('car_products.show', ['manufacturer_name' => \Str::lower($car->manufacturer->name), 'type' => 'Spare Parts', 'model' => \Str::snake($car->model)]) }}"
                             class="transition text-primary hover:underline">Spare parts</a> |
-                        <a href="{{ route('car_products.show', ['manufacturer_name' => \Str::snake($car->manufacturer->name), 'type' => 'accessories', 'model' => \Str::snake($car->model)]) }}"
+                        <a href="{{ route('car_products.show', ['manufacturer_name' => \Str::lower($car->manufacturer->name), 'type' => 'accessories', 'model' => \Str::snake($car->model)]) }}"
                             class="transition text-primary hover:underline">
                             Accessories
                         </a>
