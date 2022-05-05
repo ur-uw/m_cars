@@ -156,7 +156,6 @@
                         <label for="fuel_type" class="text-base lg:text-lg lg:font-medium">Fuel Type</label>
                         <select name="fuel_type" wire:model.lazy='fuel_type' id="fuel_type">
                             <option value="">Select</option>
-                            {{-- TODO: add fuel types to database --}}
                             <option value="benzin">Benzin</option>
                             <option value="gas">Gas</option>
                             <option value="gasoline">Gasoline</option>
@@ -343,7 +342,7 @@
                             </svg>
                             <div class="flex flex-col items-center text-sm text-gray-600 md:flex-row">
                                 <label for="thumb_nail"
-                                    class="relative bg-white rounded-md cursor-pointer text-base lg:text-lg lg:font-medium text-primary hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary">
+                                    class="relative text-base bg-white rounded-md cursor-pointer lg:text-lg lg:font-medium text-primary hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary">
                                     <span class="text-sm">Upload image preview</span>
                                     <input id="thumb_nail" name="thumb_nail" type="file" class="sr-only"
                                         wire:model='car_thumbnail'>
@@ -380,7 +379,7 @@
                             </svg>
                             <div class="flex flex-col items-center text-sm text-gray-600 md:flex-row">
                                 <label for="car_images"
-                                    class="relative bg-white rounded-md cursor-pointer text-base lg:text-lg lg:font-medium text-primary hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary">
+                                    class="relative text-base bg-white rounded-md cursor-pointer lg:text-lg lg:font-medium text-primary hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary">
                                     <span class="text-sm">Upload images</span>
                                     <input id="car_images" name="car_images" type="file" class="sr-only"
                                         wire:model='car_images' multiple>
