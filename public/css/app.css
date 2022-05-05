@@ -1485,12 +1485,6 @@ html {
 .-bottom-7 {
   bottom: -1.75rem;
 }
-.left-0 {
-  left: 0px;
-}
-.bottom-0 {
-  bottom: 0px;
-}
 .top-2 {
   top: 0.5rem;
 }
@@ -1530,10 +1524,6 @@ html {
   margin-left: -1rem;
   margin-right: -1rem;
 }
-.my-6 {
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
-}
 .my-3 {
   margin-top: 0.75rem;
   margin-bottom: 0.75rem;
@@ -1549,6 +1539,10 @@ html {
 .my-10 {
   margin-top: 2.5rem;
   margin-bottom: 2.5rem;
+}
+.my-6 {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 .my-5 {
   margin-top: 1.25rem;
@@ -1583,9 +1577,6 @@ html {
 }
 .mt-5 {
   margin-top: 1.25rem;
-}
-.mr-3 {
-  margin-right: 0.75rem;
 }
 .mr-4 {
   margin-right: 1rem;
@@ -1658,9 +1649,6 @@ html {
 }
 .h-6 {
   height: 1.5rem;
-}
-.h-8 {
-  height: 2rem;
 }
 .h-14 {
   height: 3.5rem;
@@ -1865,11 +1853,11 @@ html {
 .gap-8 {
   gap: 2rem;
 }
-.gap-5 {
-  gap: 1.25rem;
-}
 .gap-4 {
   gap: 1rem;
+}
+.gap-5 {
+  gap: 1.25rem;
 }
 .gap-x-2 {
   -moz-column-gap: 0.5rem;
@@ -1912,9 +1900,6 @@ html {
   margin-top: calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(0.25rem * var(--tw-space-y-reverse));
 }
-.self-center {
-  align-self: center;
-}
 .overflow-hidden {
   overflow: hidden;
 }
@@ -1923,9 +1908,6 @@ html {
 }
 .overflow-y-auto {
   overflow-y: auto;
-}
-.whitespace-nowrap {
-  white-space: nowrap;
 }
 .rounded-md {
   border-radius: 0.375rem;
@@ -1982,16 +1964,16 @@ html {
   --tw-border-opacity: 1;
   border-color: rgb(82 103 223 / var(--tw-border-opacity));
 }
-.border-gray-200 {
-  --tw-border-opacity: 1;
-  border-color: rgb(229 231 235 / var(--tw-border-opacity));
-}
 .border-white {
   --tw-border-opacity: 1;
   border-color: rgb(255 255 255 / var(--tw-border-opacity));
 }
 .border-transparent {
   border-color: transparent;
+}
+.border-gray-200 {
+  --tw-border-opacity: 1;
+  border-color: rgb(229 231 235 / var(--tw-border-opacity));
 }
 .border-gray-500 {
   --tw-border-opacity: 1;
@@ -2053,15 +2035,8 @@ html {
   --tw-bg-opacity: 1;
   background-color: rgb(0 0 0 / var(--tw-bg-opacity));
 }
-.bg-neutral {
-  --tw-bg-opacity: 1;
-  background-color: hsl(var(--n) / var(--tw-bg-opacity));
-}
 .bg-cover {
   background-size: cover;
-}
-.fill-current {
-  fill: currentColor;
 }
 .stroke-current {
   stroke: currentColor;
@@ -2290,13 +2265,17 @@ html {
   --tw-text-opacity: 1;
   color: rgb(107 114 128 / var(--tw-text-opacity));
 }
+.text-neutral-content {
+  --tw-text-opacity: 1;
+  color: hsl(var(--nc) / var(--tw-text-opacity));
+}
 .text-gray-600 {
   --tw-text-opacity: 1;
   color: rgb(75 85 99 / var(--tw-text-opacity));
 }
-.text-secondary {
+.text-red-400 {
   --tw-text-opacity: 1;
-  color: rgb(250 89 89 / var(--tw-text-opacity));
+  color: rgb(248 113 113 / var(--tw-text-opacity));
 }
 .text-gray-900 {
   --tw-text-opacity: 1;
@@ -2305,6 +2284,10 @@ html {
 .text-gray-400 {
   --tw-text-opacity: 1;
   color: rgb(156 163 175 / var(--tw-text-opacity));
+}
+.text-secondary {
+  --tw-text-opacity: 1;
+  color: rgb(250 89 89 / var(--tw-text-opacity));
 }
 .text-indigo-600 {
   --tw-text-opacity: 1;
@@ -2317,14 +2300,6 @@ html {
 .text-black {
   --tw-text-opacity: 1;
   color: rgb(0 0 0 / var(--tw-text-opacity));
-}
-.text-neutral-content {
-  --tw-text-opacity: 1;
-  color: hsl(var(--nc) / var(--tw-text-opacity));
-}
-.text-red-400 {
-  --tw-text-opacity: 1;
-  color: rgb(248 113 113 / var(--tw-text-opacity));
 }
 .underline {
   -webkit-text-decoration-line: underline;
@@ -2634,10 +2609,6 @@ textarea {
   .sm\:col-span-6 {
     grid-column: span 6 / span 6;
   }
-  .sm\:mx-auto {
-    margin-left: auto;
-    margin-right: auto;
-  }
   .sm\:mb-0 {
     margin-bottom: 0px;
   }
@@ -2687,9 +2658,6 @@ textarea {
   .sm\:px-0 {
     padding-left: 0px;
     padding-right: 0px;
-  }
-  .sm\:text-center {
-    text-align: center;
   }
   .sm\:text-sm {
     font-size: 0.875rem;
@@ -2764,14 +2732,6 @@ textarea {
   .md\:rounded-full {
     border-radius: 9999px;
   }
-  .md\:px-6 {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
-  .md\:py-8 {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-  }
   .md\:text-xl {
     font-size: 1.25rem;
     line-height: 1.75rem;
@@ -2819,10 +2779,6 @@ textarea {
   }
   .lg\:m-0 {
     margin: 0px;
-  }
-  .lg\:my-8 {
-    margin-top: 2rem;
-    margin-bottom: 2rem;
   }
   .lg\:ml-20 {
     margin-left: 5rem;

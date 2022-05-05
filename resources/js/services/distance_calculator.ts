@@ -25,3 +25,5 @@ export const haversine_distance = (
     }
     return 0;
 };
+
+// Euclidean distance

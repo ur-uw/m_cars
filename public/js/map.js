@@ -2192,7 +2192,7 @@ var haversine_distance = function haversine_distance(mk1, pos2) {
   }
 
   return 0;
-};
+}; // Euclidean distance
 
 /***/ }),
 

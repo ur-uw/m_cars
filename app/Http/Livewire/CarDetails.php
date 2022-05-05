@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\Car;
 use Auth;
 use Livewire\Component;
+use Session;
 
 class CarDetails extends Component
 {
@@ -27,8 +28,8 @@ class CarDetails extends Component
     public function addToGarage()
     {
         if (Auth::check()) {
-            $user = Auth::user();
-            $user->cars()->save($this->car);
+            session(['car_image' => $this->selected_car_image]);
+            redirect()->route('checkout.car.show', ['car' => $this->car]);
             $this->showAddToGarage = false;
         } else {
             redirect()->route('auth.login');

@@ -60,7 +60,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', Profile::class)->name('profile.show');
     Route::get('/cart', CartView::class)->name('cart.show');
     Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout.show');
-    Route::post('/checkout', [CheckoutController::class, 'charge'])->name('checkout.charge');
+    Route::get('/checkout/car/{car}', [CheckoutController::class, 'carCheckout'])->name('checkout.car.show');
+    Route::post('/checkout', [CheckoutController::class, 'chargeProducts'])->name('checkout.charge');
+    Route::post('/checkout/{car}', [CheckoutController::class, 'chargeCar'])->name('checkout.charge_car');
     // Admin Routes
     Route::middleware('admin')->group(function () {
         Route::get('/admin-dashboard', AdminDashboard::class)
