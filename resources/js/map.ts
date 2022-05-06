@@ -7,6 +7,19 @@ import { LocationService } from "./services/location_service";
 window.initMap = async () => {
     // The location of Baghdad
     const baghdad = { lat: 33.312805, lng: 44.361488 };
+    // Create directions renderer to show routes
+    const directionsRenderer: google.maps.DirectionsRenderer =
+        new google.maps.DirectionsRenderer({
+            markerOptions: {
+                visible: false,
+            },
+            suppressMarkers: true,
+            polylineOptions: {
+                strokeColor: "#5267DF",
+            },
+            preserveViewport: false,
+            suppressInfoWindows: true,
+        });
     // The map, centered at baghdad
     const map: google.maps.Map = new google.maps.Map(
         document.getElementById("map") as HTMLElement,
@@ -19,6 +32,7 @@ window.initMap = async () => {
             mapId: "6e21f68e87eba133",
         }
     );
+    directionsRenderer.setMap(map);
 
     // Get service places from the server
     const servicePlaces = await getServicePlaces();
@@ -69,7 +83,8 @@ window.initMap = async () => {
                         getNearestServicePlace(
                             marker,
                             servicePlaces,
-                            "Car Service"
+                            "Car Service",
+                            directionsRenderer
                         );
                     if (nearestServicePlace != null) {
                         const cameraOptions: google.maps.CameraOptions = {
@@ -131,7 +146,8 @@ window.initMap = async () => {
                         getNearestServicePlace(
                             marker,
                             servicePlaces,
-                            "Car Care"
+                            "Car Care",
+                            directionsRenderer
                         );
                     if (nearestCarePlace != null) {
                         const cameraOptions: google.maps.CameraOptions = {
@@ -254,7 +270,8 @@ async function moveToUserLocation(
 function getNearestServicePlace(
     marker: google.maps.Marker,
     servicePlaces: ServicePlace[],
-    type: string
+    type: string,
+    directionsRenderer: google.maps.DirectionsRenderer
 ): ServicePlace | null {
     // get nearest service place
     if (servicePlaces.length > 0) {
@@ -274,6 +291,18 @@ function getNearestServicePlace(
                 return distance1 < distance2 ? p1 : p2;
             });
         // Return nearest service place
+        // Get route
+        LocationService.getRoute(
+            {
+                lat: marker.getPosition()!.lat(),
+                lng: marker.getPosition()!.lng(),
+            },
+            {
+                lat: nearestServicePlace.latitude,
+                lng: nearestServicePlace.longitude,
+            },
+            directionsRenderer
+        );
         return nearestServicePlace;
     }
     return null;

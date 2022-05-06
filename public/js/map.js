@@ -2218,6 +2218,31 @@ function () {
     });
   };
 
+  LocationService.getRoute = function (origin, destination, directionsRenderer) {
+    return new Promise(function (resolve, reject) {
+      var directionsService = new google.maps.DirectionsService();
+      var directionsRequest = {
+        origin: {
+          lat: origin.lat,
+          lng: origin.lng
+        },
+        destination: {
+          lat: destination.lat,
+          lng: destination.lng
+        },
+        travelMode: google.maps.TravelMode.WALKING
+      };
+      directionsService.route(directionsRequest, function (result, status) {
+        if (status === google.maps.DirectionsStatus.OK) {
+          directionsRenderer.setDirections(result);
+          resolve(result);
+        } else {
+          reject(result);
+        }
+      });
+    });
+  };
+
   return LocationService;
 }();
 
@@ -2648,7 +2673,7 @@ var __generator = undefined && undefined.__generator || function (thisArg, body)
 
 window.initMap = function () {
   return __awaiter(void 0, void 0, void 0, function () {
-    var baghdad, map, servicePlaces, userLocationButton, servicePlacesMarkers;
+    var baghdad, directionsRenderer, map, servicePlaces, userLocationButton, servicePlacesMarkers;
     return __generator(this, function (_a) {
       switch (_a.label) {
         case 0:
@@ -2656,6 +2681,17 @@ window.initMap = function () {
             lat: 33.312805,
             lng: 44.361488
           };
+          directionsRenderer = new google.maps.DirectionsRenderer({
+            markerOptions: {
+              visible: false
+            },
+            suppressMarkers: true,
+            polylineOptions: {
+              strokeColor: "#5267DF"
+            },
+            preserveViewport: false,
+            suppressInfoWindows: true
+          });
           map = new google.maps.Map(document.getElementById("map"), {
             zoom: 12,
             center: baghdad,
@@ -2664,6 +2700,7 @@ window.initMap = function () {
             streetViewControl: false,
             mapId: "6e21f68e87eba133"
           });
+          directionsRenderer.setMap(map);
           return [4
           /*yield*/
           , getServicePlaces()];
@@ -2699,7 +2736,7 @@ window.initMap = function () {
             map.controls[google.maps.ControlPosition.TOP_RIGHT].push(nearestServicePlaceButton);
             nearestServicePlaceButton.addEventListener("click", function () {
               if (servicePlaces != null && marker != null) {
-                var nearestServicePlace_1 = getNearestServicePlace(marker, servicePlaces, "Car Service");
+                var nearestServicePlace_1 = getNearestServicePlace(marker, servicePlaces, "Car Service", directionsRenderer);
 
                 if (nearestServicePlace_1 != null) {
                   var cameraOptions = {
@@ -2740,7 +2777,7 @@ window.initMap = function () {
             map.controls[google.maps.ControlPosition.TOP_RIGHT].push(nearestCarePlaceButton);
             nearestCarePlaceButton.addEventListener("click", function () {
               if (servicePlaces != null && marker != null) {
-                var nearestCarePlace_1 = getNearestServicePlace(marker, servicePlaces, "Car Care");
+                var nearestCarePlace_1 = getNearestServicePlace(marker, servicePlaces, "Car Care", directionsRenderer);
 
                 if (nearestCarePlace_1 != null) {
                   var cameraOptions = {
@@ -2874,7 +2911,7 @@ function moveToUserLocation(map) {
 } // Get nearest service place
 
 
-function getNearestServicePlace(marker, servicePlaces, type) {
+function getNearestServicePlace(marker, servicePlaces, type, directionsRenderer) {
   // get nearest service place
   if (servicePlaces.length > 0) {
     var nearestServicePlace = servicePlaces.filter(function (place) {
@@ -2890,7 +2927,15 @@ function getNearestServicePlace(marker, servicePlaces, type) {
       });
       return distance1 < distance2 ? p1 : p2;
     }); // Return nearest service place
+    // Get route
 
+    _services_location_service__WEBPACK_IMPORTED_MODULE_2__.LocationService.getRoute({
+      lat: marker.getPosition().lat(),
+      lng: marker.getPosition().lng()
+    }, {
+      lat: nearestServicePlace.latitude,
+      lng: nearestServicePlace.longitude
+    }, directionsRenderer);
     return nearestServicePlace;
   }
 
