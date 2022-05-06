@@ -2438,6 +2438,8 @@ function () {
 
   LocationService.getRoute = function (origin, destination, directionsRenderer) {
     return new Promise(function (resolve, reject) {
+      var selectedMode = document.getElementById("mode").value;
+      console.log(selectedMode);
       var directionsService = new google.maps.DirectionsService();
       var directionsRequest = {
         origin: {
@@ -2448,7 +2450,7 @@ function () {
           lat: destination.lat,
           lng: destination.lng
         },
-        travelMode: google.maps.TravelMode.WALKING
+        travelMode: google.maps.TravelMode[selectedMode]
       };
       directionsService.route(directionsRequest, function (result, status) {
         if (status === google.maps.DirectionsStatus.OK) {
@@ -2753,67 +2755,80 @@ function () {
 
 
   PlacesService.prototype.moveToNearestPlace = function (map, currentLocationMarker, placeType, directionsRenderer) {
-    var _a;
-
     return __awaiter(this, void 0, void 0, function () {
-      var requestPos, userCurrentPos, nearestServicePlace, cameraOptions, nearestPlaceMarkers;
-      return __generator(this, function (_b) {
-        switch (_b.label) {
-          case 0:
-            return [4
-            /*yield*/
-            , _location_service__WEBPACK_IMPORTED_MODULE_2__.LocationService.getPosition({
-              enableHighAccuracy: true,
-              maximumAge: 0,
-              timeout: Infinity
-            })];
+      var _this = this;
 
-          case 1:
-            requestPos = _b.sent();
+      return __generator(this, function (_a) {
+        return [2
+        /*return*/
+        , new Promise(function (resolve, reject) {
+          return __awaiter(_this, void 0, void 0, function () {
+            var requestPos, userCurrentPos, nearestServicePlace, cameraOptions, nearestPlaceMarkers;
 
-            if (requestPos.coords == null) {
-              return [2
-              /*return*/
-              ];
-            }
+            var _a;
 
-            userCurrentPos = {
-              lat: requestPos.coords.latitude,
-              lng: requestPos.coords.longitude
-            };
-            currentLocationMarker.setPosition(userCurrentPos);
-            nearestServicePlace = this.getNearestServicePlace(userCurrentPos, placeType, directionsRenderer);
+            return __generator(this, function (_b) {
+              switch (_b.label) {
+                case 0:
+                  return [4
+                  /*yield*/
+                  , _location_service__WEBPACK_IMPORTED_MODULE_2__.LocationService.getPosition({
+                    enableHighAccuracy: true,
+                    maximumAge: 0,
+                    timeout: Infinity
+                  })];
 
-            if (nearestServicePlace != null) {
-              cameraOptions = {
-                center: {
-                  lat: nearestServicePlace.latitude,
-                  lng: nearestServicePlace.longitude
-                },
-                zoom: 18
-              };
-              nearestPlaceMarkers = (_a = this.servicePlacesMarkers) === null || _a === void 0 ? void 0 : _a.filter(function (marker) {
-                return JSON.stringify(marker.getPosition()) === JSON.stringify({
-                  lat: nearestServicePlace.latitude,
-                  lng: nearestServicePlace.longitude
-                });
-              });
+                case 1:
+                  requestPos = _b.sent();
 
-              if (nearestPlaceMarkers != null && (nearestPlaceMarkers === null || nearestPlaceMarkers === void 0 ? void 0 : nearestPlaceMarkers.length) > 0) {
-                // Open nearest place info window
-                nearestPlaceMarkers[0].setAnimation(google.maps.Animation.DROP);
-                new google.maps.event.trigger(nearestPlaceMarkers[0], "click");
+                  if (requestPos.coords == null) {
+                    return [2
+                    /*return*/
+                    , null];
+                  }
+
+                  userCurrentPos = {
+                    lat: requestPos.coords.latitude,
+                    lng: requestPos.coords.longitude
+                  };
+                  currentLocationMarker.setPosition(userCurrentPos);
+                  nearestServicePlace = this.getNearestServicePlace(userCurrentPos, placeType, directionsRenderer);
+
+                  if (nearestServicePlace != null) {
+                    cameraOptions = {
+                      center: {
+                        lat: nearestServicePlace.latitude,
+                        lng: nearestServicePlace.longitude
+                      },
+                      zoom: 18
+                    };
+                    nearestPlaceMarkers = (_a = this.servicePlacesMarkers) === null || _a === void 0 ? void 0 : _a.filter(function (marker) {
+                      return JSON.stringify(marker.getPosition()) === JSON.stringify({
+                        lat: nearestServicePlace.latitude,
+                        lng: nearestServicePlace.longitude
+                      });
+                    });
+
+                    if (nearestPlaceMarkers != null && (nearestPlaceMarkers === null || nearestPlaceMarkers === void 0 ? void 0 : nearestPlaceMarkers.length) > 0) {
+                      // Open nearest place info window
+                      nearestPlaceMarkers[0].setAnimation(google.maps.Animation.DROP);
+                      new google.maps.event.trigger(nearestPlaceMarkers[0], "click");
+                    }
+
+                    map.setCenter(cameraOptions.center);
+                    map.setTilt(45);
+                    map.setZoom(cameraOptions.zoom);
+                    resolve(nearestServicePlace);
+                  }
+
+                  reject(null);
+                  return [2
+                  /*return*/
+                  ];
               }
-
-              map.setCenter(cameraOptions.center);
-              map.setTilt(45);
-              map.setZoom(cameraOptions.zoom);
-            }
-
-            return [2
-            /*return*/
-            ];
-        }
+            });
+          });
+        })];
       });
     });
   };
@@ -3245,7 +3260,7 @@ var __generator = undefined && undefined.__generator || function (thisArg, body)
 
 window.initMap = function () {
   return __awaiter(void 0, void 0, void 0, function () {
-    var baghdad, directionsRenderer, map, currentLocationMarker, placesService, servicePlaces;
+    var baghdad, directionsRenderer, map, currentLocationMarker, routedPlace, placesService, servicePlaces;
     return __generator(this, function (_a) {
       switch (_a.label) {
         case 0:
@@ -3273,10 +3288,19 @@ window.initMap = function () {
             gestureHandling: screen.height >= 1024 ? "cooperative" : "greedy",
             mapId: "6e21f68e87eba133"
           });
-          directionsRenderer.setMap(map);
           currentLocationMarker = new google.maps.Marker({
             map: map,
             icon: "./assets/svg/current_pos.svg"
+          });
+          directionsRenderer.setMap(map);
+          routedPlace = null;
+          document.getElementById("mode").addEventListener("change", function () {
+            if (routedPlace && currentLocationMarker.getPosition()) {
+              _services_location_service__WEBPACK_IMPORTED_MODULE_0__.LocationService.getRoute({
+                lat: currentLocationMarker.getPosition().lat(),
+                lng: currentLocationMarker.getPosition().lng()
+              }, routedPlace, directionsRenderer);
+            }
           });
           placesService = new _services_places_service__WEBPACK_IMPORTED_MODULE_1__.PlacesService();
           return [4
@@ -3304,14 +3328,34 @@ window.initMap = function () {
               iconElement: "<i class=\"fa-solid fa-screwdriver-wrench text-lg\"></i>"
             }, function () {
               return __awaiter(void 0, void 0, void 0, function () {
+                var nearestPlace;
                 return __generator(this, function (_a) {
-                  if (servicePlaces != null && locationExists != null) {
-                    placesService.moveToNearestPlace(map, currentLocationMarker, "Car Service", directionsRenderer);
-                  }
+                  switch (_a.label) {
+                    case 0:
+                      if (!(servicePlaces != null && locationExists != null)) return [3
+                      /*break*/
+                      , 2];
+                      return [4
+                      /*yield*/
+                      , placesService.moveToNearestPlace(map, currentLocationMarker, "Car Service", directionsRenderer)];
 
-                  return [2
-                  /*return*/
-                  ];
+                    case 1:
+                      nearestPlace = _a.sent();
+
+                      if (nearestPlace) {
+                        routedPlace = {
+                          lat: nearestPlace.latitude,
+                          lng: nearestPlace.longitude
+                        };
+                      }
+
+                      _a.label = 2;
+
+                    case 2:
+                      return [2
+                      /*return*/
+                      ];
+                  }
                 });
               });
             }));
@@ -3320,14 +3364,34 @@ window.initMap = function () {
               iconElement: "<i class=\"fa-solid fa-spray-can-sparkles text-lg\"></i>"
             }, function () {
               return __awaiter(void 0, void 0, void 0, function () {
+                var nearestPlace;
                 return __generator(this, function (_a) {
-                  if (servicePlaces != null && locationExists != null) {
-                    placesService.moveToNearestPlace(map, currentLocationMarker, "Car Care", directionsRenderer);
-                  }
+                  switch (_a.label) {
+                    case 0:
+                      if (!(servicePlaces != null && locationExists != null)) return [3
+                      /*break*/
+                      , 2];
+                      return [4
+                      /*yield*/
+                      , placesService.moveToNearestPlace(map, currentLocationMarker, "Car Care", directionsRenderer)];
 
-                  return [2
-                  /*return*/
-                  ];
+                    case 1:
+                      nearestPlace = _a.sent();
+
+                      if (nearestPlace) {
+                        routedPlace = {
+                          lat: nearestPlace.latitude,
+                          lng: nearestPlace.longitude
+                        };
+                      }
+
+                      _a.label = 2;
+
+                    case 2:
+                      return [2
+                      /*return*/
+                      ];
+                  }
                 });
               });
             }));

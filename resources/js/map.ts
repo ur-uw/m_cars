@@ -31,12 +31,30 @@ window.initMap = async () => {
             mapId: "6e21f68e87eba133",
         }
     );
-    directionsRenderer.setMap(map);
     // Current location marker
     const currentLocationMarker = new google.maps.Marker({
         map: map,
         icon: "./assets/svg/current_pos.svg",
     });
+
+    directionsRenderer.setMap(map);
+    // Routed place to be used when travel mode changes
+    let routedPlace: { lat: number; lng: number } | null = null;
+    (document.getElementById("mode") as HTMLInputElement).addEventListener(
+        "change",
+        () => {
+            if (routedPlace && currentLocationMarker.getPosition()) {
+                LocationService.getRoute(
+                    {
+                        lat: currentLocationMarker.getPosition()!.lat(),
+                        lng: currentLocationMarker.getPosition()!.lng(),
+                    },
+                    routedPlace,
+                    directionsRenderer
+                );
+            }
+        }
+    );
 
     // Get service places from the server
     const placesService = new PlacesService();
@@ -70,12 +88,19 @@ window.initMap = async () => {
                     },
                     async () => {
                         if (servicePlaces != null && locationExists != null) {
-                            placesService.moveToNearestPlace(
-                                map,
-                                currentLocationMarker,
-                                "Car Service",
-                                directionsRenderer
-                            );
+                            const nearestPlace =
+                                await placesService.moveToNearestPlace(
+                                    map,
+                                    currentLocationMarker,
+                                    "Car Service",
+                                    directionsRenderer
+                                );
+                            if (nearestPlace) {
+                                routedPlace = {
+                                    lat: nearestPlace.latitude,
+                                    lng: nearestPlace.longitude,
+                                };
+                            }
                         }
                     }
                 )
@@ -88,12 +113,20 @@ window.initMap = async () => {
                     },
                     async () => {
                         if (servicePlaces != null && locationExists != null) {
-                            placesService.moveToNearestPlace(
-                                map,
-                                currentLocationMarker,
-                                "Car Care",
-                                directionsRenderer
-                            );
+                            const nearestPlace =
+                                await placesService.moveToNearestPlace(
+                                    map,
+                                    currentLocationMarker,
+                                    "Car Care",
+                                    directionsRenderer
+                                );
+
+                            if (nearestPlace) {
+                                routedPlace = {
+                                    lat: nearestPlace.latitude,
+                                    lng: nearestPlace.longitude,
+                                };
+                            }
                         }
                     }
                 )

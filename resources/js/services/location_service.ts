@@ -56,6 +56,11 @@ export class LocationService {
     ): Promise<google.maps.DirectionsResult | null> => {
         return new Promise<google.maps.DirectionsResult | null>(
             (resolve, reject) => {
+                const selectedMode = (
+                    document.getElementById("mode") as HTMLInputElement
+                ).value;
+                console.log(selectedMode);
+
                 const directionsService = new google.maps.DirectionsService();
                 const directionsRequest: google.maps.DirectionsRequest = {
                     origin: {
@@ -66,7 +71,7 @@ export class LocationService {
                         lat: destination.lat,
                         lng: destination.lng,
                     },
-                    travelMode: google.maps.TravelMode.WALKING,
+                    travelMode: google.maps.TravelMode[selectedMode],
                 };
                 directionsService.route(directionsRequest, (result, status) => {
                     if (status === google.maps.DirectionsStatus.OK) {
