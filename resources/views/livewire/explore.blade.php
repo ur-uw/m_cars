@@ -35,15 +35,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="flex items-center w-full gap-3 lg:items-start lg:flex-col lg:justify-center lg:gap-0">
-                    <label for="rating" class="flex-1">Rating</label>
-                    <select id="rating" class="flex-1" class="text-sm">
-                        <option value="">All</option>
-                        @for ($i = 1; $i <= 5; $i++)
-                            <option value="{{ $i }}">{{ $i }} Star</option>
-                        @endfor
-                    </select>
-                </div>
+
             </div>
         </div>
     </section>
