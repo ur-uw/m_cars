@@ -2175,23 +2175,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "haversine_distance": () => (/* binding */ haversine_distance)
 /* harmony export */ });
-var haversine_distance = function haversine_distance(mk1, pos2) {
-  if (mk1.getPosition() !== undefined) {
-    var R = 3958.8; // Radius of the Earth in miles
+var haversine_distance = function haversine_distance(pos1, pos2) {
+  var R = 3958.8; // Radius of the Earth in miles
 
-    var rlat1 = mk1.getPosition().lat() * (Math.PI / 180); // Convert degrees to radians
+  var rlat1 = pos1.lat * (Math.PI / 180); // Convert degrees to radians
 
-    var rlat2 = pos2.lat * (Math.PI / 180); // Convert degrees to radians
+  var rlat2 = pos2.lat * (Math.PI / 180); // Convert degrees to radians
 
-    var difflat = rlat2 - rlat1; // Radian difference (latitudes)
+  var difflat = rlat2 - rlat1; // Radian difference (latitudes)
 
-    var difflon = (pos2.lng - mk1.getPosition().lng()) * (Math.PI / 180); // Radian difference (longitudes)
+  var difflon = (pos2.lng - pos1.lng) * (Math.PI / 180); // Radian difference (longitudes)
 
-    var d = 2 * R * Math.asin(Math.sqrt(Math.sin(difflat / 2) * Math.sin(difflat / 2) + Math.cos(rlat1) * Math.cos(rlat2) * Math.sin(difflon / 2) * Math.sin(difflon / 2)));
-    return d;
-  }
-
-  return 0;
+  var d = 2 * R * Math.asin(Math.sqrt(Math.sin(difflat / 2) * Math.sin(difflat / 2) + Math.cos(rlat1) * Math.cos(rlat2) * Math.sin(difflon / 2) * Math.sin(difflon / 2)));
+  return d;
 }; // Euclidean distance
 
 /***/ }),
@@ -2673,7 +2669,7 @@ var __generator = undefined && undefined.__generator || function (thisArg, body)
 
 window.initMap = function () {
   return __awaiter(void 0, void 0, void 0, function () {
-    var baghdad, directionsRenderer, map, servicePlaces, userLocationButton, servicePlacesMarkers;
+    var baghdad, directionsRenderer, map, currentLocationMarker, servicePlaces, userLocationButton, servicePlacesMarkers;
     return __generator(this, function (_a) {
       switch (_a.label) {
         case 0:
@@ -2689,7 +2685,7 @@ window.initMap = function () {
             polylineOptions: {
               strokeColor: "#5267DF"
             },
-            preserveViewport: false,
+            preserveViewport: true,
             suppressInfoWindows: true
           });
           map = new google.maps.Map(document.getElementById("map"), {
@@ -2698,9 +2694,14 @@ window.initMap = function () {
             fullscreenControl: false,
             mapTypeControl: false,
             streetViewControl: false,
+            gestureHandling: screen.height >= 1024 ? "cooperative" : "greedy",
             mapId: "6e21f68e87eba133"
           });
           directionsRenderer.setMap(map);
+          currentLocationMarker = new google.maps.Marker({
+            map: map,
+            icon: "./assets/svg/current_pos.svg"
+          });
           return [4
           /*yield*/
           , getServicePlaces()];
@@ -2715,7 +2716,7 @@ window.initMap = function () {
           userLocationButton.style.margin = "0.5rem";
           userLocationButton.innerHTML = "<i class=\"fas fa-map-marker-alt text-lg\"></i>";
           userLocationButton.addEventListener("click", function () {
-            moveToUserLocation(map);
+            moveToUserLocation(map, currentLocationMarker);
           });
           map.controls[google.maps.ControlPosition.TOP_RIGHT].push(userLocationButton); // Show service places on the map
 
@@ -2724,7 +2725,7 @@ window.initMap = function () {
           } // Get User location
 
 
-          moveToUserLocation(map).then(function (marker) {
+          moveToUserLocation(map, currentLocationMarker).then(function (locationExists) {
             // Create button to get nearest service place
             var nearestServicePlaceButton = document.createElement("button");
             nearestServicePlaceButton.setAttribute("title", "Locate nearest service place");
@@ -2735,36 +2736,17 @@ window.initMap = function () {
             nearestServicePlaceButton.innerHTML = "<i class=\"fa-solid fa-screwdriver-wrench text-lg\"></i>";
             map.controls[google.maps.ControlPosition.TOP_RIGHT].push(nearestServicePlaceButton);
             nearestServicePlaceButton.addEventListener("click", function () {
-              if (servicePlaces != null && marker != null) {
-                var nearestServicePlace_1 = getNearestServicePlace(marker, servicePlaces, "Car Service", directionsRenderer);
-
-                if (nearestServicePlace_1 != null) {
-                  var cameraOptions = {
-                    center: {
-                      lat: nearestServicePlace_1.latitude,
-                      lng: nearestServicePlace_1.longitude
-                    },
-                    zoom: 18
-                  }; // Get nearest places markers
-
-                  var nearestPlaceMarkers = servicePlacesMarkers === null || servicePlacesMarkers === void 0 ? void 0 : servicePlacesMarkers.filter(function (marker) {
-                    return JSON.stringify(marker.getPosition()) === JSON.stringify({
-                      lat: nearestServicePlace_1.latitude,
-                      lng: nearestServicePlace_1.longitude
-                    });
-                  });
-
-                  if (nearestPlaceMarkers != null && (nearestPlaceMarkers === null || nearestPlaceMarkers === void 0 ? void 0 : nearestPlaceMarkers.length) > 0) {
-                    // Open nearest place info window
-                    nearestPlaceMarkers[0].setAnimation(google.maps.Animation.DROP);
-                    new google.maps.event.trigger(nearestPlaceMarkers[0], "click");
+              return __awaiter(void 0, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                  if (servicePlaces != null && locationExists != null) {
+                    moveToNearestPlace(map, currentLocationMarker, "Car Service", servicePlaces, servicePlacesMarkers, directionsRenderer);
                   }
 
-                  map.setCenter(cameraOptions.center);
-                  map.setTilt(45);
-                  map.setZoom(cameraOptions.zoom);
-                }
-              }
+                  return [2
+                  /*return*/
+                  ];
+                });
+              });
             }); // Create button to get nearest care place
 
             var nearestCarePlaceButton = document.createElement("button");
@@ -2776,36 +2758,17 @@ window.initMap = function () {
             nearestCarePlaceButton.innerHTML = "<i class=\"fa-solid fa-spray-can-sparkles text-lg\"></i>";
             map.controls[google.maps.ControlPosition.TOP_RIGHT].push(nearestCarePlaceButton);
             nearestCarePlaceButton.addEventListener("click", function () {
-              if (servicePlaces != null && marker != null) {
-                var nearestCarePlace_1 = getNearestServicePlace(marker, servicePlaces, "Car Care", directionsRenderer);
-
-                if (nearestCarePlace_1 != null) {
-                  var cameraOptions = {
-                    center: {
-                      lat: nearestCarePlace_1.latitude,
-                      lng: nearestCarePlace_1.longitude
-                    },
-                    zoom: 18
-                  }; // Get nearest places markers
-
-                  var nearestPlaceMarkers = servicePlacesMarkers === null || servicePlacesMarkers === void 0 ? void 0 : servicePlacesMarkers.filter(function (marker) {
-                    return JSON.stringify(marker.getPosition()) === JSON.stringify({
-                      lat: nearestCarePlace_1.latitude,
-                      lng: nearestCarePlace_1.longitude
-                    });
-                  });
-
-                  if (nearestPlaceMarkers != null && (nearestPlaceMarkers === null || nearestPlaceMarkers === void 0 ? void 0 : nearestPlaceMarkers.length) > 0) {
-                    // Open nearest place info window
-                    nearestPlaceMarkers[0].setAnimation(google.maps.Animation.DROP);
-                    new google.maps.event.trigger(nearestPlaceMarkers[0], "click");
+              return __awaiter(void 0, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                  if (servicePlaces != null && locationExists != null) {
+                    moveToNearestPlace(map, currentLocationMarker, "Car Care", servicePlaces, servicePlacesMarkers, directionsRenderer);
                   }
 
-                  map.setCenter(cameraOptions.center);
-                  map.setTilt(45);
-                  map.setZoom(cameraOptions.zoom);
-                }
-              }
+                  return [2
+                  /*return*/
+                  ];
+                });
+              });
             });
           })["catch"](function (e) {
             return console.error(e);
@@ -2862,19 +2825,100 @@ function showServicePlaces(map, servicePlaces) {
     markers.push(marker);
   });
   return markers;
-} // TODO: REMOVE OLD MARKER
+}
 
-
-function moveToUserLocation(map) {
+function moveToUserLocation(map, marker) {
   return __awaiter(this, void 0, void 0, function () {
-    var geolocation, position, pos, newMarker;
+    var geolocation;
+
+    var _this = this;
+
+    return __generator(this, function (_a) {
+      geolocation = navigator.geolocation;
+      return [2
+      /*return*/
+      , new Promise(function (resolve, reject) {
+        return __awaiter(_this, void 0, void 0, function () {
+          var position, pos;
+          return __generator(this, function (_a) {
+            switch (_a.label) {
+              case 0:
+                if (!geolocation) return [3
+                /*break*/
+                , 2];
+                return [4
+                /*yield*/
+                , _services_location_service__WEBPACK_IMPORTED_MODULE_2__.LocationService.getPosition({
+                  enableHighAccuracy: true,
+                  maximumAge: 0,
+                  timeout: Infinity
+                })];
+
+              case 1:
+                position = _a.sent();
+                pos = {
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude
+                }; // The marker, positioned at user location
+
+                marker.setPosition(pos); // Center map on user location
+
+                map.setZoom(16);
+                map.panTo(pos);
+                resolve(true);
+                _a.label = 2;
+
+              case 2:
+                reject(false);
+                return [2
+                /*return*/
+                ];
+            }
+          });
+        });
+      })];
+    });
+  });
+} // Get nearest service place
+
+
+function getNearestServicePlace(currentPos, servicePlaces, type, directionsRenderer) {
+  // get nearest service place
+  if (servicePlaces.length > 0) {
+    var nearestServicePlace = servicePlaces.filter(function (place) {
+      return place.service_place_type.name === type;
+    }).reduce(function (p1, p2) {
+      var distance1 = (0,_services_distance_calculator__WEBPACK_IMPORTED_MODULE_1__.haversine_distance)(currentPos, {
+        lat: p1.latitude,
+        lng: p1.longitude
+      });
+      var distance2 = (0,_services_distance_calculator__WEBPACK_IMPORTED_MODULE_1__.haversine_distance)(currentPos, {
+        lat: p2.latitude,
+        lng: p2.longitude
+      });
+      return distance1 < distance2 ? p1 : p2;
+    }); // Return nearest service place
+    // Get route
+
+    _services_location_service__WEBPACK_IMPORTED_MODULE_2__.LocationService.getRoute({
+      lat: currentPos.lat,
+      lng: currentPos.lng
+    }, {
+      lat: nearestServicePlace.latitude,
+      lng: nearestServicePlace.longitude
+    }, directionsRenderer);
+    return nearestServicePlace;
+  }
+
+  return null;
+}
+
+function moveToNearestPlace(map, currentLocationMarker, placeType, servicePlaces, servicePlacesMarkers, directionsRenderer) {
+  return __awaiter(this, void 0, void 0, function () {
+    var requestPos, userCurrentPos, nearestServicePlace, cameraOptions, nearestPlaceMarkers;
     return __generator(this, function (_a) {
       switch (_a.label) {
         case 0:
-          geolocation = navigator.geolocation;
-          if (!geolocation) return [3
-          /*break*/
-          , 2];
           return [4
           /*yield*/
           , _services_location_service__WEBPACK_IMPORTED_MODULE_2__.LocationService.getPosition({
@@ -2884,62 +2928,53 @@ function moveToUserLocation(map) {
           })];
 
         case 1:
-          position = _a.sent();
-          pos = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
+          requestPos = _a.sent();
+
+          if (requestPos.coords == null) {
+            return [2
+            /*return*/
+            ];
+          }
+
+          userCurrentPos = {
+            lat: requestPos.coords.latitude,
+            lng: requestPos.coords.longitude
           };
-          newMarker = new google.maps.Marker({
-            position: pos,
-            map: map,
-            icon: "./assets/svg/current_pos.svg"
-          }); // Center map on user location
+          currentLocationMarker.setPosition(userCurrentPos);
+          nearestServicePlace = getNearestServicePlace(userCurrentPos, servicePlaces, placeType, directionsRenderer);
 
-          map.setZoom(16);
-          map.panTo(pos);
+          if (nearestServicePlace != null) {
+            cameraOptions = {
+              center: {
+                lat: nearestServicePlace.latitude,
+                lng: nearestServicePlace.longitude
+              },
+              zoom: 18
+            };
+            nearestPlaceMarkers = servicePlacesMarkers === null || servicePlacesMarkers === void 0 ? void 0 : servicePlacesMarkers.filter(function (marker) {
+              return JSON.stringify(marker.getPosition()) === JSON.stringify({
+                lat: nearestServicePlace.latitude,
+                lng: nearestServicePlace.longitude
+              });
+            });
+
+            if (nearestPlaceMarkers != null && (nearestPlaceMarkers === null || nearestPlaceMarkers === void 0 ? void 0 : nearestPlaceMarkers.length) > 0) {
+              // Open nearest place info window
+              nearestPlaceMarkers[0].setAnimation(google.maps.Animation.DROP);
+              new google.maps.event.trigger(nearestPlaceMarkers[0], "click");
+            }
+
+            map.setCenter(cameraOptions.center);
+            map.setTilt(45);
+            map.setZoom(cameraOptions.zoom);
+          }
+
           return [2
           /*return*/
-          , newMarker];
-
-        case 2:
-          return [2
-          /*return*/
-          , null];
+          ];
       }
     });
   });
-} // Get nearest service place
-
-
-function getNearestServicePlace(marker, servicePlaces, type, directionsRenderer) {
-  // get nearest service place
-  if (servicePlaces.length > 0) {
-    var nearestServicePlace = servicePlaces.filter(function (place) {
-      return place.service_place_type.name === type;
-    }).reduce(function (p1, p2) {
-      var distance1 = (0,_services_distance_calculator__WEBPACK_IMPORTED_MODULE_1__.haversine_distance)(marker, {
-        lat: p1.latitude,
-        lng: p1.longitude
-      });
-      var distance2 = (0,_services_distance_calculator__WEBPACK_IMPORTED_MODULE_1__.haversine_distance)(marker, {
-        lat: p2.latitude,
-        lng: p2.longitude
-      });
-      return distance1 < distance2 ? p1 : p2;
-    }); // Return nearest service place
-    // Get route
-
-    _services_location_service__WEBPACK_IMPORTED_MODULE_2__.LocationService.getRoute({
-      lat: marker.getPosition().lat(),
-      lng: marker.getPosition().lng()
-    }, {
-      lat: nearestServicePlace.latitude,
-      lng: nearestServicePlace.longitude
-    }, directionsRenderer);
-    return nearestServicePlace;
-  }
-
-  return null;
 }
 })();
 
