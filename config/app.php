@@ -165,8 +165,8 @@ return [
         /*
          * Package Service Providers...
          */
-        // Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
-        // Barryvdh\Debugbar\ServiceProvider::class,
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+        Barryvdh\Debugbar\ServiceProvider::class,
         Cartalyst\Stripe\Laravel\StripeServiceProvider::class,
         /*
          * Application Service Providers...
